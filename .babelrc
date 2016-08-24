@@ -1,0 +1,34 @@
+{
+  "plugins": [
+    "react-hot-loader/babel",
+    "transform-decorators-legacy",
+    "./tools/lib/babelRelayPlugin.js",
+    ["module-resolver", {
+      "root": ["./"],
+      "alias": {
+        "app": "./app",
+        "lib": "./lib",
+        "mailer": "./mailer",
+        "schema": "./schema",
+      }
+    }]
+  ],
+  "presets": [
+    ["es2015", {"modules": false}],
+    "stage-0",
+    "react"
+  ],
+  "env": {
+    "build": {
+      "plugins": [
+        "transform-decorators-legacy",
+        "./tools/lib/babelRelayPlugin.js"
+      ],
+      "presets": [
+        ["es2015", {"modules": "commonjs"}],
+        "stage-0",
+        "react"
+      ],
+    }
+  }
+}
