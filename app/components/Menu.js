@@ -3,11 +3,11 @@ import { Nav, NavItem } from 'react-bootstrap';
 import { LinkContainer, IndexLinkContainer } from 'react-router-bootstrap';
 
 export const menuLinks = {
-  '/categories': 'Categories',
-  '/customers': 'Customers',
-  '/employees': 'Employees',
   '/orders': 'Orders',
   '/products': 'Products',
+  '/customers': 'Customers',
+  '/employees': 'Employees',
+  '/categories': 'Categories',
   '/regions': 'Regions',
   '/shippers': 'Shippers',
   '/suppliers': 'Suppliers',
@@ -22,11 +22,10 @@ export default class Menu extends React.Component {
         </IndexLinkContainer>
 
         { Object.keys(menuLinks).map(link => (
-            <LinkContainer key={link} to={{ pathname: link }}>
-              <NavItem>{menuLinks[link]}</NavItem>
-            </LinkContainer>
-          ))
-        }
+          <LinkContainer key={link} to={{ pathname: link }}>
+            <NavItem>{menuLinks[link]}</NavItem>
+          </LinkContainer>
+        ))}
       </Nav>
     );
   }

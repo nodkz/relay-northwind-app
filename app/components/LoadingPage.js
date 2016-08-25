@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
-import s from './LoadingPage.scss';
-import Loader from 'app/_components/Loader';
+import Loading from 'react-loading';
 
 export default class LoadingPage extends React.Component {
   static propTypes = {
@@ -9,13 +8,13 @@ export default class LoadingPage extends React.Component {
 
   render() {
     return (
-      <div className={s.root}>
-        <Loader width="70px" height="100px" />
+      <div>
+        <Loading type="bubbles" color="#3385b5" />
 
-        <div className={s.message}>
+        <div>
           { this.props.children
             ? this.props.children
-            : 'Пару секунд, загружаем всио'
+            : 'Пару секунд, загружаемся'
           }
         </div>
       </div>

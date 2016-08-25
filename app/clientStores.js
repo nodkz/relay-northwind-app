@@ -14,5 +14,5 @@ if (process.env.NODE_ENV === 'development' || __DEV__) {
 export const relayStore = Relay.Store;
 
 export {
-  hashHistory
+  hashHistory,
 };

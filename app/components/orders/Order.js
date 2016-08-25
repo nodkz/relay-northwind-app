@@ -1,31 +1,52 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
-import { Link } from 'react-router';
 import Address from '../Address';
+import OrderDetails from './OrderDetails';
 
 class Order extends React.Component {
   static propTypes = {
+    order: PropTypes.object,
   };
 
-  constructor(props) {
-    super(props);
-
-    this.onItemClick = this.onItemClick.bind(this);
-  }
-
-  onItemClick() {
-    this.props.onItemClick(this.props.company._id);
-  }
-
   render() {
-    const { customer = {} } = this.props;
+    const { order = {} } = this.props;
 
     return (
-      <div className="row">
-        <div className="col-sm-2">{customer.customerID}</div>
-        <div className="col-sm-2">{customer.companyName}</div>
-        <div className="col-sm-2">{customer.contactName}</div>
-        <div className="col-sm-2">{customer.contactTitle}</div>
+      <div className="bordered">
+        <dl className="dl-horizontal">
+          <dt>OrderID</dt>
+          <dd>{order.orderID}</dd>
+
+          <dt>CustomerID</dt>
+          <dd>{order.customerID}</dd>
+
+          <dt>EmployeeID</dt>
+          <dd>{order.employeeID}</dd>
+
+          <dt>OrderDate</dt>
+          <dd>{`${order.orderDate}`.substr(0, 10)}</dd>
+
+          <dt>RequiredDate</dt>
+          <dd>{`${order.requiredDate}`.substr(0, 10)}</dd>
+
+          <dt>ShippedDate</dt>
+          <dd>{`${order.shippedDate}`.substr(0, 10)}</dd>
+
+          <dt>ShipVia</dt>
+          <dd>{order.shipVia}</dd>
+
+          <dt>Freight</dt>
+          <dd>{order.freight}</dd>
+
+          <dt>ShipAddress</dt>
+          <dd>
+            <i>{order.shipName}</i>
+            <Address address={order.shipAddress} />
+          </dd>
+        </dl>
+        <div className="lrspace">
+          <OrderDetails details={order.details} />
+        </div>
       </div>
     );
   }
@@ -47,7 +68,9 @@ export default Relay.createContainer(Order, {
         shipAddress {
           ${Address.getFragment('address')}
         }
-        details: [OrderDetails]
+        details {
+          ${OrderDetails.getFragment('details')}
+        }
       }
     `,
   },

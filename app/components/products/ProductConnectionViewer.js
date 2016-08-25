@@ -1,14 +1,15 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
 import Loading from 'react-loading';
-import CustomerConnection from './CustomerConnection';
+import ProductConnection from './ProductConnection';
 
 const PER_PAGE = 10;
-const LOAD_NEXT_IF_PIXEL = 100;
 
-class CustomerConnectionViewer extends React.Component {
+class ProductConnectionViewer extends React.Component {
   static propTypes = {
     viewer: PropTypes.object,
+    relay: PropTypes.object.isRequired,
+    onItemClick: PropTypes.func,
   };
 
   constructor(props) {
@@ -23,7 +24,7 @@ class CustomerConnectionViewer extends React.Component {
 
   componentDidMount() {
     setTimeout(
-      () => this.loadNextItemsIfNeeded(this.refs.scrollContainer),
+      () => this.loadNextItemsIfNeeded(this.scrollContainer),
       500);
 
     window.addEventListener('scroll', this.onScroll);
@@ -33,14 +34,14 @@ class CustomerConnectionViewer extends React.Component {
     window.removeEventListener('scroll', this.onScroll);
   }
 
-  onScroll(e) {
+  onScroll() {
     if (!this.state.loading) {
       this.loadNextItemsIfNeeded();
     }
   }
 
   loadNextItemsIfNeeded() {
-    const elem = this.refs.scrollContainer;
+    const elem = this.scrollContainer;
     const contentHeight = elem.offsetHeight;
     const y = window.pageYOffset + window.innerHeight;
     if (y >= contentHeight) {
@@ -50,15 +51,17 @@ class CustomerConnectionViewer extends React.Component {
 
   loadNextItems() {
     this.setState({ loading: true }, () => {
-      setTimeout(() => { // set delay for visibility
+      if (this.props.viewer.productConnection.pageInfo.hasNextPage) {
         this.props.relay.setVariables({
           count: this.props.relay.variables.count + PER_PAGE,
         }, (readyState) => { // this gets called twice https://goo.gl/ZsQ3Dy
           if (readyState.done) {
-            this.setState({ loading: false }, () => { this.loadNextItemsIfNeeded() });
+            this.setState({ loading: false }, () => { this.loadNextItemsIfNeeded(); });
           }
         });
-      }, 1000);
+      } else {
+        window.removeEventListener('scroll', this.onScroll);
+      }
     });
   }
 
@@ -70,29 +73,33 @@ class CustomerConnectionViewer extends React.Component {
 
   render() {
     return (
-      <div onScroll={this.onScroll} ref="scrollContainer">
-        <CustomerConnection customerConnection = {this.props.viewer.customerConnection} />
+      <div
+        onScroll={this.onScroll}
+        ref={c => { this.scrollContainer = c; }}
+        style={{ marginBottom: '200px' }}
+      >
+        <ProductConnection productConnection={this.props.viewer.productConnection} />
 
-        { this.props.viewer.customerConnection.pageInfo.hasNextPage &&
-          <Loading type='bubbles' color='#3385b5' />
+        { this.props.viewer.productConnection.pageInfo.hasNextPage &&
+          <Loading type="bubbles" color="#3385b5" />
         }
       </div>
     );
   }
 }
 
-export default Relay.createContainer(CustomerConnectionViewer, {
+export default Relay.createContainer(ProductConnectionViewer, {
   initialVariables: {
     count: PER_PAGE,
   },
   fragments: {
     viewer: () => Relay.QL`
       fragment on Viewer {
-        customerConnection(first: $count) {
+        productConnection(first: $count) {
           pageInfo {
             hasNextPage
           }
-          ${CustomerConnection.getFragment('customerConnection')}
+          ${ProductConnection.getFragment('productConnection')}
         }
       }
     `,

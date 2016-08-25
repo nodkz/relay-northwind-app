@@ -36,7 +36,7 @@ if (module.hot) {
 
     ReactDOM.render(
       <AppContainer>
-        <NextRoot relayStore={relayStore} history={browserHistory} />
+        <NextRoot relayStore={relayStore} history={hashHistory} />
       </AppContainer>,
       appContainer
     );

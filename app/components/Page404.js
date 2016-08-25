@@ -1,8 +1,6 @@
 import React from 'react';
 import { Jumbotron } from 'react-bootstrap';
 
-const s = {};
-
 class Page404 extends React.Component {
   constructor(props) {
     super(props);
@@ -10,7 +8,7 @@ class Page404 extends React.Component {
     this.onClick = this.onClick.bind(this);
   }
   onClick() {
-    this.setState({ cnt: this.state.cnt + 1 })
+    this.setState({ cnt: this.state.cnt + 1 });
   }
   render() {
     return (

@@ -1,8 +1,11 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
-import { Link } from 'react-router';
 
 class Address extends React.Component {
+  static propTypes = {
+    address: PropTypes.object.isRequired,
+  };
+
   render() {
     const { address = {} } = this.props;
 
@@ -10,7 +13,7 @@ class Address extends React.Component {
       <div>
         {address.street}<br />
         {address.city}, {address.region || ''} {address.postalCode}, {address.country}<br />
-        <abbr title="Phone">P:</abbr> {address.phone}
+        {address.phone && <span><abbr title="Phone">P:</abbr> {address.phone}</span> }
       </div>
     );
   }

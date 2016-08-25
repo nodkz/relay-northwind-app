@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
 import Loading from 'react-loading';
-import CustomerConnection from './CustomerConnection';
+import SupplierConnection from './SupplierConnection';
 
 const PER_PAGE = 10;
 
-class CustomerConnectionViewer extends React.Component {
+class SupplierConnectionViewer extends React.Component {
   static propTypes = {
     viewer: PropTypes.object,
     relay: PropTypes.object.isRequired,
@@ -51,7 +51,7 @@ class CustomerConnectionViewer extends React.Component {
 
   loadNextItems() {
     this.setState({ loading: true }, () => {
-      if (this.props.viewer.customerConnection.pageInfo.hasNextPage) {
+      if (this.props.viewer.supplierConnection.pageInfo.hasNextPage) {
         this.props.relay.setVariables({
           count: this.props.relay.variables.count + PER_PAGE,
         }, (readyState) => { // this gets called twice https://goo.gl/ZsQ3Dy
@@ -78,9 +78,9 @@ class CustomerConnectionViewer extends React.Component {
         ref={c => { this.scrollContainer = c; }}
         style={{ marginBottom: '200px' }}
       >
-        <CustomerConnection customerConnection={this.props.viewer.customerConnection} />
+        <SupplierConnection supplierConnection={this.props.viewer.supplierConnection} />
 
-        { this.props.viewer.customerConnection.pageInfo.hasNextPage &&
+        { this.props.viewer.supplierConnection.pageInfo.hasNextPage &&
           <Loading type="bubbles" color="#3385b5" />
         }
       </div>
@@ -88,18 +88,18 @@ class CustomerConnectionViewer extends React.Component {
   }
 }
 
-export default Relay.createContainer(CustomerConnectionViewer, {
+export default Relay.createContainer(SupplierConnectionViewer, {
   initialVariables: {
     count: PER_PAGE,
   },
   fragments: {
     viewer: () => Relay.QL`
       fragment on Viewer {
-        customerConnection(first: $count) {
+        supplierConnection(first: $count) {
           pageInfo {
             hasNextPage
           }
-          ${CustomerConnection.getFragment('customerConnection')}
+          ${SupplierConnection.getFragment('supplierConnection')}
         }
       }
     `,

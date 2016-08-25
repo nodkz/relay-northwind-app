@@ -1,21 +1,11 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
-import { Link } from 'react-router';
 import Category from './Category';
 
 class CategoryList extends React.Component {
   static propTypes = {
+    categoryList: PropTypes.array.isRequired,
   };
-
-  constructor(props) {
-    super(props);
-
-    this.onItemClick = this.onItemClick.bind(this);
-  }
-
-  onItemClick() {
-    this.props.onItemClick(this.props.company._id);
-  }
 
   render() {
     const { categoryList = [] } = this.props;
@@ -23,7 +13,7 @@ class CategoryList extends React.Component {
     return (
       <div>
         { categoryList.map((category, i) => {
-          return <Category key={i} category={category} />
+          return <Category key={i} category={category} />;
         })}
       </div>
     );

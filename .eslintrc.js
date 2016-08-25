@@ -21,7 +21,7 @@ module.exports = {
   "rules": {
     "graphql/template-strings": ['error', {
       env: 'relay',
-      schemaJson: require('./build/schema.graphql.json'),
+      schemaJson: require('./schema.graphql.json'),
     }],
     "react/jsx-quotes": 0,
     "react/jsx-indent-props": 0,
@@ -32,6 +32,7 @@ module.exports = {
     "arrow-body-style": 0,
     "import/no-extraneous-dependencies": 0,
     "import/imports-first": 0,
-    "react/jsx-filename-extension": 0
+    "react/jsx-filename-extension": 0,
+    "react/prefer-stateless-function": 0
   }
 };

@@ -1,4 +1,3 @@
-import React from 'react';
 import Relay from 'react-relay';
 import App from './components/App';
 import Page404 from './components/Page404';
@@ -7,6 +6,11 @@ import MainPage from './components/MainPage';
 import CategoryListViewer from './components/categories/CategoryListViewer';
 import CustomerConnectionViewer from './components/customers/CustomerConnectionViewer';
 import EmployeeListViewer from './components/employees/EmployeeListViewer';
+import OrderConnectionViewer from './components/orders/OrderConnectionViewer';
+import ProductConnectionViewer from './components/products/ProductConnectionViewer';
+import RegionListViewer from './components/regions/RegionListViewer';
+import ShipperListViewer from './components/shippers/ShipperListViewer';
+import SupplierConnectionViewer from './components/suppliers/SupplierConnectionViewer';
 // import LoadingPage from 'app/components/LoadingPage/LoadingPage';
 // import BrokenPage from 'app/components/BrokenPage/BrokenPage';
 
@@ -14,7 +18,7 @@ import EmployeeListViewer from './components/employees/EmployeeListViewer';
 
 const ViewerQueries = {
   viewer: () => Relay.QL`query { viewer }`,
-}
+};
 
 // const AppWithRelay = Relay.createContainer(App, {
 //   prepareVariables(prevVars) {
@@ -50,6 +54,31 @@ const routes = [
       {
         path: 'employees',
         component: EmployeeListViewer,
+        queries: ViewerQueries,
+      },
+      {
+        path: 'orders',
+        component: OrderConnectionViewer,
+        queries: ViewerQueries,
+      },
+      {
+        path: 'products',
+        component: ProductConnectionViewer,
+        queries: ViewerQueries,
+      },
+      {
+        path: 'regions',
+        component: RegionListViewer,
+        queries: ViewerQueries,
+      },
+      {
+        path: 'shippers',
+        component: ShipperListViewer,
+        queries: ViewerQueries,
+      },
+      {
+        path: 'suppliers',
+        component: SupplierConnectionViewer,
         queries: ViewerQueries,
       },
       {

@@ -1,7 +1,5 @@
 import React, { PropTypes } from 'react';
-import s from './BrokenPage.scss';
-import SvgIcon from 'app/_components/SvgIcon';
-import Button from 'app/_components/Form/Element/Button/Button';
+import { Jumbotron, Button, Alert } from 'react-bootstrap';
 
 export default class BrokenPage extends React.Component {
   static propTypes = {
@@ -23,37 +21,22 @@ export default class BrokenPage extends React.Component {
 
   render() {
     return (
-      <div className={s.root}>
-        <SvgIcon
-          color="#95A5A6"
-          width="70px"
-          height="70px"
-          filename="ic_error_outline_24px.svg"
-        />
-
-        <div className={s.message}>
-          {this.props.children ?
-            this.props.children
-            :
-            <div className={s.text}>
-              <p className={s.title}>
-                Что-то пошло не&nbsp;так
-              </p>
-              { this.props.message
-                ? <p className={s.redNote}>{this.props.message}</p>
-                : <p className={s.note}>
-                  То&nbsp;ли наш сервер повис, то&nbsp;ли у&nbsp;вас интернет говно.
-                  <br />
-                  В&nbsp;любом случае&nbsp;&mdash; жмите на&nbsp;кнопку!
-                </p>
-              }
-              <Button type="button" onClick={this.reloadPage} s={s} outline blue large>
-                Перезагрузить страницу
-              </Button>
-            </div>
-          }
-        </div>
-      </div>
+      <Jumbotron style={{ textAlign: 'center' }}>
+        <h1 onClick={this.onClick} style={{ userSelect: 'none', cursor: 'pointer' }}>
+          {this.state.cnt}
+        </h1>
+        { this.props.message
+          ? <Alert bsStyle="danger">{this.props.message}</Alert>
+          : <p>
+            То&nbsp;ли наш сервер повис, то&nbsp;ли у&nbsp;вас интернет говно.
+            <br />
+            В&nbsp;любом случае&nbsp;&mdash; жмите на&nbsp;кнопку!
+          </p>
+        }
+        <Button onClick={this.reloadPage}>
+          Перезагрузить страницу
+        </Button>
+      </Jumbotron>
     );
   }
 }

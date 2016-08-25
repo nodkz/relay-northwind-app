@@ -1,21 +1,11 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
-import { Link } from 'react-router';
 import Address from '../Address';
 
 class Customer extends React.Component {
   static propTypes = {
+    customer: PropTypes.object.isRequired,
   };
-
-  constructor(props) {
-    super(props);
-
-    this.onItemClick = this.onItemClick.bind(this);
-  }
-
-  onItemClick() {
-    this.props.onItemClick(this.props.company._id);
-  }
 
   render() {
     const { customer = {} } = this.props;

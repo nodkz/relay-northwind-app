@@ -1,21 +1,11 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
-import { Link } from 'react-router';
 import Employee from './Employee';
 
 class EmployeeList extends React.Component {
   static propTypes = {
+    employeeList: PropTypes.array.isRequired,
   };
-
-  constructor(props) {
-    super(props);
-
-    this.onItemClick = this.onItemClick.bind(this);
-  }
-
-  onItemClick() {
-    this.props.onItemClick(this.props.company._id);
-  }
 
   render() {
     const { employeeList = [] } = this.props;
@@ -23,7 +13,7 @@ class EmployeeList extends React.Component {
     return (
       <div>
         { employeeList.map((employee, i) => {
-          return <Employee key={i} employee={employee} />
+          return <Employee key={i} employee={employee} />;
         })}
       </div>
     );

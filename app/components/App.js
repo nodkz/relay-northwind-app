@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import Relay from 'react-relay';
 import Menu from './Menu';
 
 const s = {};
@@ -8,10 +7,6 @@ class App extends Component {
   static propTypes = {
     children: PropTypes.element.isRequired,
   };
-
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     return (

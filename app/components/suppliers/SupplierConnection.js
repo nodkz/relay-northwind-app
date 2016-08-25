@@ -1,15 +1,11 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
-import Loading from 'react-loading';
-import Customer from './Customer';
+import SupplierConnectionItem from './SupplierConnectionItem';
 
-const PER_PAGE = 10;
-const LOAD_NEXT_IF_PIXEL = 100;
-
-class CustomerConnection extends React.Component {
+class SupplierConnection extends React.Component {
   static propTypes = {
     onItemClick: PropTypes.func,
-    customerConnection: PropTypes.object,
+    supplierConnection: PropTypes.object,
   };
 
   constructor(props) {
@@ -25,18 +21,14 @@ class CustomerConnection extends React.Component {
   }
 
   render() {
-    // const currentId = this.props.params.cvId;
-
     return (
       <div>
-        {this.props.customerConnection.edges.map(({ node }) => {
+        {this.props.supplierConnection.edges.map(({ node }) => {
           return (
             <div key={node._id}>
-              <Customer
-                customer={node}
+              <SupplierConnectionItem
+                supplier={node}
                 onItemClick={this.handleItemClick}
-                // isActive={node._id === currentId}
-                route={this.props.route}
               />
             </div>
           );
@@ -46,10 +38,10 @@ class CustomerConnection extends React.Component {
   }
 }
 
-export default Relay.createContainer(CustomerConnection, {
+export default Relay.createContainer(SupplierConnection, {
   fragments: {
-    customerConnection: () => Relay.QL`
-      fragment on CustomerConnection {
+    supplierConnection: () => Relay.QL`
+      fragment on SupplierConnection {
         pageInfo {
           hasNextPage
         }
@@ -57,7 +49,7 @@ export default Relay.createContainer(CustomerConnection, {
           cursor
           node {
             _id
-            ${Customer.getFragment('customer')}
+            ${SupplierConnectionItem.getFragment('supplier')}
           }
         }
       }
