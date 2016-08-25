@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
-import Customer from './Customer';
+import CustomerConnectionItem from './CustomerConnectionItem';
 
 class CustomerConnection extends React.Component {
   static propTypes = {
@@ -21,17 +21,14 @@ class CustomerConnection extends React.Component {
   }
 
   render() {
-    // const currentId = this.props.params.cvId;
-
     return (
       <div>
         {this.props.customerConnection.edges.map(({ node }) => {
           return (
             <div key={node._id}>
-              <Customer
+              <CustomerConnectionItem
                 customer={node}
                 onItemClick={this.handleItemClick}
-                // isActive={node._id === currentId}
               />
             </div>
           );
@@ -52,7 +49,7 @@ export default Relay.createContainer(CustomerConnection, {
           cursor
           node {
             _id
-            ${Customer.getFragment('customer')}
+            ${CustomerConnectionItem.getFragment('customer')}
           }
         }
       }

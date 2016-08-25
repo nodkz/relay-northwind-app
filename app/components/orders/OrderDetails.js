@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
 import { Table } from 'react-bootstrap';
+import ToggleProduct from '../products/ToggleProduct';
+
 
 class OrderDetails extends React.Component {
   static propTypes = {
@@ -25,7 +27,11 @@ class OrderDetails extends React.Component {
           { details.map((row, i) =>
             <tr key={i}>
               <td>{row.productID}</td>
-              <td>{row.product.name}</td>
+              <td>
+                {row.product.name}
+                &nbsp;
+                <ToggleProduct id={row.productID} />
+              </td>
               <td>{row.unitPrice}</td>
               <td>{row.quantity}</td>
               <td>{row.discount}</td>

@@ -2,6 +2,9 @@ import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
 import Address from '../Address';
 import OrderDetails from './OrderDetails';
+import ToggleCustomer from '../customers/ToggleCustomer';
+import ToggleEmployee from '../employees/ToggleEmployee';
+import ToggleShipper from '../shippers/ToggleShipper';
 
 class Order extends React.Component {
   static propTypes = {
@@ -18,10 +21,16 @@ class Order extends React.Component {
           <dd>{order.orderID}</dd>
 
           <dt>CustomerID</dt>
-          <dd>{order.customerID}</dd>
+          <dd>
+            {order.customerID}
+            <ToggleCustomer id={order.customerID} />
+          </dd>
 
           <dt>EmployeeID</dt>
-          <dd>{order.employeeID}</dd>
+          <dd>
+            {order.employeeID}
+            <ToggleEmployee id={order.employeeID} />
+          </dd>
 
           <dt>OrderDate</dt>
           <dd>{`${order.orderDate}`.substr(0, 10)}</dd>
@@ -33,7 +42,10 @@ class Order extends React.Component {
           <dd>{`${order.shippedDate}`.substr(0, 10)}</dd>
 
           <dt>ShipVia</dt>
-          <dd>{order.shipVia}</dd>
+          <dd>
+            {order.shipVia}
+            <ToggleShipper id={order.shipVia} />
+          </dd>
 
           <dt>Freight</dt>
           <dd>{order.freight}</dd>

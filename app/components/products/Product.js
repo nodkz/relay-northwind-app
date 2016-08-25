@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
 import { Label } from 'react-bootstrap';
+import ToggleCategory from '../categories/ToggleCategory';
+import ToggleSupplier from '../suppliers/ToggleSupplier';
 
 class Product extends React.Component {
   static propTypes = {
@@ -20,10 +22,16 @@ class Product extends React.Component {
           <dd>{product.name}</dd>
 
           <dt>SupplierID</dt>
-          <dd>{product.supplierID}</dd>
+          <dd>
+            {product.supplierID}
+            <ToggleSupplier id={product.supplierID} />
+          </dd>
 
           <dt>CategoryID</dt>
-          <dd>{product.categoryID}</dd>
+          <dd>
+            {product.categoryID}
+            <ToggleCategory id={product.categoryID} />
+          </dd>
 
           <dt>QuantityPerUnit</dt>
           <dd>{product.quantityPerUnit}</dd>

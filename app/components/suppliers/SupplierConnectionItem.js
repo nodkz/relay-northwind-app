@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
-import { Button, Label } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import Loading from 'react-loading';
 import Supplier from './Supplier';
 import { relayStore } from '../../clientStores';
@@ -8,7 +8,6 @@ import { relayStore } from '../../clientStores';
 class SupplierConnectionItem extends React.Component {
   static propTypes = {
     supplier: PropTypes.object,
-    viewer: PropTypes.object,
     relay: PropTypes.object,
   };
 

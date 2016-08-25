@@ -10,10 +10,20 @@ class Category extends React.Component {
     const { category = {} } = this.props;
 
     return (
-      <div className="row">
-        <div className="col-sm-1">{category.categoryID}</div>
-        <div className="col-sm-5">{category.name}</div>
-        <div className="col-sm-6">{category.description}</div>
+      <div className="bordered bspace">
+        <dl className="dl-horizontal">
+          <dt>CategoryID</dt>
+          <dd>{category.categoryID}</dd>
+
+          <dt>Name</dt>
+          <dd>{category.name}</dd>
+
+          <dt>Description</dt>
+          <dd>{category.description}</dd>
+
+          <dt>Total products</dt>
+          <dd>{category.productConnection.count}</dd>
+        </dl>
       </div>
     );
   }
@@ -26,6 +36,9 @@ export default Relay.createContainer(Category, {
         categoryID
         name
         description
+        productConnection {
+          count
+        }
       }
     `,
   },

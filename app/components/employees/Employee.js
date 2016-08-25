@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
+import { Label } from 'react-bootstrap';
 import Address from '../Address';
+import ToggleEmployee from './ToggleEmployee';
 
 class Employee extends React.Component {
   static propTypes = {
@@ -36,8 +38,15 @@ class Employee extends React.Component {
         <dt>Chief</dt>
         <dd>
           { emp.chief
-            ? `${emp.chief.firstName} ${emp.chief.lastName}`
-            : 'Super boss'
+            ?
+            <span>
+              {emp.chief.firstName}
+              &nbsp;
+              {emp.chief.lastName}
+              <ToggleEmployee id={emp.reportsTo} />
+            </span>
+            :
+            <h4><Label bsStyle="danger">Super boss</Label></h4>
           }
         </dd>
       </dl>

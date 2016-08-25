@@ -11,12 +11,25 @@ class Customer extends React.Component {
     const { customer = {} } = this.props;
 
     return (
-      <div className="row">
-        <div className="col-sm-2">{customer.customerID}</div>
-        <div className="col-sm-2">{customer.companyName}</div>
-        <div className="col-sm-2">{customer.contactName}</div>
-        <div className="col-sm-2">{customer.contactTitle}</div>
-        <div className="col-sm-2"><Address address={customer.address} /></div>
+      <div className="bordered">
+        <dl className="dl-horizontal">
+          <dt>CustomerID</dt>
+          <dd>{customer.customerID}</dd>
+
+          <dt>CompanyName</dt>
+          <dd>{customer.companyName}</dd>
+
+          <dt>ContactName</dt>
+          <dd>{customer.contactName}</dd>
+
+          <dt>ContactTitle</dt>
+          <dd>{customer.contactTitle}</dd>
+
+          <dt>ShipAddress</dt>
+          <dd>
+            <Address address={customer.address} />
+          </dd>
+        </dl>
       </div>
     );
   }
