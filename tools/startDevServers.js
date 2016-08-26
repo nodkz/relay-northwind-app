@@ -65,13 +65,11 @@ function frontendServer(compiler) {
 function commmonDevServer() {
   return new Promise((resolve, reject) => {
     const devCommonProxy = express();
-    devCommonProxy.use('/assets', expressHttpProxy(
-      `127.0.0.1:${PORT_FRONTEND_DEV_SERVER}`,
-      {
-        forwardPath: (req) => req.originalUrl,
-      }
-    ));
     devCommonProxy.use(express.static(path.resolve(__dirname, '../public')));
+    devCommonProxy.use(expressHttpProxy(
+      `127.0.0.1:${PORT_FRONTEND_DEV_SERVER}`,
+      { forwardPath: (req) => req.originalUrl, }
+    ));
     const http = devCommonProxy.listen(PORT, () => {
       resolve();
       const serverUrl = `http://127.0.0.1:${PORT}`;

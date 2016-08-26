@@ -4,21 +4,20 @@
 
 import path from 'path';
 import webpack from 'webpack';
-import AssetsPlugin from 'assets-webpack-plugin';
 import {
   mergeConfig,
   DEV,
   VERBOSE,
   PORT_FRONTEND_DEV_SERVER,
 } from './webpack.config.common.js';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
+// import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 
 const clientConfig = mergeConfig({
   target: 'web',
 
   entry: DEV ? [
-    'react-hot-loader/patch', // TODO see https://github.com/webpack/webpack.io/pull/64/commits/69fccee7e8ec9924573766e4d254d55706b5e11c#r73804882
+    'react-hot-loader/patch', // see https://github.com/webpack/webpack.io/pull/64/commits/69fccee7e8ec9924573766e4d254d55706b5e11c#r73804882
     `webpack-dev-server/client?http://0.0.0.0:${PORT_FRONTEND_DEV_SERVER}`,
     'webpack/hot/only-dev-server',
     './app/client.js',
@@ -27,9 +26,10 @@ const clientConfig = mergeConfig({
   ],
 
   output: {
-    path: path.join(__dirname, '../build', process.env.NODE_ENV, 'public/assets'),
-    filename: DEV ? '[name].js?[hash]' : '[name].[hash].js',
-    publicPath: '/assets/',
+    path: path.join(__dirname, '../build', process.env.NODE_ENV),
+    // filename: DEV ? '[name].js?[hash]' : '[name].[hash].js',
+    filename: '[name].js?[hash]',
+    publicPath: '/',
   },
 
   // Choose a developer tool to enhance debugging
@@ -40,11 +40,6 @@ const clientConfig = mergeConfig({
   devtool: DEV ? 'eval' : 'source-map',
 
   plugins: [
-    new AssetsPlugin({
-      path: path.join(__dirname, '../build', process.env.NODE_ENV),
-      filename: 'assets.js',
-      processOutput: x => `module.exports = ${JSON.stringify(x)};`,
-    }),
     DEV ? new webpack.HotModuleReplacementPlugin({ quiet: true }) : null,
     !DEV ? new webpack.optimize.UglifyJsPlugin({
       compress: {

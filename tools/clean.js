@@ -1,5 +1,4 @@
 import del from 'del';
-import mkdirp from 'mkdirp';
 
 const env = process.env.NODE_ENV || 'development';
 
@@ -14,7 +13,6 @@ async function clean() {
     ],
     { dot: true }
   );
-  mkdirp.sync(`build/${env}/public`);
 }
 
 export default clean;
