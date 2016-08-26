@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
 import Address from '../Address';
+import ToggleOrderCollection from '../orders/ToggleOrderConnection';
 
 class Customer extends React.Component {
   static propTypes = {
@@ -29,6 +30,12 @@ class Customer extends React.Component {
           <dd>
             <Address address={customer.address} />
           </dd>
+
+          <dt>Total orders</dt>
+          <dd>
+            <b>{customer.orderConnection.count}</b>
+            <ToggleOrderCollection filter={{ customerID: customer.customerID }} />
+          </dd>
         </dl>
       </div>
     );
@@ -45,6 +52,9 @@ export default Relay.createContainer(Customer, {
         contactTitle
         address {
           ${Address.getFragment('address')}
+        }
+        orderConnection {
+          count
         }
       }
     `,
