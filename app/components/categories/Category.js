@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
+import ToggleProductCollection from '../products/ToggleProductConnection';
 
 class Category extends React.Component {
   static propTypes = {
@@ -22,7 +23,10 @@ class Category extends React.Component {
           <dd>{category.description}</dd>
 
           <dt>Total products</dt>
-          <dd>{category.productConnection.count}</dd>
+          <dd>
+            <b>{category.productConnection.count}</b>
+            <ToggleProductCollection filter={{ categoryID: category.categoryID }} />
+          </dd>
         </dl>
       </div>
     );

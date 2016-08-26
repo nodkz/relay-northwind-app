@@ -4,17 +4,17 @@ import Category from './Category';
 
 class CategoryList extends React.Component {
   static propTypes = {
-    categoryList: PropTypes.array.isRequired,
+    viewer: PropTypes.object,
   };
 
   render() {
-    const { categoryList = [] } = this.props;
-
     return (
       <div>
-        { categoryList.map((category, i) => {
-          return <Category key={i} category={category} />;
-        })}
+        <h3>Total {this.props.viewer.categoryList.length} records</h3>
+
+        { this.props.viewer.categoryList.map((category, i) =>
+          <Category key={i} category={category} />
+        )}
       </div>
     );
   }
@@ -22,9 +22,11 @@ class CategoryList extends React.Component {
 
 export default Relay.createContainer(CategoryList, {
   fragments: {
-    categoryList: () => Relay.QL`
-      fragment on Category @relay(plural: true) {
-        ${Category.getFragment('category')}
+    viewer: () => Relay.QL`
+      fragment on Viewer {
+        categoryList {
+          ${Category.getFragment('category')}
+        }
       }
     `,
   },
