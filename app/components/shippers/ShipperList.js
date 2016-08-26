@@ -4,15 +4,15 @@ import Shipper from './Shipper';
 
 class ShipperList extends React.Component {
   static propTypes = {
-    shipperList: PropTypes.array.isRequired,
+    viewer: PropTypes.object,
   };
 
   render() {
-    const { shipperList = [] } = this.props;
-
     return (
       <div>
-        { shipperList.map((shipper, i) => {
+        <h3>Total {this.props.viewer.shipperList.length} records</h3>
+
+        { this.props.viewer.shipperList.map((shipper, i) => {
           return <Shipper key={i} shipper={shipper} />;
         })}
       </div>
@@ -22,9 +22,11 @@ class ShipperList extends React.Component {
 
 export default Relay.createContainer(ShipperList, {
   fragments: {
-    shipperList: () => Relay.QL`
-      fragment on Shipper @relay(plural: true) {
-        ${Shipper.getFragment('shipper')}
+    viewer: () => Relay.QL`
+      fragment on Viewer {
+        shipperList {
+          ${Shipper.getFragment('shipper')}
+        }
       }
     `,
   },
