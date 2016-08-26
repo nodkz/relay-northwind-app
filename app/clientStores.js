@@ -7,9 +7,11 @@ Relay.injectNetworkLayer(
   new Relay.DefaultNetworkLayer('http://localhost:3333/northwind/')
 );
 
-if (process.env.NODE_ENV === 'development' || __DEV__) {
-  RelayNetworkDebug.init();
-}
+// DISABLE network debug in your production!
+// This is demo app, so debug is part of demo :P
+// if (process.env.NODE_ENV === 'development' || __DEV__) {
+RelayNetworkDebug.init();
+// }
 
 export const relayStore = Relay.Store;
 
