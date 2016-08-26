@@ -29,7 +29,7 @@ class OrderDetails extends React.Component {
               <td>{row.productID}</td>
               <td>
                 {row.product.name}
-                &nbsp;
+                {' '}
                 <ToggleProduct id={row.productID} />
               </td>
               <td>{row.unitPrice}</td>

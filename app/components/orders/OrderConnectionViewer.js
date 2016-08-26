@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
-import Loading from 'react-loading';
+import Loading from '../Loading';
 import OrderConnection from './OrderConnection';
 
 const PER_PAGE = 10;
@@ -81,7 +81,7 @@ class OrderConnectionViewer extends React.Component {
         <OrderConnection orderConnection={this.props.viewer.orderConnection} />
 
         { this.props.viewer.orderConnection.pageInfo.hasNextPage &&
-          <Loading type="bubbles" color="#3385b5" />
+          <Loading />
         }
       </div>
     );

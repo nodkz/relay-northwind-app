@@ -18,7 +18,7 @@ class ProductConnectionItem extends React.Component {
           <div className="col-sm-1">{product.productID}</div>
           <div className="col-sm-3">
             {product.name}
-            &nbsp;
+            {' '}
             {product.discontinued ? <Label bsStyle="danger">Discontinued</Label> : ''}
           </div>
           <div className="col-sm-2">{product.category.name}</div>

@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
-import Loading from 'react-loading';
+import Loading from '../Loading';
 import ProductConnection from './ProductConnection';
+import ProductFilter from './ProductFilter';
 
 const PER_PAGE = 10;
 
@@ -81,7 +82,7 @@ class ProductConnectionViewer extends React.Component {
         <ProductConnection productConnection={this.props.viewer.productConnection} />
 
         { this.props.viewer.productConnection.pageInfo.hasNextPage &&
-          <Loading type="bubbles" color="#3385b5" />
+          <Loading />
         }
       </div>
     );

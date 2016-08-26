@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
-import Loading from 'react-loading';
+import Loading from '../Loading';
 import CustomerConnection from './CustomerConnection';
 
 const PER_PAGE = 10;
@@ -81,7 +81,7 @@ class CustomerConnectionViewer extends React.Component {
         <CustomerConnection customerConnection={this.props.viewer.customerConnection} />
 
         { this.props.viewer.customerConnection.pageInfo.hasNextPage &&
-          <Loading type="bubbles" color="#3385b5" />
+          <Loading />
         }
       </div>
     );

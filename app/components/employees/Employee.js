@@ -40,7 +40,7 @@ class Employee extends React.Component {
             ?
             <span>
               {emp.chief.firstName}
-              &nbsp;
+              {' '}
               {emp.chief.lastName}
               <ToggleEmployee id={emp.reportsTo} />
             </span>

@@ -48,7 +48,7 @@ export default class ToggleCustomer extends React.Component {
   render() {
     return (
       <span>
-        &nbsp;
+        {' '}
         <Button
           bsSize="xsmall"
           bsStyle="info"
