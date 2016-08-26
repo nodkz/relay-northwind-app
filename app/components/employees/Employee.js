@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
 import Address from '../Address';
 import ToggleEmployee from './ToggleEmployee';
+import ToggleOrderConnection from '../orders/ToggleOrderConnection';
 
 class Employee extends React.Component {
   static propTypes = {
@@ -9,44 +10,53 @@ class Employee extends React.Component {
   };
 
   render() {
-    const { employee: emp } = this.props;
+    const { employee } = this.props;
 
     return (
       <dl className="dl-horizontal bordered">
         <dt>EmployeeID</dt>
-        <dd>{emp.employeeID}</dd>
+        <dd>{employee.employeeID}</dd>
 
         <dt>Name</dt>
-        <dd>{emp.firstName} {emp.lastName}, {emp.titleOfCourtesy}</dd>
+        <dd>
+          {employee.firstName} {employee.lastName},
+          {employee.titleOfCourtesy}
+        </dd>
 
         <dt>Title</dt>
-        <dd>{emp.title}</dd>
+        <dd>{employee.title}</dd>
 
         <dt>BirthDate</dt>
-        <dd>{`${emp.birthDate}`.substr(0, 10)}</dd>
+        <dd>{`${employee.birthDate}`.substr(0, 10)}</dd>
 
         <dt>HireDate</dt>
-        <dd>{`${emp.hireDate}`.substr(0, 10)}</dd>
+        <dd>{`${employee.hireDate}`.substr(0, 10)}</dd>
 
         <dt>Notes</dt>
-        <dd>{emp.notes}</dd>
+        <dd>{employee.notes}</dd>
 
         <dt>Home address</dt>
-        <dd><Address address={emp.address} /></dd>
+        <dd><Address address={employee.address} /></dd>
 
         <dt>Chief</dt>
         <dd>
-          { emp.chief
+          { employee.chief
             ?
             <span>
-              {emp.chief.firstName}
+              {employee.chief.firstName}
               {' '}
-              {emp.chief.lastName}
-              <ToggleEmployee id={emp.reportsTo} />
+              {employee.chief.lastName}
+              <ToggleEmployee id={employee.reportsTo} />
             </span>
             :
             <span className="text-danger"><b>Super boss</b></span>
           }
+        </dd>
+
+        <dt>Total orders</dt>
+        <dd>
+          <b>{employee.orderConnection.count}</b>
+          <ToggleOrderConnection filter={{ employeeID: employee.employeeID }} />
         </dd>
       </dl>
     );
@@ -72,6 +82,9 @@ export default Relay.createContainer(Employee, {
         chief {
           lastName
           firstName
+        }
+        orderConnection {
+          count
         }
       }
     `,
