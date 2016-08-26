@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
-import { Label } from 'react-bootstrap';
 import ToggleProduct from './ToggleProduct';
 
 class ProductConnectionItem extends React.Component {
@@ -19,11 +18,20 @@ class ProductConnectionItem extends React.Component {
           <div className="col-sm-3">
             {product.name}
             {' '}
-            {product.discontinued ? <Label bsStyle="danger">Discontinued</Label> : ''}
+            {product.discontinued ? <span className="text-danger"><b>Discontinued</b></span> : ''}
           </div>
-          <div className="col-sm-2">{product.category.name}</div>
-          <div className="col-sm-2">{product.unitPrice}</div>
-          <div className="col-sm-2">{product.unitsInStock}</div>
+          <div className="col-sm-2">
+            {product.category.name}
+            {' '}
+            (id:{product.categoryID})
+          </div>
+          <div className="col-sm-2">
+            {product.supplier.companyName}
+            {' '}
+            (id:{product.supplierID})
+          </div>
+          <div className="col-sm-2">${product.unitPrice}</div>
+          <div className="col-sm-2">{product.unitsInStock} pcs</div>
         </div>
         <ToggleProduct id={product.productID} />
       </div>
@@ -37,8 +45,13 @@ export default Relay.createContainer(ProductConnectionItem, {
       fragment on Product {
         id
         name
+        categoryID
         category {
           name
+        }
+        supplierID
+        supplier {
+          companyName
         }
         productID
         quantityPerUnit
