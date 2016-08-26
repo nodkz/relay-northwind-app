@@ -13,7 +13,11 @@ export default class LoadingPage extends React.Component {
         <h2>
           One moment, please...
         </h2>
-        <Loading type="bubbles" color="#3385b5" />
+        <div className="row">
+          <div className="col-md-2 col-md-offset-5">
+            <Loading type="bubbles" color="#3385b5" />
+          </div>
+        </div>
       </Jumbotron>
     );
   }
