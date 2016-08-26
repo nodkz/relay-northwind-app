@@ -11,6 +11,8 @@ Build using React, Relay and GraphQL.
 
 [Live GraphQL server DEMO](http://graphql-compose.herokuapp.com/northwind/)
 
+![relay-northwind-app](https://cloud.githubusercontent.com/assets/1946920/18013918/488e6830-6be2-11e6-84b6-884c8ab971ac.gif)
+
 Internally implements many cool things:
 - Connections with infinite lists and filtering
 - Running Relay queries from component (not via routing)
