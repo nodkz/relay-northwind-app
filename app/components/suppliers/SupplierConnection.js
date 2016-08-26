@@ -23,6 +23,8 @@ class SupplierConnection extends React.Component {
   render() {
     return (
       <div>
+        <h3>Total {this.props.supplierConnection.count} records</h3>
+
         {this.props.supplierConnection.edges.map(({ node }) => {
           return (
             <div key={node._id}>
@@ -42,6 +44,7 @@ export default Relay.createContainer(SupplierConnection, {
   fragments: {
     supplierConnection: () => Relay.QL`
       fragment on SupplierConnection {
+        count
         pageInfo {
           hasNextPage
         }

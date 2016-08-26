@@ -10,6 +10,8 @@ class RegionList extends React.Component {
   render() {
     return (
       <div>
+        <h3>Total {this.props.viewer.regionList.length} records</h3>
+
         { this.props.viewer.regionList.map((region, i) => {
           return <Region key={i} region={region} />;
         })}
