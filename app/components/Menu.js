@@ -8,9 +8,9 @@ export const menuLinks = {
   '/customers': 'Customers',
   '/employees': 'Employees',
   '/categories': 'Categories',
-  '/regions': 'Regions',
   '/shippers': 'Shippers',
   '/suppliers': 'Suppliers',
+  '/regions': 'Regions',
 };
 
 export default class Menu extends React.Component {

@@ -13,7 +13,7 @@ function render() {
   try {
     ReactDOM.render(
       <AppContainer>
-        <ClientRootComponent relayStore={relayStore} history={hashHistory} />
+        <ClientRootComponent environment={relayStore} history={hashHistory} />
       </AppContainer>,
       appContainer
     );
@@ -21,7 +21,7 @@ function render() {
     if (/Check the render method of `AppContainer`/.test(e.message)) {
       // re-render without HOT-RELOAD for getting normal error
       ReactDOM.render(
-        <ClientRootComponent relayStore={relayStore} history={hashHistory} />,
+        <ClientRootComponent environment={relayStore} history={hashHistory} />,
         appContainer
       );
     } else {
@@ -36,7 +36,7 @@ if (module.hot) {
 
     ReactDOM.render(
       <AppContainer>
-        <NextRoot relayStore={relayStore} history={hashHistory} />
+        <NextRoot environment={relayStore} history={hashHistory} />
       </AppContainer>,
       appContainer
     );

@@ -6,77 +6,60 @@ import BrokenPage from './components/BrokenPage';
 import LoadingPage from './components/LoadingPage';
 import MainPage from './components/MainPage';
 
-import CategoryListViewer from './components/categories/CategoryListViewer';
-import CustomerConnectionViewer from './components/customers/CustomerConnectionViewer';
-import EmployeeListViewer from './components/employees/EmployeeListViewer';
-import OrderConnectionViewer from './components/orders/OrderConnectionViewer';
-import ProductConnectionViewer from './components/products/ProductConnectionViewer';
-import RegionListViewer from './components/regions/RegionListViewer';
-import ShipperListViewer from './components/shippers/ShipperListViewer';
+import CategoryList from './components/categories/CategoryList';
+import CustomerConnection from './components/customers/CustomerConnection';
+import EmployeeList from './components/employees/EmployeeList';
+import OrderConnection from './components/orders/OrderConnection';
+import ProductConnection from './components/products/ProductConnection';
+import RegionList from './components/regions/RegionList';
+import ShipperList from './components/shippers/ShipperList';
 import SupplierConnectionViewer from './components/suppliers/SupplierConnectionViewer';
-// import LoadingPage from 'app/components/LoadingPage/LoadingPage';
-// import BrokenPage from 'app/components/BrokenPage/BrokenPage';
-
-// import cv from 'app/cv/routes.js';
 
 const ViewerQueries = {
   viewer: () => Relay.QL`query { viewer }`,
 };
 
-// const AppWithRelay = Relay.createContainer(App, {
-//   prepareVariables(prevVars) {
-//     return prevVars;
-//   },
-//   fragments: {
-//     viewer: () => Relay.QL`fragment on Viewer {
-//       ${Menu.getFragment('viewer')}
-//     }`,
-//   },
-// });
-
 const routes = [
   {
     path: '/',
     component: App,
-    // queries: RelayQueries,
     indexRoute: {
       component: MainPage,
-      // queries: RelayQueries,
     },
     childRoutes: [
       {
         path: 'categories',
-        component: CategoryListViewer,
+        component: CategoryList,
         queries: ViewerQueries,
       },
       {
         path: 'customers',
-        component: CustomerConnectionViewer,
+        component: CustomerConnection,
         queries: ViewerQueries,
       },
       {
         path: 'employees',
-        component: EmployeeListViewer,
+        component: EmployeeList,
         queries: ViewerQueries,
       },
       {
         path: 'orders',
-        component: OrderConnectionViewer,
+        component: OrderConnection,
         queries: ViewerQueries,
       },
       {
         path: 'products',
-        component: ProductConnectionViewer,
+        component: ProductConnection,
         queries: ViewerQueries,
       },
       {
         path: 'regions',
-        component: RegionListViewer,
+        component: RegionList,
         queries: ViewerQueries,
       },
       {
         path: 'shippers',
-        component: ShipperListViewer,
+        component: ShipperList,
         queries: ViewerQueries,
       },
       {

@@ -9,19 +9,19 @@ import routes from './routes';
 
 export default class ClientRoot extends Component { // eslint-disable-line
   static propTypes = {
-    relayStore: PropTypes.object.isRequired,
+    environment: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
   };
 
   render() {
-    const { relayStore, history } = this.props;
+    const { environment, history } = this.props;
 
     return (
       <Router
         routes={routes}
         history={history}
         render={applyRouterMiddleware(useRelay)}
-        environment={relayStore}
+        environment={environment}
       />
 		);
   }
