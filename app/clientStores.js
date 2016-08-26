@@ -3,8 +3,8 @@ import RelayNetworkDebug from 'react-relay/lib/RelayNetworkDebug';
 import { hashHistory } from 'react-router';
 
 Relay.injectNetworkLayer(
-  // new Relay.DefaultNetworkLayer('http://graphql-compose.herokuapp.com/northwind/')
-  new Relay.DefaultNetworkLayer('http://localhost:3333/northwind/')
+  new Relay.DefaultNetworkLayer('http://graphql-compose.herokuapp.com/northwind/')
+  // new Relay.DefaultNetworkLayer('http://localhost:3333/northwind/')
 );
 
 // DISABLE network debug in your production!
