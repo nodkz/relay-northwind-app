@@ -64,12 +64,6 @@ class CustomerConnection extends React.Component {
     });
   }
 
-  handleItemClick(i) {
-    if (this.props.onItemClick) {
-      this.props.onItemClick(i);
-    }
-  }
-
   render() {
     return (
       <div

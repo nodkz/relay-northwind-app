@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
-import Address from '../Address';
 
 class Region extends React.Component {
   static propTypes = {

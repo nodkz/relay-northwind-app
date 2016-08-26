@@ -45,7 +45,6 @@ class OrderConnection extends React.Component {
   }
 
   onFormFilter(filter) {
-    console.log(filter);
     this.props.relay.setVariables({ filter });
   }
 

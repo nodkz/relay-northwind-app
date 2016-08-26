@@ -1,3 +1,4 @@
+// eslint-disable
 //
 // Configuration for the client-side bundle (client.js)
 // -----------------------------------------------------------------------------
