@@ -1,5 +1,7 @@
 {
-  "private": true,
+  "license": "MIT",
+  "description": "A complex React, Relay, GraphQL demo app.",
+  "homepage": "https://nodkz.github.io/relay-northwind/",
   "engines": {
     "node": ">=5.0 <7",
     "npm": ">=3.3 <4"
