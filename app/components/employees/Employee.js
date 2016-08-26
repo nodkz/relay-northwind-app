@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
-import { Label } from 'react-bootstrap';
 import Address from '../Address';
 import ToggleEmployee from './ToggleEmployee';
 
@@ -46,7 +45,7 @@ class Employee extends React.Component {
               <ToggleEmployee id={emp.reportsTo} />
             </span>
             :
-            <h4><Label bsStyle="danger">Super boss</Label></h4>
+            <span className="text-danger"><b>Super boss</b></span>
           }
         </dd>
       </dl>

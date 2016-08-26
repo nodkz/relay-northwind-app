@@ -22,20 +22,14 @@ export default class BrokenPage extends React.Component {
   render() {
     return (
       <Jumbotron style={{ textAlign: 'center' }}>
-        <h1 onClick={this.onClick} style={{ userSelect: 'none', cursor: 'pointer' }}>
+        <h1>
           {this.state.cnt}
+          { this.props.message
+            ? <Alert bsStyle="danger">{this.props.message}</Alert>
+            : <span>Shit happens!</span>
+          }
         </h1>
-        { this.props.message
-          ? <Alert bsStyle="danger">{this.props.message}</Alert>
-          : <p>
-            То&nbsp;ли наш сервер повис, то&nbsp;ли у&nbsp;вас интернет говно.
-            <br />
-            В&nbsp;любом случае&nbsp;&mdash; жмите на&nbsp;кнопку!
-          </p>
-        }
-        <Button onClick={this.reloadPage}>
-          Перезагрузить страницу
-        </Button>
+        <Button onClick={this.reloadPage}>Reload page</Button>
       </Jumbotron>
     );
   }

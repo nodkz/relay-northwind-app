@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
 import { Button } from 'react-bootstrap';
-import Loading from 'react-loading';
+import Loading from '../Loading';
 import { relayStore } from '../../clientStores';
 import Product from './Product';
 
@@ -60,7 +60,7 @@ export default class ToggleProduct extends React.Component {
           ? <div className="lrspace bspace">
             <Product product={this.state.data} />
           </div>
-          : <Loading type="bubbles" color="#3385b5" />
+          : <Loading />
         )}
       </span>
     );

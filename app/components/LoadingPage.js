@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import Loading from 'react-loading';
+import { Jumbotron } from 'react-bootstrap';
 
 export default class LoadingPage extends React.Component {
   static propTypes = {
@@ -8,16 +9,12 @@ export default class LoadingPage extends React.Component {
 
   render() {
     return (
-      <div>
+      <Jumbotron style={{ textAlign: 'center' }}>
+        <h2>
+          One moment, please...
+        </h2>
         <Loading type="bubbles" color="#3385b5" />
-
-        <div>
-          { this.props.children
-            ? this.props.children
-            : 'Пару секунд, загружаемся'
-          }
-        </div>
-      </div>
+      </Jumbotron>
     );
   }
 }

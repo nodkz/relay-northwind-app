@@ -35,10 +35,12 @@ export default function MainPage() {
       </div>
       <br />
       <div>
-        <h4>GraphQL server</h4>
+        <h4>Source code of server-side (GraphQL + MongoDB)</h4>
         <a href="http://graphql-compose.herokuapp.com/northwind/" target="_blank">GraphiQL for writing queries by hands</a>
         <br />
         <a href="https://github.com/nodkz/graphql-compose-examples/tree/master/examples/northwind" target="_blank">GraphQL server source code (graphql-compose inside)</a>
+        <br />
+        <a href="https://github.com/nodkz/graphql-compose-examples/tree/master/examples/northwind/data/json" target="_blank">All data in JSON format for your demos and apps</a>
       </div>
       <br />
       <div>

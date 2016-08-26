@@ -1,6 +1,9 @@
+import React from 'react';
 import Relay from 'react-relay';
 import App from './components/App';
 import Page404 from './components/Page404';
+import BrokenPage from './components/BrokenPage';
+import LoadingPage from './components/LoadingPage';
 import MainPage from './components/MainPage';
 
 import CategoryListViewer from './components/categories/CategoryListViewer';
@@ -90,35 +93,36 @@ const routes = [
 ];
 
 
-// function addLoaderForRelayComponents(routeList) {
-//   function addLoader(route) {
-//     if (route.queries && route.component && !route.render) {
-//       route.render = (o) => { // eslint-disable-line
-//         if (o.props) {
-//           return React.createElement(route.component, o.props);
-//         }
-//
-//         if (o.error) {
-//           return <BrokenPage message={o.error.message} />;
-//         }
-//
-//         return <LoadingPage />;
-//       };
-//     }
-//   }
-//
-//   routeList.forEach(route => {
-//     if (route.indexRoute) {
-//       addLoader(route.indexRoute);
-//     }
-//     addLoader(route);
-//
-//     if (route.childRoutes && Array.isArray(route.childRoutes)) {
-//       addLoaderForRelayComponents(route.childRoutes);
-//     }
-//   });
-// }
-// addLoaderForRelayComponents(routes);
+// add loaders and error catcher for all routes, also for nested routes if will exist
+function addLoaderForRelayComponents(routeList) {
+  function addLoader(route) {
+    if (route.queries && route.component && !route.render) {
+      route.render = (o) => { // eslint-disable-line
+        if (o.props) {
+          return React.createElement(route.component, o.props);
+        }
+
+        if (o.error) {
+          return <BrokenPage message={o.error.message} />;
+        }
+
+        return <LoadingPage />;
+      };
+    }
+  }
+
+  routeList.forEach(route => {
+    if (route.indexRoute) {
+      addLoader(route.indexRoute);
+    }
+    addLoader(route);
+
+    if (route.childRoutes && Array.isArray(route.childRoutes)) {
+      addLoaderForRelayComponents(route.childRoutes);
+    }
+  });
+}
+addLoaderForRelayComponents(routes);
 
 
 export default routes;
