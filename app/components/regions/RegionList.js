@@ -4,15 +4,13 @@ import Region from './Region';
 
 class RegionList extends React.Component {
   static propTypes = {
-    regionList: PropTypes.array.isRequired,
+    viewer: PropTypes.object,
   };
 
   render() {
-    const { regionList = [] } = this.props;
-
     return (
       <div>
-        { regionList.map((region, i) => {
+        { this.props.viewer.regionList.map((region, i) => {
           return <Region key={i} region={region} />;
         })}
       </div>
@@ -22,9 +20,11 @@ class RegionList extends React.Component {
 
 export default Relay.createContainer(RegionList, {
   fragments: {
-    regionList: () => Relay.QL`
-      fragment on Region @relay(plural: true) {
-        ${Region.getFragment('region')}
+    viewer: () => Relay.QL`
+      fragment on Viewer {
+        regionList {
+          ${Region.getFragment('region')}
+        }
       }
     `,
   },
