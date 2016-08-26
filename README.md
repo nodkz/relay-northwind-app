@@ -11,8 +11,6 @@ Build using React, Relay and GraphQL.
 
 [Live GraphQL server DEMO](http://graphql-compose.herokuapp.com/northwind/)
 
-![relay-northwind-app](https://cloud.githubusercontent.com/assets/1946920/18013918/488e6830-6be2-11e6-84b6-884c8ab971ac.gif)
-
 Internally implements many cool things:
 - Connections with infinite lists and filtering
 - Running Relay queries from component (not via routing)
@@ -20,6 +18,8 @@ Internally implements many cool things:
 - Build on top of [graphql-compose](https://github.com/nodkz/graphql-compose) auto-generated GraphQL schema from mongoose (MongoDB).
 - Eslint with GraphQL fragment validation, Webpack 2, React Hot Loader 3.0.0-beta, last versions of React and Babel.
 - Many thanks to @taion for `react-router-relay`, `react-bootstrap` and changes in `react-router`. Awesome work!
+
+![relay-northwind-app](https://cloud.githubusercontent.com/assets/1946920/18013918/488e6830-6be2-11e6-84b6-884c8ab971ac.gif)
 
 ### Data models
 This APP has 8 basic types, which has many cross-relations (via one-to-one, arrays, connections):
