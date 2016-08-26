@@ -3,6 +3,8 @@ import {
   Form, FormGroup, ControlLabel, FormControl, Button, InputGroup,
 } from 'react-bootstrap';
 
+const InputGroupAddon = InputGroup.Addon;
+
 export default class ProductFilter extends React.Component {
   static propTypes = {
     onFilter: PropTypes.func,
@@ -99,7 +101,7 @@ export default class ProductFilter extends React.Component {
           <ControlLabel>UnitPrice</ControlLabel>
           {' '}
           <InputGroup>
-            <InputGroup.Addon>$</InputGroup.Addon>
+            <InputGroupAddon>$</InputGroupAddon>
             <FormControl
               type="number"
               data-name="unitPriceGTE"
@@ -107,7 +109,7 @@ export default class ProductFilter extends React.Component {
               style={{ width: '70px' }}
               onChange={this.onChange}
             />
-            <InputGroup.Addon>—</InputGroup.Addon>
+            <InputGroupAddon>—</InputGroupAddon>
             <FormControl
               type="number"
               data-name="unitPriceLTE"

@@ -24,19 +24,21 @@ export default function MainPage() {
             <p style={{ textAlign: 'right', fontWeight: 'bold' }}>© Fargo</p>
           </div>
           <div className="col-sm-3 hidden-xs">
-            <img width="185" src="/fargo500.jpg" alt="Fargo poster" />
+            <img width="185" src="./fargo500.jpg" alt="Fargo poster" />
           </div>
         </div>
       </Jumbotron>
 
       <div>
         <h4>Source code of this client app</h4>
-        <a href="https://github.com/nodkz/northwind-relay-example-app" target="_blank">https://github.com/nodkz/northwind-relay-example-app</a>
+        <a href="https://github.com/nodkz/relay-northwind-app" target="_blank">https://github.com/nodkz/relay-northwind-app</a>
       </div>
       <br />
       <div>
         <h4>Source code of server-side (GraphQL + MongoDB)</h4>
         <a href="http://graphql-compose.herokuapp.com/northwind/" target="_blank">GraphiQL for writing queries by hands</a>
+        <br />
+        <a href="http://graphql-compose.herokuapp.com/" target="_blank">Query examples to GraphQL Server</a>
         <br />
         <a href="https://github.com/nodkz/graphql-compose-examples/tree/master/examples/northwind" target="_blank">GraphQL server source code (graphql-compose inside)</a>
         <br />
