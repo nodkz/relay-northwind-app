@@ -15,7 +15,21 @@ class OrderConnectionItem extends React.Component {
       <div>
         <div className="row">
           <div className="col-sm-1">{order.orderID}</div>
-          <div className="col-sm-3">{order.shipName}</div>
+          <div className="col-sm-2">
+            {order.customer.companyName}
+          </div>
+          <div className="col-sm-2">
+            {order.employee.firstName}
+            {' '}
+            {order.employee.lastName}
+            {' '}
+            (id:{order.employeeID})
+          </div>
+          <div className="col-sm-2">
+            {order.shipper.companyName}
+            {' '}
+            (id:{order.shipVia})
+          </div>
           <div className="col-sm-2">{`${order.orderDate}`.substr(0, 10)}</div>
           <div className="col-sm-2">{order.freight}</div>
         </div>
@@ -31,7 +45,19 @@ export default Relay.createContainer(OrderConnectionItem, {
       fragment on Order {
         id
         orderID
-        shipName
+        customerID
+        employeeID
+        shipVia
+        customer {
+          companyName
+        }
+        shipper {
+          companyName
+        }
+        employee {
+          firstName
+          lastName
+        }
         orderDate
         freight
       }
