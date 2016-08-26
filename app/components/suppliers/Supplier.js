@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
-import { Label } from 'react-bootstrap';
 import Address from '../Address';
+import ToggleProductCollection from '../products/ToggleProductConnection';
 
 class Supplier extends React.Component {
   static propTypes = {
@@ -27,10 +27,13 @@ class Supplier extends React.Component {
           <dd>{supplier.contactTitle}</dd>
 
           <dt>Address</dt>
-          <dd><Address address={supplier.address}/></dd>
+          <dd><Address address={supplier.address} /></dd>
 
           <dt>Total products</dt>
-          <dd><b>{supplier.productConnection.count}</b></dd>
+          <dd>
+            <b>{supplier.productConnection.count}</b>
+            <ToggleProductCollection filter={{ supplierID: supplier.supplierID }} />
+          </dd>
         </dl>
       </div>
     );

@@ -61,7 +61,7 @@ class SupplierConnectionItem extends React.Component {
           <div className="col-sm-2">{supplier.contactName}</div>
           <div className="col-sm-2">{supplier.contactTitle}</div>
           <div className="col-sm-1">
-            <Button bsSize="xsmall">
+            <Button bsSize="xsmall" bsStyle="info">
               { isOpen ? 'Close' : 'Open' }
             </Button>
           </div>
