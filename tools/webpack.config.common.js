@@ -3,7 +3,6 @@
 
 import path from 'path';
 import webpack from 'webpack';
-import autoprefixer from 'autoprefixer';
 import deepmerge from 'deepmerge';
 
 if (!process.env.NODE_ENV) {
@@ -128,4 +127,4 @@ export function mergeConfig(extConfig) {
   });
 
   return result;
-};
+}
