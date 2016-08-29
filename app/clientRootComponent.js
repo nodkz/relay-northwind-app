@@ -20,7 +20,7 @@ export default class ClientRoot extends Component { // eslint-disable-line
       <Router
         routes={routes}
         history={history}
-        render={applyRouterMiddleware(useRelay)}
+        render={applyRouterMiddleware(useRelay.default ? useRelay.default : useRelay)} // eslint-disable-line
         environment={environment}
       />
 		);
