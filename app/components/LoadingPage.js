@@ -16,8 +16,8 @@ export default class LoadingPage extends React.Component {
           One moment, please...
           <br />
           <small>
-            Waiting
-            {' '}
+            Waiting while warming up herokuapp and GraphQL server returns data 
+            <br />
             <a href="https://graphql-compose.herokuapp.com/northwind/" target="_blank">https://graphql-compose.herokuapp.com/northwind/</a>
           </small>
         </h2>
