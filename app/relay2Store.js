@@ -1,10 +1,14 @@
 import Relay from 'react-relay';
 import RelayNetworkDebug from 'react-relay/lib/RelayNetworkDebug';
 
+const endpoint = 'https://graphql-compose.herokuapp.com/northwind/';
+// const endpoint = '/graphql';
+
 let relayStore;
 function relayCreateStore() {
   const env = new Relay.Environment();
-  env.injectNetworkLayer(new Relay.DefaultNetworkLayer('/graphql'));
+  env.endpoint = endpoint;
+  env.injectNetworkLayer(new Relay.DefaultNetworkLayer(env.endpoint));
   if (__DEV__) {
     RelayNetworkDebug.init(env);
   }

@@ -3,6 +3,7 @@
 import React, { PropTypes } from 'react';
 import Loading from 'react-loading';
 import { Jumbotron } from 'react-bootstrap';
+import { relayStore } from '../clientStores';
 
 export default class LoadingPage extends React.Component {
   static propTypes = {
@@ -18,7 +19,7 @@ export default class LoadingPage extends React.Component {
           <small>
             Waiting
             {' '}
-            <a href="https://graphql-compose.herokuapp.com/northwind/" target="_blank">https://graphql-compose.herokuapp.com/northwind/</a>
+            <a href={relayStore.endpoint} target="_blank">{relayStore.endpoint}</a>
           </small>
         </h2>
         <div className="row">
