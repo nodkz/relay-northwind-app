@@ -13,6 +13,45 @@ function relayCreateStore() {
     RelayNetworkDebug.init(env);
   }
   env.reset = () => relayCreateStore();
+
+  env.fetch = ({
+    query,
+    force = false,
+    variables,
+    onSuccess,
+    onError,
+    onStart,
+    onEnd,
+  }) => {
+    return new Promise((resolve, reject) => {
+      const q = Relay.createQuery(query, variables || {});
+      if (onStart) onStart();
+
+      const args = [
+        { query: q },
+        (readyState) => {
+          if (readyState.error) {
+            if (onError) onError(readyState.error);
+            if (onEnd) onEnd();
+            reject(readyState.error);
+          }
+          if (readyState.ready) {
+            const result = env.readQuery(q)[0];
+            if (onSuccess) onSuccess(result);
+            if (onEnd) onEnd();
+            resolve(result);
+          }
+        },
+      ];
+
+      if (force) {
+        env.forceFetch(...args);
+      } else {
+        env.primeCache(...args);
+      }
+    });
+  };
+
   env.mutate = ({
     query,
     variables,
@@ -20,70 +59,72 @@ function relayCreateStore() {
     configs,
     onSuccess,
     onError,
-    onEnd,
     onStart,
+    onEnd,
     optimisticQuery,
     optimisticResponse,
     optimisticConfigs,
   }) => {
-    // see docs https://facebook.github.io/relay/docs/api-reference-relay-graphql-mutation.html#content
-    let vars;
-    if (!variables) {
-      vars = undefined;
-    } else {
-      if (variables.input) { // eslint-disable-line
-        vars = variables;
+    return new Promise((resolve, reject) => {
+      // see docs https://facebook.github.io/relay/docs/api-reference-relay-graphql-mutation.html#content
+      let vars;
+      if (!variables) {
+        vars = undefined;
       } else {
-        vars = { input: variables };
+        if (variables.input) { // eslint-disable-line
+          vars = variables;
+        } else {
+          vars = { input: variables };
+        }
       }
-    }
 
-    if (onStart) {
-      onStart();
-    }
-
-    let collisionKeyComputed;
-    if (collisionKey) {
-      collisionKeyComputed = collisionKey;
-    } else if (variables) {
-      // if _id provided, then take it as collision key
-      if (variables._id) {
-        collisionKeyComputed = variables._id;
-      } else if (variables.record && variables.record._id) {
-        collisionKeyComputed = variables.record._id;
+      if (onStart) {
+        onStart();
       }
-    }
 
-    const mutation = new Relay.GraphQLMutation(
-      query,
-      vars,
-      null, // I don't use file upload, cause upload by signed url directly to S3
-      relayStore,
-      {
-        onFailure: (transaction) => {
-          if (onError) onError(transaction);
-          if (onEnd) onEnd();
-        },
-        onSuccess: (response) => {
-          if (onSuccess) onSuccess(response);
-          if (onEnd) onEnd();
-        },
-      },
-      collisionKeyComputed
-    );
+      let collisionKeyComputed;
+      if (collisionKey) {
+        collisionKeyComputed = collisionKey;
+      } else if (variables) {
+        // if _id provided, then take it as collision key
+        if (variables._id) {
+          collisionKeyComputed = variables._id;
+        } else if (variables.record && variables.record._id) {
+          collisionKeyComputed = variables.record._id;
+        }
+      }
 
-    if (optimisticResponse) {
-      mutation.applyOptimistic(
-        optimisticQuery || query, // if optimisticQuery not provided, then take query
-        optimisticResponse,
-        optimisticConfigs || configs,
+      const mutation = new Relay.GraphQLMutation(
+        query,
+        vars,
+        null, // I don't use file upload, cause upload by signed url directly to S3
+        relayStore,
+        {
+          onFailure: (transaction) => {
+            if (onError) onError(transaction);
+            if (onEnd) onEnd();
+            reject(transaction.getError());
+          },
+          onSuccess: (response) => {
+            if (onSuccess) onSuccess(response);
+            if (onEnd) onEnd();
+            resolve(response);
+          },
+        },
+        collisionKeyComputed
       );
-    }
 
-    // we can get transaction here but no need, cause callbacks already defined in constructor
-    mutation.commit(configs);
+      if (optimisticResponse) {
+        mutation.applyOptimistic(
+          optimisticQuery || query, // if optimisticQuery not provided, then take query
+          optimisticResponse,
+          optimisticConfigs || configs,
+        );
+      }
 
-    return mutation;
+      // we can get transaction here but no need, cause callbacks already defined in constructor
+      mutation.commit(configs);
+    });
   };
 
   relayStore = env;
