@@ -1,6 +1,7 @@
 import Relay from 'react-relay';
 import RelayNetworkDebug from 'react-relay/lib/RelayNetworkDebug';
 import { hashHistory } from 'react-router';
+import Relay2Store from './relay2Store';
 
 Relay.injectNetworkLayer(
   new Relay.DefaultNetworkLayer('https://graphql-compose.herokuapp.com/northwind/')
@@ -13,6 +14,7 @@ Relay.injectNetworkLayer(
 RelayNetworkDebug.init();
 // }
 
+// export const relayStore = Relay2Store;
 export const relayStore = Relay.Store;
 
 export {
