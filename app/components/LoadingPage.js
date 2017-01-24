@@ -17,8 +17,8 @@ export default class LoadingPage extends React.Component {
           One moment, please...
           <br />
           <small>
-            Waiting
-            {' '}
+            Waiting while warming up GraphQL server on Heroku and data returns 
+            <br />
             <a href={relayStore.endpoint} target="_blank">{relayStore.endpoint}</a>
           </small>
         </h2>
