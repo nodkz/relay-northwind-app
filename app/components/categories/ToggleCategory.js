@@ -21,27 +21,25 @@ export default class ToggleCategory extends React.Component {
   }
 
   toggle() {
-    this.setState({
-      isOpen: !this.state.isOpen,
-    });
+    this.setState({ isOpen: !this.state.isOpen });
 
     if (!this.state.data) {
-      const query = Relay.createQuery(
-        Relay.QL`query {
-          viewer {
-            category(filter: $filter) {
-              ${Category.getFragment('category')}
+      relayStore
+        .fetch({
+          query: Relay.QL`query {
+            viewer {
+              category(filter: $filter) {
+                ${Category.getFragment('category')}
+              }
             }
-          }
-        }`,
-        { filter: { categoryID: this.props.id } }
-      );
-      relayStore.primeCache({ query }, readyState => {
-        if (readyState.done) {
-          const data = relayStore.readQuery(query)[0];
-          this.setState({ data: data.category });
-        }
-      });
+          }`,
+          variables: {
+            filter: { categoryID: this.props.id },
+          },
+        })
+        .then((res) => {
+          this.setState({ data: res.category });
+        });
     }
   }
 
