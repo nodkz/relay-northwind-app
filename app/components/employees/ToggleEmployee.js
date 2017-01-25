@@ -26,21 +26,19 @@ export default class ToggleEmployee extends React.Component {
     });
 
     if (!this.state.data) {
-      const query = Relay.createQuery(
-        Relay.QL`query {
+      relayStore.fetch({
+        query: Relay.QL`query {
           viewer {
             employee(filter: $filter) {
               ${Employee.getFragment('employee')}
             }
           }
         }`,
-        { filter: { employeeID: this.props.id } }
-      );
-      relayStore.primeCache({ query }, readyState => {
-        if (readyState.done) {
-          const data = relayStore.readQuery(query)[0];
-          this.setState({ data: data.employee });
-        }
+        variables: { filter: { employeeID: this.props.id } }
+      }).then((res) => {
+        this.setState({
+          data: res.employee,
+        });
       });
     }
   }

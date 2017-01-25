@@ -26,21 +26,17 @@ export default class ToggleProduct extends React.Component {
     });
 
     if (!this.state.data) {
-      const query = Relay.createQuery(
-        Relay.QL`query {
+      relayStore.fetch({
+        query: Relay.QL`query {
           viewer {
             product(filter: $filter) {
               ${Product.getFragment('product')}
             }
           }
         }`,
-        { filter: { productID: this.props.id } }
-      );
-      relayStore.primeCache({ query }, readyState => {
-        if (readyState.done) {
-          const data = relayStore.readQuery(query)[0];
-          this.setState({ data: data.product });
-        }
+        variables: { filter: { productID: this.props.id } }
+      }).then((res) => {
+        this.setState({ data: res.product });
       });
     }
   }
