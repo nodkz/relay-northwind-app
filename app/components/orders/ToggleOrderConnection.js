@@ -26,19 +26,17 @@ export default class ToggleOrderConnection extends React.Component {
     });
 
     if (!this.state.viewer) {
-      const query = Relay.createQuery(
-        Relay.QL`query {
+      relayStore.fetch({
+        query: Relay.QL`query {
           viewer {
             ${OrderConnection.getFragment('viewer', { filter: this.props.filter })}
           }
         }`,
-        { filter: this.props.filter }
-      );
-      relayStore.primeCache({ query }, readyState => {
-        if (readyState.done) {
-          const viewer = relayStore.readQuery(query)[0];
-          this.setState({ viewer });
-        }
+        variables: { filter: this.props.filter }
+      }).then((res) => {
+        this.setState({
+          viewer: res
+        })
       });
     }
   }
