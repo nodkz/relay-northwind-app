@@ -1,6 +1,9 @@
 import React from 'react';
+import {
+  Button, InputGroup,
+} from 'react-bootstrap';
 
-export default function ProductHeaders({ count }) {
+export default function ProductHeaders({ count, onCreating, isCreating }) {
   if (!count) {
     return <h3>Nothing found! But it is no reason to be upset ;)</h3>;
   }
@@ -8,6 +11,9 @@ export default function ProductHeaders({ count }) {
   return (
     <div>
       <h3>Total {count} records</h3>
+      {!isCreating &&
+        <Button type="submit" bsStyle="primary" onClick={onCreating}>Create New Product</Button>
+      }
       <div className="row">
         <div className="col-sm-1"><b>ProductID</b></div>
         <div className="col-sm-3"><b>Title</b></div>
