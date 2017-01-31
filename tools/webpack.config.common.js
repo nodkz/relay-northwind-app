@@ -9,7 +9,7 @@ if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = 'development';
 }
 
-export const PORT = 3000;
+export const PORT = 4200;
 export const PORT_BACKEND_SERVER = 5000;
 export const PORT_FRONTEND_DEV_SERVER = 3001;
 

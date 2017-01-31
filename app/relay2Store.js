@@ -1,8 +1,9 @@
 import Relay from 'react-relay';
 import RelayNetworkDebug from 'react-relay/lib/RelayNetworkDebug';
 
-const endpoint = 'https://graphql-compose.herokuapp.com/northwind/';
+// const endpoint = 'https://graphql-compose.herokuapp.com/northwind/';
 // const endpoint = '/graphql';
+const endpoint = 'http://localhost:3000/northwind/'
 
 let relayStore;
 function relayCreateStore() {
