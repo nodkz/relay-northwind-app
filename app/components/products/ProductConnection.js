@@ -131,7 +131,7 @@ class ProductConnection extends React.Component {
         }
 
         {this.state.isCreating &&
-          <CreateProduct onCreateProduct={this.onCreateProduct} />
+          <CreateProduct/>
         }
 
         <ProductHeaders
