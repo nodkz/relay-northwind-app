@@ -1,6 +1,8 @@
 // Common configuration chunk to be used for both
 // client-side (client.js) and server-side (server.js) bundles
 
+require('dotenv').config();
+
 import path from 'path';
 import webpack from 'webpack';
 import deepmerge from 'deepmerge';
@@ -9,15 +11,18 @@ if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = 'development';
 }
 
-export const PORT = 4200;
-export const PORT_BACKEND_SERVER = 5000;
-export const PORT_FRONTEND_DEV_SERVER = 3001;
+export const PORT = process.env.DEV_PORT || 3000;
+export const PORT_BACKEND_SERVER = process.env.DEV_PORT_BACKEND_SERVER || 5000;
+export const PORT_FRONTEND_DEV_SERVER = process.env.DEV_PORT_FRONTEND_DEV_SERVER || 3001;
 
 export const DEV = process.env.NODE_ENV === 'development';
 export const VERBOSE = process.argv.includes('--verbose');
 export const GLOBALS = {
   __DEV__: DEV,
   'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+  'process.env.RELAY_ENDPOINT': JSON.stringify(
+    process.env.RELAY_ENDPOINT || 'https://graphql-compose.herokuapp.com/northwind/'
+  ),
 };
 
 

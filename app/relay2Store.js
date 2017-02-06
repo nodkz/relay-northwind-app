@@ -1,9 +1,11 @@
 import Relay from 'react-relay';
 import RelayNetworkDebug from 'react-relay/lib/RelayNetworkDebug';
 
-// const endpoint = 'https://graphql-compose.herokuapp.com/northwind/';
-// const endpoint = '/graphql';
-const endpoint = 'http://localhost:3000/northwind/'
+// This variable will be replaced at build process by webpack
+//    see webpack.DefinePlugin in /tools/webpack.config.commons.js
+// By default `https://graphql-compose.herokuapp.com/northwind/`
+// But may be overrided locally via .env file
+const endpoint = process.env.RELAY_ENDPOINT;
 
 let relayStore;
 function relayCreateStore() {
