@@ -26,18 +26,20 @@ export default class ToggleShipper extends React.Component {
     });
 
     if (!this.state.data) {
-      relayStore.fetch({
-        query: Relay.QL`query {
+      relayStore
+        .fetch({
+          query: Relay.QL`query {
           viewer {
             shipper(filter: $filter) {
               ${Shipper.getFragment('shipper')}
             }
           }
         }`,
-        variables: { filter: { shipperID: this.props.id } },
-      }).then((res) => {
-        this.setState({ data: res.shipper });
-      });
+          variables: { filter: { shipperID: this.props.id } },
+        })
+        .then(res => {
+          this.setState({ data: res.shipper });
+        });
     }
   }
 
@@ -52,13 +54,14 @@ export default class ToggleShipper extends React.Component {
           data-id={this.props.id}
           children={this.state.isOpen ? 'close' : 'open'}
         />
-        { this.state.isOpen && (
-          this.state.data
-          ? <div className="lrspace bspace">
-            <Shipper shipper={this.state.data} />
-          </div>
-          : <Loading />
-        )}
+        {this.state.isOpen &&
+          (this.state.data ? (
+            <div className="lrspace bspace">
+              <Shipper shipper={this.state.data} />
+            </div>
+          ) : (
+            <Loading />
+          ))}
       </span>
     );
   }

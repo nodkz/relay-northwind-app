@@ -12,9 +12,9 @@ class CategoryList extends React.Component {
       <div>
         <h3>Total {this.props.viewer.categoryList.length} records</h3>
 
-        { this.props.viewer.categoryList.map((category, i) =>
+        {this.props.viewer.categoryList.map((category, i) => (
           <Category key={i} category={category} />
-        )}
+        ))}
       </div>
     );
   }

@@ -23,9 +23,7 @@ class SupplierConnectionViewer extends React.Component {
   }
 
   componentDidMount() {
-    setTimeout(
-      () => this.loadNextItemsIfNeeded(this.scrollContainer),
-      500);
+    setTimeout(() => this.loadNextItemsIfNeeded(this.scrollContainer), 500);
 
     window.addEventListener('scroll', this.onScroll);
   }
@@ -52,13 +50,19 @@ class SupplierConnectionViewer extends React.Component {
   loadNextItems() {
     this.setState({ loading: true }, () => {
       if (this.props.viewer.supplierConnection.pageInfo.hasNextPage) {
-        this.props.relay.setVariables({
-          count: this.props.relay.variables.count + PER_PAGE,
-        }, (readyState) => { // this gets called twice https://goo.gl/ZsQ3Dy
-          if (readyState.done) {
-            this.setState({ loading: false }, () => { this.loadNextItemsIfNeeded(); });
+        this.props.relay.setVariables(
+          {
+            count: this.props.relay.variables.count + PER_PAGE,
+          },
+          readyState => {
+            // this gets called twice https://goo.gl/ZsQ3Dy
+            if (readyState.done) {
+              this.setState({ loading: false }, () => {
+                this.loadNextItemsIfNeeded();
+              });
+            }
           }
-        });
+        );
       } else {
         window.removeEventListener('scroll', this.onScroll);
       }
@@ -75,14 +79,14 @@ class SupplierConnectionViewer extends React.Component {
     return (
       <div
         onScroll={this.onScroll}
-        ref={c => { this.scrollContainer = c; }}
+        ref={c => {
+          this.scrollContainer = c;
+        }}
         style={{ marginBottom: '200px' }}
       >
         <SupplierConnection supplierConnection={this.props.viewer.supplierConnection} />
 
-        { this.props.viewer.supplierConnection.pageInfo.hasNextPage &&
-          <Loading />
-        }
+        {this.props.viewer.supplierConnection.pageInfo.hasNextPage && <Loading />}
       </div>
     );
   }

@@ -1,7 +1,5 @@
 import React, { PropTypes } from 'react';
-import {
-  Form, FormGroup, ControlLabel, FormControl, Button,
-} from 'react-bootstrap';
+import { Form, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
 
 export default class OrderFilter extends React.Component {
   static propTypes = {
@@ -60,8 +58,7 @@ export default class OrderFilter extends React.Component {
     return (
       <Form inline>
         <FormGroup style={{ marginRight: '20px' }}>
-          <ControlLabel>EmployeeID</ControlLabel>
-          {' '}
+          <ControlLabel>EmployeeID</ControlLabel>{' '}
           <FormControl
             type="number"
             data-name="employeeID"
@@ -69,11 +66,9 @@ export default class OrderFilter extends React.Component {
             style={{ width: '70px' }}
             onChange={this.onChange}
           />
-        </FormGroup>
-        {' '}
+        </FormGroup>{' '}
         <FormGroup style={{ marginRight: '20px' }}>
-          <ControlLabel>ShipperID</ControlLabel>
-          {' '}
+          <ControlLabel>ShipperID</ControlLabel>{' '}
           <FormControl
             type="number"
             data-name="shipperID"
@@ -81,11 +76,13 @@ export default class OrderFilter extends React.Component {
             style={{ width: '70px' }}
             onChange={this.onChange}
           />
-        </FormGroup>
-        {' '}
-        <Button type="submit" bsStyle="primary" onClick={this.onFilter}>Filter</Button>
-        {' '}
-        <Button type="submit" onClick={this.onClear}>Clear</Button>
+        </FormGroup>{' '}
+        <Button type="submit" bsStyle="primary" onClick={this.onFilter}>
+          Filter
+        </Button>{' '}
+        <Button type="submit" onClick={this.onClear}>
+          Clear
+        </Button>
       </Form>
     );
   }

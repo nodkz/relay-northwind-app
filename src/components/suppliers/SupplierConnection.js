@@ -28,10 +28,7 @@ class SupplierConnection extends React.Component {
         {this.props.supplierConnection.edges.map(({ node }) => {
           return (
             <div key={node._id}>
-              <SupplierConnectionItem
-                supplier={node}
-                onItemClick={this.handleItemClick}
-              />
+              <SupplierConnectionItem supplier={node} onItemClick={this.handleItemClick} />
             </div>
           );
         })}

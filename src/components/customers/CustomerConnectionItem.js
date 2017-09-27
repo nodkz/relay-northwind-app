@@ -17,10 +17,11 @@ class CustomerConnectionItem extends React.Component {
         <div className="col-sm-2">{customer.companyName}</div>
         <div className="col-sm-2">{customer.contactName}</div>
         <div className="col-sm-2">{customer.contactTitle}</div>
-        <div className="col-sm-2"><Address address={customer.address} /></div>
+        <div className="col-sm-2">
+          <Address address={customer.address} />
+        </div>
         <div>
-          <b>{customer.orderConnection.count}</b>
-          {' '}
+          <b>{customer.orderConnection.count}</b>{' '}
           <ToggleOrderCollection filter={{ customerID: customer.customerID }} />
         </div>
       </div>

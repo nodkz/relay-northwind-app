@@ -12,7 +12,7 @@ class ShipperList extends React.Component {
       <div>
         <h3>Total {this.props.viewer.shipperList.length} records</h3>
 
-        { this.props.viewer.shipperList.map((shipper, i) => {
+        {this.props.viewer.shipperList.map((shipper, i) => {
           return <Shipper key={i} shipper={shipper} />;
         })}
       </div>

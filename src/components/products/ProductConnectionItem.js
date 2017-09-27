@@ -16,19 +16,20 @@ class ProductConnectionItem extends React.Component {
         <div className="row">
           <div className="col-sm-1">{product.productID}</div>
           <div className="col-sm-3">
-            {product.name}
-            {' '}
-            {product.discontinued ? <span className="text-danger"><b>Discontinued</b></span> : ''}
+            {product.name}{' '}
+            {product.discontinued ? (
+              <span className="text-danger">
+                <b>Discontinued</b>
+              </span>
+            ) : (
+              ''
+            )}
           </div>
           <div className="col-sm-2">
-            {product.category.name}
-            {' '}
-            (id:{product.categoryID})
+            {product.category.name} (id:{product.categoryID})
           </div>
           <div className="col-sm-2">
-            {product.supplier.companyName}
-            {' '}
-            (id:{product.supplierID})
+            {product.supplier.companyName} (id:{product.supplierID})
           </div>
           <div className="col-sm-2">${product.unitPrice}</div>
           <div className="col-sm-2">{product.unitsInStock} pcs</div>

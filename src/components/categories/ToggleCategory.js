@@ -37,7 +37,7 @@ export default class ToggleCategory extends React.Component {
             filter: { categoryID: this.props.id },
           },
         })
-        .then((res) => {
+        .then(res => {
           this.setState({ data: res.category });
         });
     }
@@ -54,13 +54,14 @@ export default class ToggleCategory extends React.Component {
           data-id={this.props.id}
           children={this.state.isOpen ? 'close' : 'open'}
         />
-        { this.state.isOpen && (
-          this.state.data
-          ? <div className="lrspace bspace">
-            <Category category={this.state.data} />
-          </div>
-          : <Loading />
-        )}
+        {this.state.isOpen &&
+          (this.state.data ? (
+            <div className="lrspace bspace">
+              <Category category={this.state.data} />
+            </div>
+          ) : (
+            <Loading />
+          ))}
       </span>
     );
   }

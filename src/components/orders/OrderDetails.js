@@ -3,7 +3,6 @@ import Relay from 'react-relay';
 import { Table } from 'react-bootstrap';
 import ToggleProduct from '../products/ToggleProduct';
 
-
 class OrderDetails extends React.Component {
   static propTypes = {
     details: PropTypes.array.isRequired,
@@ -24,19 +23,17 @@ class OrderDetails extends React.Component {
           </tr>
         </thead>
         <tbody>
-          { details.map((row, i) =>
+          {details.map((row, i) => (
             <tr key={i}>
               <td>{row.productID}</td>
               <td>
-                {row.product.name}
-                {' '}
-                <ToggleProduct id={row.productID} />
+                {row.product.name} <ToggleProduct id={row.productID} />
               </td>
               <td>{row.unitPrice}</td>
               <td>{row.quantity}</td>
               <td>{row.discount}</td>
             </tr>
-          )}
+          ))}
         </tbody>
       </Table>
     );

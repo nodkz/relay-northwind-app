@@ -26,20 +26,22 @@ export default class ToggleEmployee extends React.Component {
     });
 
     if (!this.state.data) {
-      relayStore.fetch({
-        query: Relay.QL`query {
+      relayStore
+        .fetch({
+          query: Relay.QL`query {
           viewer {
             employee(filter: $filter) {
               ${Employee.getFragment('employee')}
             }
           }
         }`,
-        variables: { filter: { employeeID: this.props.id } }
-      }).then((res) => {
-        this.setState({
-          data: res.employee,
+          variables: { filter: { employeeID: this.props.id } },
+        })
+        .then(res => {
+          this.setState({
+            data: res.employee,
+          });
         });
-      });
     }
   }
 
@@ -54,13 +56,14 @@ export default class ToggleEmployee extends React.Component {
           data-id={this.props.id}
           children={this.state.isOpen ? 'close' : 'open'}
         />
-        { this.state.isOpen && (
-          this.state.data
-          ? <div className="lrspace bspace">
-            <Employee employee={this.state.data} />
-          </div>
-          : <Loading />
-        )}
+        {this.state.isOpen &&
+          (this.state.data ? (
+            <div className="lrspace bspace">
+              <Employee employee={this.state.data} />
+            </div>
+          ) : (
+            <Loading />
+          ))}
       </span>
     );
   }

@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react';
 import Relay from 'react-relay';
 import Employee from './Employee';
 
-
 class EmployeeList extends React.Component {
   static propTypes = {
     viewer: PropTypes.object,
@@ -13,9 +12,9 @@ class EmployeeList extends React.Component {
       <div>
         <h3>Total {this.props.viewer.employeeList.length} records</h3>
 
-        { this.props.viewer.employeeList.map((employee, i) =>
+        {this.props.viewer.employeeList.map((employee, i) => (
           <Employee key={i} employee={employee} />
-        )}
+        ))}
       </div>
     );
   }

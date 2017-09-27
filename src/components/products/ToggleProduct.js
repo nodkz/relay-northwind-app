@@ -26,18 +26,20 @@ export default class ToggleProduct extends React.Component {
     });
 
     if (!this.state.data) {
-      relayStore.fetch({
-        query: Relay.QL`query {
+      relayStore
+        .fetch({
+          query: Relay.QL`query {
           viewer {
             product(filter: $filter) {
               ${Product.getFragment('product')}
             }
           }
         }`,
-        variables: { filter: { productID: this.props.id } }
-      }).then((res) => {
-        this.setState({ data: res.product });
-      });
+          variables: { filter: { productID: this.props.id } },
+        })
+        .then(res => {
+          this.setState({ data: res.product });
+        });
     }
   }
 
@@ -51,13 +53,14 @@ export default class ToggleProduct extends React.Component {
           data-id={this.props.id}
           children={this.state.isOpen ? 'close' : 'open'}
         />
-        { this.state.isOpen && (
-          this.state.data
-          ? <div className="lrspace bspace">
-            <Product product={this.state.data} />
-          </div>
-          : <Loading />
-        )}
+        {this.state.isOpen &&
+          (this.state.data ? (
+            <div className="lrspace bspace">
+              <Product product={this.state.data} />
+            </div>
+          ) : (
+            <Loading />
+          ))}
       </span>
     );
   }

@@ -57,22 +57,25 @@ class SupplierConnectionItem extends React.Component {
           className={['row', 'bgOnHover', isOpen ? 'bg-primary' : ''].join(' ')}
         >
           <div className="col-sm-1">{supplier.supplierID}</div>
-          <div className="col-sm-3"><b>{supplier.companyName}</b></div>
+          <div className="col-sm-3">
+            <b>{supplier.companyName}</b>
+          </div>
           <div className="col-sm-2">{supplier.contactName}</div>
           <div className="col-sm-2">{supplier.contactTitle}</div>
           <div className="col-sm-1">
             <Button bsSize="xsmall" bsStyle="info">
-              { isOpen ? 'Close' : 'Open' }
+              {isOpen ? 'Close' : 'Open'}
             </Button>
           </div>
         </div>
-        { isOpen && (
-          this.state.additionalData
-          ? <div className="lrspace bspace">
-            <Supplier supplier={this.state.additionalData} />
-          </div>
-          : <Loading type="bubbles" color="#3385b5" />
-        )}
+        {isOpen &&
+          (this.state.additionalData ? (
+            <div className="lrspace bspace">
+              <Supplier supplier={this.state.additionalData} />
+            </div>
+          ) : (
+            <Loading type="bubbles" color="#3385b5" />
+          ))}
       </div>
     );
   }

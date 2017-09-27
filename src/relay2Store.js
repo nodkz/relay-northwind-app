@@ -17,22 +17,14 @@ function relayCreateStore() {
   }
   env.reset = () => relayCreateStore();
 
-  env.fetch = ({
-    query,
-    force = false,
-    variables,
-    onSuccess,
-    onError,
-    onStart,
-    onEnd,
-  }) => {
+  env.fetch = ({ query, force = false, variables, onSuccess, onError, onStart, onEnd }) => {
     return new Promise((resolve, reject) => {
       const q = Relay.createQuery(query, variables || {});
       if (onStart) onStart();
 
       const args = [
         { query: q },
-        (readyState) => {
+        readyState => {
           if (readyState.error) {
             if (onError) onError(readyState.error);
             if (onEnd) onEnd();
@@ -103,12 +95,12 @@ function relayCreateStore() {
         null, // I don't use file upload, cause upload by signed url directly to S3
         relayStore,
         {
-          onFailure: (transaction) => {
+          onFailure: transaction => {
             if (onError) onError(transaction);
             if (onEnd) onEnd();
             reject(transaction.getError());
           },
-          onSuccess: (response) => {
+          onSuccess: response => {
             if (onSuccess) onSuccess(response);
             if (onEnd) onEnd();
             resolve(response);
@@ -121,7 +113,7 @@ function relayCreateStore() {
         mutation.applyOptimistic(
           optimisticQuery || query, // if optimisticQuery not provided, then take query
           optimisticResponse,
-          optimisticConfigs || configs,
+          optimisticConfigs || configs
         );
       }
 

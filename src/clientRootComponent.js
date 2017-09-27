@@ -24,6 +24,6 @@ export default class ClientRoot extends Component { // eslint-disable-line
         render={applyRouterMiddleware(useRelay.default ? useRelay.default : useRelay)} // eslint-disable-line
         environment={environment}
       />
-		);
+    );
   }
 }

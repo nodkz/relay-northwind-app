@@ -26,18 +26,20 @@ export default class ToggleOrderConnection extends React.Component {
     });
 
     if (!this.state.viewer) {
-      relayStore.fetch({
-        query: Relay.QL`query {
+      relayStore
+        .fetch({
+          query: Relay.QL`query {
           viewer {
             ${OrderConnection.getFragment('viewer', { filter: this.props.filter })}
           }
         }`,
-        variables: { filter: this.props.filter }
-      }).then((res) => {
-        this.setState({
-          viewer: res
+          variables: { filter: this.props.filter },
         })
-      });
+        .then(res => {
+          this.setState({
+            viewer: res,
+          });
+        });
     }
   }
 
@@ -51,17 +53,14 @@ export default class ToggleOrderConnection extends React.Component {
           onClick={this.toggle}
           children={this.state.isOpen ? 'hide all' : 'show all'}
         />
-        { this.state.isOpen && (
-          this.state.viewer
-          ? <div className="lrspace bspace bordered">
-            <OrderConnection
-              hideFilter
-              viewer={this.state.viewer}
-              filter={this.props.filter}
-            />
-          </div>
-          : <Loading />
-        )}
+        {this.state.isOpen &&
+          (this.state.viewer ? (
+            <div className="lrspace bspace bordered">
+              <OrderConnection hideFilter viewer={this.state.viewer} filter={this.props.filter} />
+            </div>
+          ) : (
+            <Loading />
+          ))}
       </span>
     );
   }

@@ -27,7 +27,9 @@ class Supplier extends React.Component {
           <dd>{supplier.contactTitle}</dd>
 
           <dt>Address</dt>
-          <dd><Address address={supplier.address} /></dd>
+          <dd>
+            <Address address={supplier.address} />
+          </dd>
 
           <dt>Total products</dt>
           <dd>

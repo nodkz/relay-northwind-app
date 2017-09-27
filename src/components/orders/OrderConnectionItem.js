@@ -15,20 +15,12 @@ class OrderConnectionItem extends React.Component {
       <div>
         <div className="row">
           <div className="col-sm-1">{order.orderID}</div>
+          <div className="col-sm-2">{order.customer.companyName}</div>
           <div className="col-sm-2">
-            {order.customer.companyName}
+            {order.employee.firstName} {order.employee.lastName} (id:{order.employeeID})
           </div>
           <div className="col-sm-2">
-            {order.employee.firstName}
-            {' '}
-            {order.employee.lastName}
-            {' '}
-            (id:{order.employeeID})
-          </div>
-          <div className="col-sm-2">
-            {order.shipper.companyName}
-            {' '}
-            (id:{order.shipVia})
+            {order.shipper.companyName} (id:{order.shipVia})
           </div>
           <div className="col-sm-2">{`${order.orderDate}`.substr(0, 10)}</div>
           <div className="col-sm-2">{order.freight}</div>

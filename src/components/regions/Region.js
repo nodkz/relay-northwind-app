@@ -15,12 +15,18 @@ class Region extends React.Component {
         <dd>{region.regionID}</dd>
 
         <dt>Name</dt>
-        <dd><b>{region.name}</b></dd>
+        <dd>
+          <b>{region.name}</b>
+        </dd>
 
         <dt>Territories</dt>
         <dd>
-          { region.territories.map((row, i) => {
-            return <div key={i}>{row.name} ({row.territoryID})</div>;
+          {region.territories.map((row, i) => {
+            return (
+              <div key={i}>
+                {row.name} ({row.territoryID})
+              </div>
+            );
           })}
         </dd>
       </dl>

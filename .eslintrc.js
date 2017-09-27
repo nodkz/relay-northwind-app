@@ -1,14 +1,14 @@
 module.exports = {
   "env": {
-    "node": true,
     "es6": true,
     "browser": true,
   },
   "parser": "babel-eslint",
-  "extends": "airbnb",
+  "extends": ["react-app", "prettier"],
   "plugins": [
     "import",
-    "graphql"
+    "graphql",
+    "prettier"
   ],
   "settings": {
     "import/resolver": {
@@ -33,6 +33,17 @@ module.exports = {
     "import/no-extraneous-dependencies": 0,
     "import/imports-first": 0,
     "react/jsx-filename-extension": 0,
-    "react/prefer-stateless-function": 0
+    "react/prefer-stateless-function": 0,
+    "prettier/prettier": [
+      "error",
+      {
+        printWidth: 100,
+        singleQuote: true,
+        trailingComma: "es5",
+        tabWidth: 2,
+        useTabs: false,
+      },
+    ],
+    "jsx-a11y/href-no-hash": "off",
   }
 };

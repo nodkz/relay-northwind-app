@@ -1,7 +1,5 @@
 import React, { PropTypes } from 'react';
-import {
-  Form, FormGroup, ControlLabel, FormControl, Button, InputGroup,
-} from 'react-bootstrap';
+import { Form, FormGroup, ControlLabel, FormControl, Button, InputGroup } from 'react-bootstrap';
 
 const InputGroupAddon = InputGroup.Addon;
 
@@ -56,14 +54,15 @@ export default class ProductFilter extends React.Component {
       this.props.onFilter({
         supplierID: supplierID ? supplierID : null, // eslint-disable-line
         categoryID: categoryID ? categoryID : null, // eslint-disable-line
-        _operators: (unitPriceLTE || unitPriceGTE)
-          ? {
-            unitPrice: {
+        _operators:
+          unitPriceLTE || unitPriceGTE
+            ? {
+                unitPrice: {
               lte: unitPriceLTE ? unitPriceLTE : null, // eslint-disable-line
               gte: unitPriceGTE ? unitPriceGTE : null, // eslint-disable-line
-            },
-          }
-          : null,
+                },
+              }
+            : null,
       });
     }
   }
@@ -74,8 +73,7 @@ export default class ProductFilter extends React.Component {
     return (
       <Form inline>
         <FormGroup style={{ marginRight: '20px' }}>
-          <ControlLabel>CategoryID</ControlLabel>
-          {' '}
+          <ControlLabel>CategoryID</ControlLabel>{' '}
           <FormControl
             type="number"
             data-name="categoryID"
@@ -83,11 +81,9 @@ export default class ProductFilter extends React.Component {
             style={{ width: '70px' }}
             onChange={this.onChange}
           />
-        </FormGroup>
-        {' '}
+        </FormGroup>{' '}
         <FormGroup style={{ marginRight: '20px' }}>
-          <ControlLabel>SupplierID</ControlLabel>
-          {' '}
+          <ControlLabel>SupplierID</ControlLabel>{' '}
           <FormControl
             type="number"
             data-name="supplierID"
@@ -95,11 +91,9 @@ export default class ProductFilter extends React.Component {
             style={{ width: '70px' }}
             onChange={this.onChange}
           />
-        </FormGroup>
-        {' '}
+        </FormGroup>{' '}
         <FormGroup style={{ marginRight: '20px' }}>
-          <ControlLabel>UnitPrice</ControlLabel>
-          {' '}
+          <ControlLabel>UnitPrice</ControlLabel>{' '}
           <InputGroup>
             <InputGroupAddon>$</InputGroupAddon>
             <FormControl
@@ -118,11 +112,13 @@ export default class ProductFilter extends React.Component {
               onChange={this.onChange}
             />
           </InputGroup>
-        </FormGroup>
-        {' '}
-        <Button type="submit" bsStyle="primary" onClick={this.onFilter}>Filter</Button>
-        {' '}
-        <Button type="submit" onClick={this.onClear}>Clear</Button>
+        </FormGroup>{' '}
+        <Button type="submit" bsStyle="primary" onClick={this.onFilter}>
+          Filter
+        </Button>{' '}
+        <Button type="submit" onClick={this.onClear}>
+          Clear
+        </Button>
       </Form>
     );
   }

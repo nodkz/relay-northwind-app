@@ -12,7 +12,7 @@ class RegionList extends React.Component {
       <div>
         <h3>Total {this.props.viewer.regionList.length} records</h3>
 
-        { this.props.viewer.regionList.map((region, i) => {
+        {this.props.viewer.regionList.map((region, i) => {
           return <Region key={i} region={region} />;
         })}
       </div>

@@ -16,9 +16,7 @@ class Page404 extends React.Component {
         <h1 onClick={this.onClick} style={{ userSelect: 'none', cursor: 'pointer' }}>
           {this.state.cnt}
         </h1>
-        <p>
-          Страница не найдена
-        </p>
+        <p>Страница не найдена</p>
       </Jumbotron>
     );
   }

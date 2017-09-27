@@ -11,9 +11,15 @@ class Address extends React.Component {
 
     return (
       <div>
-        {address.street}<br />
-        {address.city}, {address.region || ''} {address.postalCode}, {address.country}<br />
-        {address.phone && <span><abbr title="Phone">P:</abbr> {address.phone}</span> }
+        {address.street}
+        <br />
+        {address.city}, {address.region || ''} {address.postalCode}, {address.country}
+        <br />
+        {address.phone && (
+          <span>
+            <abbr title="Phone">P:</abbr> {address.phone}
+          </span>
+        )}
       </div>
     );
   }

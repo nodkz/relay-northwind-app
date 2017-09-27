@@ -21,7 +21,7 @@ export default class Menu extends React.Component {
           <NavItem>MainPage</NavItem>
         </IndexLinkContainer>
 
-        { Object.keys(menuLinks).map(link => (
+        {Object.keys(menuLinks).map(link => (
           <LinkContainer key={link} to={{ pathname: link }}>
             <NavItem>{menuLinks[link]}</NavItem>
           </LinkContainer>

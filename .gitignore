@@ -8,3 +8,4 @@ ncp-debug.log
 npm-debug.log
 .idea
 .env
+yarn-error.log

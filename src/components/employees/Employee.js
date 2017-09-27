@@ -36,21 +36,22 @@ class Employee extends React.Component {
         <dd>{employee.notes}</dd>
 
         <dt>Home address</dt>
-        <dd><Address address={employee.address} /></dd>
+        <dd>
+          <Address address={employee.address} />
+        </dd>
 
         <dt>Chief</dt>
         <dd>
-          { employee.chief
-            ?
+          {employee.chief ? (
             <span>
-              {employee.chief.firstName}
-              {' '}
-              {employee.chief.lastName}
+              {employee.chief.firstName} {employee.chief.lastName}
               <ToggleEmployee id={employee.reportsTo} />
             </span>
-            :
-            <span className="text-danger"><b>Super boss</b></span>
-          }
+          ) : (
+            <span className="text-danger">
+              <b>Super boss</b>
+            </span>
+          )}
         </dd>
 
         <dt>Total orders</dt>

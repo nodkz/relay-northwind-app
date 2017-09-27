@@ -31,9 +31,7 @@ class ProductConnection extends React.Component {
   }
 
   componentDidMount() {
-    setTimeout(
-      () => this.loadNextItemsIfNeeded(this.scrollContainer),
-      500);
+    setTimeout(() => this.loadNextItemsIfNeeded(this.scrollContainer), 500);
 
     window.addEventListener('scroll', this.onScroll);
   }
@@ -63,8 +61,9 @@ class ProductConnection extends React.Component {
 
     // todo: need to wire all of this up with variables!
     // WIP for now
-    relayStore.mutate({
-      query: Relay.QL`mutation createProduct {
+    relayStore
+      .mutate({
+        query: Relay.QL`mutation createProduct {
         createProduct(input: {
           record: {
             name: $name
@@ -83,10 +82,11 @@ class ProductConnection extends React.Component {
           }
         }
       }`,
-      variables,
-    }).then((data) => {
-      this.setState(data);
-    });
+        variables,
+      })
+      .then(data => {
+        this.setState(data);
+      });
   }
 
   loadNextItemsIfNeeded() {
@@ -101,13 +101,19 @@ class ProductConnection extends React.Component {
   loadNextItems() {
     this.setState({ loading: true }, () => {
       if (this.props.viewer.productConnection.pageInfo.hasNextPage) {
-        this.props.relay.setVariables({
-          count: this.props.relay.variables.count + PER_PAGE,
-        }, (readyState) => { // this gets called twice https://goo.gl/ZsQ3Dy
-          if (readyState.done) {
-            this.setState({ loading: false }, () => { this.loadNextItemsIfNeeded(); });
+        this.props.relay.setVariables(
+          {
+            count: this.props.relay.variables.count + PER_PAGE,
+          },
+          readyState => {
+            // this gets called twice https://goo.gl/ZsQ3Dy
+            if (readyState.done) {
+              this.setState({ loading: false }, () => {
+                this.loadNextItemsIfNeeded();
+              });
+            }
           }
-        });
+        );
       } else {
         window.removeEventListener('scroll', this.onScroll);
       }
@@ -120,19 +126,18 @@ class ProductConnection extends React.Component {
     return (
       <div
         onScroll={this.onScroll}
-        ref={c => { this.scrollContainer = c; }}
+        ref={c => {
+          this.scrollContainer = c;
+        }}
         style={{ marginBottom: hideFilter ? '20px' : '200px' }}
       >
-
-        { !hideFilter &&
+        {!hideFilter && (
           <Well>
             <ProductFilter onFilter={this.onFormFilter} />
           </Well>
-        }
+        )}
 
-        {this.state.isCreating &&
-          <CreateProduct/>
-        }
+        {this.state.isCreating && <CreateProduct />}
 
         <ProductHeaders
           count={this.props.viewer.productConnection.count}
@@ -142,17 +147,12 @@ class ProductConnection extends React.Component {
         {this.props.viewer.productConnection.edges.map(({ node }) => {
           return (
             <div key={node._id}>
-              <ProductConnectionItem
-                product={node}
-                onItemClick={this.handleItemClick}
-              />
+              <ProductConnectionItem product={node} onItemClick={this.handleItemClick} />
             </div>
           );
         })}
 
-        { this.props.viewer.productConnection.pageInfo.hasNextPage &&
-          <Loading />
-        }
+        {this.props.viewer.productConnection.pageInfo.hasNextPage && <Loading />}
       </div>
     );
   }

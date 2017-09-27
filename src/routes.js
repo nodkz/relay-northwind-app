@@ -75,7 +75,6 @@ const routes = [
   },
 ];
 
-
 // add loaders and error catcher for all routes, also for nested routes if will exist
 function addLoaderForRelayComponents(routeList) {
   function addLoader(route) {
@@ -106,6 +105,5 @@ function addLoaderForRelayComponents(routeList) {
   });
 }
 addLoaderForRelayComponents(routes);
-
 
 export default routes;
