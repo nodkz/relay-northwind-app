@@ -20,6 +20,7 @@
     "react-router-relay": "^0.14.0"
   },
   "devDependencies": {
+    "assets-webpack-plugin": "^3.5.1",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.0.1",
     "babel-loader": "^7.1.2",
@@ -36,6 +37,7 @@
     "babel-relay-plugin": "^0.11.0",
     "babel-relay-plugin-loader": "^0.11.0",
     "chalk": "^2.1.0",
+    "compression-webpack-plugin": "^1.0.0",
     "deepmerge": "^1.5.2",
     "del": "^3.0.0",
     "escope": "3.6.0",
@@ -52,10 +54,12 @@
     "eslint-plugin-react": "^7.4.0",
     "express-http-proxy": "^1.0.6",
     "fs-extra": "^4.0.2",
+    "jsonfile": "^4.0.0",
     "ncp": "2.0.0",
     "nodemon": "^1.12.1",
     "open": "^0.0.5",
     "prettier": "^1.7.0",
+    "react-dev-utils": "^4.1.0",
     "react-hot-loader": "3.0.0-beta.5",
     "react-transform-catch-errors": "1.0.2",
     "redbox-react": "^1.5.0",
