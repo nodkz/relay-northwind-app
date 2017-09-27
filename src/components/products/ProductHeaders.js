@@ -1,5 +1,6 @@
+import PropTypes from 'prop-types';
 import React from 'react';
-import { Button, InputGroup } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 export default function ProductHeaders({ count, onCreating, isCreating }) {
   if (!count) {
@@ -40,5 +41,5 @@ export default function ProductHeaders({ count, onCreating, isCreating }) {
 }
 
 ProductHeaders.propTypes = {
-  count: React.PropTypes.number,
+  count: PropTypes.number,
 };

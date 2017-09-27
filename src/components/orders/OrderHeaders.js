@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 export default function OrderHeaders({ count }) {
@@ -34,5 +35,5 @@ export default function OrderHeaders({ count }) {
 }
 
 OrderHeaders.propTypes = {
-  count: React.PropTypes.number,
+  count: PropTypes.number,
 };

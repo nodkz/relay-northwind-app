@@ -1,24 +1,14 @@
+import PropTypes from 'prop-types';
 import React from 'react';
-import {
-  Form,
-  FormGroup,
-  ControlLabel,
-  FormControl,
-  Button,
-  InputGroup,
-  Well,
-} from 'react-bootstrap';
+import Relay from 'react-relay';
+import { Form, FormGroup, ControlLabel, FormControl, Button, Well } from 'react-bootstrap';
 
 export default class CreateProduct extends React.Component {
-  constructor() {
-    this.onCreateProduct = this.onCreateProduct.bind(this);
-  }
-
-  onCreateProduct(productArgs) {
+  onCreateProduct = productArgs => {
     const variables = {};
 
     // todo: need to wire all of this up with variables!
-    // WIP for now
+    // TODO: WIP for now
     relayStore.mutate({
       query: Relay.QL`mutation createProduct {
         createProduct(input: {
@@ -41,10 +31,10 @@ export default class CreateProduct extends React.Component {
       }`,
       variables,
     });
-  }
+  };
 
   static propTypes = {
-    onCreateProduct: React.PropTypes.func,
+    onCreateProduct: PropTypes.func,
   };
 
   render() {

@@ -1,6 +1,8 @@
 /* eslint-disable react/jsx-no-target-blank */
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React from 'react';
 import Loading from 'react-loading';
 import { Jumbotron } from 'react-bootstrap';
 import { relayStore } from '../clientStores';

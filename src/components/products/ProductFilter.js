@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { Form, FormGroup, ControlLabel, FormControl, Button, InputGroup } from 'react-bootstrap';
 
 const InputGroupAddon = InputGroup.Addon;

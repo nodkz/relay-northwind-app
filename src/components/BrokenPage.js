@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { Jumbotron, Button, Alert } from 'react-bootstrap';
 
 export default class BrokenPage extends React.Component {
