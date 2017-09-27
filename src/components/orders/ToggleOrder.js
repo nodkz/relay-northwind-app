@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Relay from 'react-relay';
+import Relay from 'react-relay/classic';
 import { Button } from 'react-bootstrap';
 import Loading from '../Loading';
 import { relayStore } from '../../clientStores';

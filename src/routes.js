@@ -1,5 +1,5 @@
 import React from 'react';
-import Relay from 'react-relay';
+import Relay from 'react-relay/classic';
 import App from './components/App';
 import Page404 from './components/Page404';
 import BrokenPage from './components/BrokenPage';

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Relay from 'react-relay';
+import Relay from 'react-relay/classic';
 import { Form, FormGroup, ControlLabel, FormControl, Button, Well } from 'react-bootstrap';
 
 export default class CreateProduct extends React.Component {

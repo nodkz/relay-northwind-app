@@ -1,4 +1,4 @@
-import Relay from 'react-relay';
+import Relay from 'react-relay/classic';
 import RelayNetworkDebug from 'react-relay/lib/RelayNetworkDebug';
 
 // This variable will be replaced at build process by webpack

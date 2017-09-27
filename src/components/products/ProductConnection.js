@@ -1,13 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Relay from 'react-relay';
+import Relay from 'react-relay/classic';
 import { Well } from 'react-bootstrap';
 import Loading from '../Loading';
 import ProductConnectionItem from './ProductConnectionItem';
 import ProductFilter from './ProductFilter';
 import ProductHeaders from './ProductHeaders';
-import CreateProduct from './CreateProduct';
-import { relayStore } from '../../clientStores';
+// import CreateProduct from './CreateProduct';
 
 const PER_PAGE = 10;
 
@@ -26,7 +25,6 @@ class ProductConnection extends React.Component {
     };
 
     this.onCreating = this.onCreating.bind(this);
-    this.onCreateProduct = this.onCreateProduct.bind(this);
     this.onScroll = this.onScroll.bind(this);
     this.onFormFilter = this.onFormFilter.bind(this);
   }
@@ -55,39 +53,6 @@ class ProductConnection extends React.Component {
     this.setState({
       isCreating: true,
     });
-  }
-
-  onCreateProduct(productArgs) {
-    const variables = {};
-
-    // todo: need to wire all of this up with variables!
-    // WIP for now
-    relayStore
-      .mutate({
-        query: Relay.QL`mutation createProduct {
-        createProduct(input: {
-          record: {
-            name: $name
-            unitPrice: 2
-            categoryID:2
-            unitsInStock:5
-            supplierID: 2
-          }
-        }) {
-          record {
-            supplierID
-            categoryID
-            name
-            unitsInStock
-            unitPrice
-          }
-        }
-      }`,
-        variables,
-      })
-      .then(data => {
-        this.setState(data);
-      });
   }
 
   loadNextItemsIfNeeded() {
