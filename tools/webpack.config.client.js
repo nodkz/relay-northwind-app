@@ -58,7 +58,7 @@ const clientConfig = mergeConfig({
             loader: 'babel-loader',
             options: {
               retainLines: DEV,
-              // forceEnv: DEV ? 'browser_development' : 'browser_production',
+              forceEnv: DEV ? 'browser_development' : 'browser_production',
               // cacheDirectory: DEV
               //   ? path.join(__dirname, '../build/tmp/babel-cache-client/', process.env.NODE_ENV)
               //   : false,
