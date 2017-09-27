@@ -1,3 +1,6 @@
+Working example on **Relay Classic** can be found in [classic branch](https://github.com/nodkz/relay-northwind-app/tree/classic).
+Now I'm rewriting code base on **Relay Modern** in [modern branch](https://github.com/nodkz/relay-northwind-app/tree/modern).
+
 ## Relay Northwind demo app
 
 > This is a true story. The events depicted took place in Northwind in 1996-1998. At the request of the survivors, the names have been changed. Out of respect for the dead, the rest has been told exactly as it occurred.
