@@ -20,7 +20,7 @@ const commonPlugins = [
 const relayTransformWatchPlugin = [
   require.resolve('babel-plugin-transform-relay-hot'),
   {
-    schema: './build/schema.graphql.json',
+    schema: './schema.graphql.json',
     watchInterval: 2000,
   },
 ];

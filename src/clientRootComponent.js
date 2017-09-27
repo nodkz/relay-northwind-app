@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Router, applyRouterMiddleware } from 'react-router';
-import useRelay from 'react-router-relay';
+import { Router } from 'react-router';
 import routes from './routes';
 
 // ////////////////////////////////////////////////////////////
@@ -22,7 +21,7 @@ export default class ClientRoot extends Component { // eslint-disable-line
         routes={routes}
         history={history}
         // `.default` problem explained here https://github.com/relay-tools/react-router-relay/issues/192
-        render={applyRouterMiddleware(useRelay.default ? useRelay.default : useRelay)} // eslint-disable-line
+        // render={applyRouterMiddleware(useRelay.default ? useRelay.default : useRelay)} // eslint-disable-line
         environment={environment}
       />
     );
