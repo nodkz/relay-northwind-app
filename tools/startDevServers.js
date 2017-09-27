@@ -4,15 +4,10 @@ import webpack from 'webpack';
 import webpackDevServer from 'webpack-dev-server';
 import express from 'express';
 import expressHttpProxy from 'express-http-proxy';
-import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
 import open from 'open';
-import {
-  PORT,
-  PORT_BACKEND_SERVER,
-  PORT_FRONTEND_DEV_SERVER,
-} from './webpack.config.common.js';
+import { PORT, PORT_FRONTEND_DEV_SERVER } from './webpack.config.common.js';
 // import serverConfig from './webpack.config.server.js';
 // import backendNodemon from './backendNodemon';
 import clientConfig from './webpack.config.client.js';
@@ -49,7 +44,7 @@ function frontendServer(compiler) {
       stats: clientConfig.stats,
       watchOptions: {
         aggregateTimeout: 300,
-        poll: 1000
+        poll: 1000,
       },
     });
     devServer.listen(PORT_FRONTEND_DEV_SERVER, 'localhost');
@@ -66,10 +61,11 @@ function commmonDevServer() {
   return new Promise((resolve, reject) => {
     const devCommonProxy = express();
     devCommonProxy.use(express.static(path.resolve(__dirname, '../public')));
-    devCommonProxy.use(expressHttpProxy(
-      `127.0.0.1:${PORT_FRONTEND_DEV_SERVER}`,
-      { forwardPath: (req) => req.originalUrl, }
-    ));
+    devCommonProxy.use(
+      expressHttpProxy(`127.0.0.1:${PORT_FRONTEND_DEV_SERVER}`, {
+        forwardPath: req => req.originalUrl,
+      })
+    );
     const http = devCommonProxy.listen(PORT, () => {
       resolve();
       const serverUrl = `http://127.0.0.1:${PORT}`;
