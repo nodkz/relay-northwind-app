@@ -1,6 +1,8 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Northwind data explorer via Relay</title>
     <link rel="stylesheet" href="./bootstrap.min.css" />
     <style>
@@ -24,13 +26,17 @@
   </head>
 
   <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+
     <div class="container">
       <div id="app"></div>
     </div>
 
-    <script src="./runtime.js"></script>
-    <script src="./vendor.js"></script>
-    <script src="./main.js"></script>
+    <!--
+      Scripts will be added via html-webpack-plugin
+    -->
 
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

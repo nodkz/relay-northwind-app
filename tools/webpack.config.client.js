@@ -5,6 +5,7 @@
 
 import path from 'path';
 import webpack from 'webpack';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import AssetsPlugin from 'assets-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
 import { mergeConfig, DEV, VERBOSE } from './webpack.config.common.js';
@@ -48,6 +49,8 @@ const clientConfig = mergeConfig({
       : undefined,
   },
 
+  devtool: DEV ? 'cheap-module-source-map' : 'source-map',
+
   module: {
     rules: [
       {
@@ -77,6 +80,10 @@ const clientConfig = mergeConfig({
   devtool: DEV ? 'eval' : 'source-map',
 
   plugins: [
+    new HtmlWebpackPlugin({
+      inject: true,
+      template: path.resolve('./public/index.html'),
+    }),
     DEV ? null : new webpack.optimize.ModuleConcatenationPlugin(),
     new AssetsPlugin({
       path: path.join(__dirname, '../build', process.env.NODE_ENV),

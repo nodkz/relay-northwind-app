@@ -3,47 +3,27 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import FastClick from 'fastclick';
 import 'whatwg-fetch';
-import { AppContainer } from 'react-hot-loader';
-import { relayStore, hashHistory } from './clientStores';
-import ClientRootComponent from './clientRootComponent';
+import App from './components/App';
 
 const appContainer = document.getElementById('app');
 
 function render() {
-  try {
-    ReactDOM.render(
-      <AppContainer>
-        <ClientRootComponent environment={relayStore} history={hashHistory} />
-      </AppContainer>,
-      appContainer
-    );
-  } catch (e) {
-    if (/Check the render method of `AppContainer`/.test(e.message)) {
-      // re-render without HOT-RELOAD for getting normal error
-      ReactDOM.render(
-        <ClientRootComponent environment={relayStore} history={hashHistory} />,
-        appContainer
-      );
-    } else {
-      throw e;
-    }
-  }
+  ReactDOM.render(<App />, appContainer);
 }
 
 if (module.hot) {
-  module.hot.accept('./clientRootComponent', () => {
-    const NextRoot = require('./clientRootComponent').default; // eslint-disable-line
+  module.hot.accept('./components/App', () => {
+    const NextRoot = require('./components/App').default; // eslint-disable-line
 
-    ReactDOM.render(
-      <AppContainer>
-        <NextRoot environment={relayStore} history={hashHistory} />
-      </AppContainer>,
-      appContainer
-    );
+    ReactDOM.render(<NextRoot />, appContainer);
   });
 }
 
+let isBootstraped = false;
 function run() {
+  if (isBootstraped) return;
+  isBootstraped = true;
+
   // Make taps on links and buttons work fast on mobiles
   FastClick.attach(document.body);
   render();

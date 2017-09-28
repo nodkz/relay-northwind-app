@@ -3,7 +3,7 @@
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import express from 'express';
-import expressHttpProxy from 'express-http-proxy';
+import proxy from 'http-proxy-middleware';
 import path from 'path';
 import chalk from 'chalk';
 import open from 'open';
@@ -63,12 +63,6 @@ function frontendServer(compiler) {
       },
     });
 
-    const innerSendStat = devServer._sendStats.bind(devServer);
-    devServer._sendStats = (sockets, stats, force) => {
-      fs.writeFile('./build/profile_client.json', JSON.stringify(stats), () => {});
-      return innerSendStat(sockets, stats, force);
-    };
-
     devServer.listen(PORT_FRONTEND_DEV_SERVER, 'localhost');
     compiler.plugin('done', resolve);
     process.on('exit', () => {
@@ -80,14 +74,17 @@ function frontendServer(compiler) {
 }
 
 function commmonDevServer() {
+  const httpFrontTarget = `http://127.0.0.1:${PORT_FRONTEND_DEV_SERVER}`;
   return new Promise((resolve, reject) => {
     const devCommonProxy = express();
-    devCommonProxy.use(express.static(path.resolve(__dirname, '../public')));
+    devCommonProxy.use(express.static(path.resolve(__dirname, '../public'), { index: false }));
     devCommonProxy.use(
-      expressHttpProxy(`127.0.0.1:${PORT_FRONTEND_DEV_SERVER}`, {
-        forwardPath: req => req.originalUrl,
+      proxy(['/sockjs-node', '/__webpack_dev_server__', '/__open-stack-frame-in-editor'], {
+        target: httpFrontTarget,
+        ws: true,
       })
     );
+    devCommonProxy.use(proxy(httpFrontTarget));
     const http = devCommonProxy.listen(PORT, () => {
       resolve();
       const serverUrl = `http://127.0.0.1:${PORT}`;
