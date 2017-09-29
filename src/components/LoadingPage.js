@@ -1,18 +1,12 @@
 /* @flow */
 /* eslint-disable react/jsx-no-target-blank */
 
-import PropTypes from 'prop-types';
-
-import React from 'react';
+import * as React from 'react';
 import Loading from 'react-loading';
 import { Jumbotron } from 'react-bootstrap';
 import { relayStore } from '../clientStores';
 
-export default class LoadingPage extends React.Component {
-  static propTypes = {
-    children: PropTypes.node,
-  };
-
+export default class LoadingPage extends React.Component<*> {
   render() {
     return (
       <Jumbotron style={{ textAlign: 'center' }}>

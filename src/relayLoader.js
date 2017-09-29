@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 import Relay from 'react-relay/classic';
+import type { ContextRouter } from 'react-router';
 import { relayStore } from './clientStores';
-
 import BrokenPage from './components/BrokenPage';
 import LoadingPage from './components/LoadingPage';
 
@@ -14,9 +14,9 @@ class ViewerRelayQuery extends Relay.Route {
   };
 }
 
-export default function relayLoader(component) {
+export default function relayLoader(component: React$ComponentType<any>) {
   const RelayRenderer = Relay.Renderer;
-  return routeProps => {
+  return (routeProps: ContextRouter) => {
     return (
       <RelayRenderer
         Container={component}
