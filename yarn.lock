@@ -738,6 +738,10 @@ babel-plugin-syntax-export-extensions@7.0.0-beta.2:
   version "7.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/babel-plugin-syntax-export-extensions/-/babel-plugin-syntax-export-extensions-7.0.0-beta.2.tgz#765e31e6095a76e5413e682475aed4f8bb88ac1a"
 
+babel-plugin-syntax-flow@7.0.0-beta.2:
+  version "7.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/babel-plugin-syntax-flow/-/babel-plugin-syntax-flow-7.0.0-beta.2.tgz#978f49f54ea8090abdeebffbb661bd0f49818f79"
+
 babel-plugin-syntax-function-bind@7.0.0-beta.2:
   version "7.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/babel-plugin-syntax-function-bind/-/babel-plugin-syntax-function-bind-7.0.0-beta.2.tgz#1aa677a7befe2a7ea05ad549f7e39fcf94a7b8aa"
@@ -978,6 +982,12 @@ babel-plugin-transform-export-namespace@7.0.0-beta.2:
   dependencies:
     babel-plugin-syntax-export-extensions "7.0.0-beta.2"
 
+babel-plugin-transform-flow-strip-types@7.0.0-beta.2:
+  version "7.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-flow-strip-types/-/babel-plugin-transform-flow-strip-types-7.0.0-beta.2.tgz#4711953000af4f35bdd115f933f96e3e4d569998"
+  dependencies:
+    babel-plugin-syntax-flow "7.0.0-beta.2"
+
 babel-plugin-transform-function-bind@7.0.0-beta.2:
   version "7.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-function-bind/-/babel-plugin-transform-function-bind-7.0.0-beta.2.tgz#e8a558be01acc25f0f08bed3e86cd7c5487d88d4"
@@ -1128,6 +1138,12 @@ babel-preset-env@2.0.0-beta.2:
     browserslist "^2.4.0"
     invariant "^2.2.2"
     semver "^5.3.0"
+
+babel-preset-flow@7.0.0-beta.2:
+  version "7.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/babel-preset-flow/-/babel-preset-flow-7.0.0-beta.2.tgz#f3e91b568adca3cb493668636dc1df59a88f5d31"
+  dependencies:
+    babel-plugin-transform-flow-strip-types "7.0.0-beta.2"
 
 babel-preset-jest@^20.0.3:
   version "20.0.3"

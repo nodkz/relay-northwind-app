@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Loading from 'react-loading';
 import { Jumbotron } from 'react-bootstrap';
-import { relayStore } from '../clientStores';
+import { relayStore } from '../relayLoader';
 
 export default class LoadingPage extends React.Component {
   static propTypes = {

@@ -145,33 +145,34 @@ const browserDevelopmentPreset = [
 
 // JSX, Flow
 const reactPreset = require.resolve('babel-preset-react');
+const flowPreset = require.resolve('babel-preset-flow');
 
 // ///////////////////////////////////////////////////////////////
 // //////////////////   EXPORT   /////////////////////////////////
 // ///////////////////////////////////////////////////////////////
 
 module.exports = {
-  presets: [reactPreset, 'stage-0'],
+  presets: [reactPreset, flowPreset, 'stage-0'],
   plugins: [...commonPlugins],
   env: {
     browser_development: {
-      presets: [browserDevelopmentPreset, reactPreset, 'stage-0'],
+      presets: [browserDevelopmentPreset, reactPreset, flowPreset, 'stage-0'],
       plugins: [...reactDevelopmentPlugins, ...commonBrowserPlugins, relayTransformWatchPlugin],
     },
     browser_production: {
-      presets: [browserProductionPreset, reactPreset, 'stage-0'],
+      presets: [browserProductionPreset, reactPreset, flowPreset, 'stage-0'],
       plugins: [relayTransformStaticPlugin, ...reactProductionPlugins, ...commonBrowserPlugins],
     },
     server_development: {
-      presets: [nodeDevelopmentPreset, reactPreset, 'stage-0'],
+      presets: [nodeDevelopmentPreset, reactPreset, flowPreset, 'stage-0'],
       plugins: [...commonNodePlugins, ...reactDevelopmentPlugins, relayTransformWatchPlugin],
     },
     server_production: {
-      presets: [nodeProductionPreset, reactPreset, 'stage-0'],
+      presets: [nodeProductionPreset, reactPreset, flowPreset, 'stage-0'],
       plugins: [...commonNodePlugins, relayTransformStaticPlugin, ...reactProductionPlugins],
     },
     test: {
-      presets: [nodeDevelopmentPreset, reactPreset, 'stage-0'],
+      presets: [nodeDevelopmentPreset, reactPreset, flowPreset, 'stage-0'],
       plugins: [
         inlineImportPlugin,
         ...commonNodePlugins,
@@ -180,7 +181,7 @@ module.exports = {
       ],
     },
     scripts: {
-      presets: [nodeDevelopmentPreset, reactPreset, 'stage-0'],
+      presets: [nodeDevelopmentPreset, reactPreset, flowPreset, 'stage-0'],
       plugins: [...commonPlugins, inlineImportPlugin],
     },
   },
