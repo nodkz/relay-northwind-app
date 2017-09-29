@@ -14,6 +14,12 @@ import {
   // perfMiddleware,
 } from 'react-relay-network-layer';
 
+// This variable will be replaced at build process by webpack
+//    see webpack.DefinePlugin in /tools/webpack.config.commons.js
+// By default `https://graphql-compose.herokuapp.com/northwind/`
+// But may be overrided locally via .env file
+const endpoint = process.env.RELAY_ENDPOINT;
+
 type AlertData = any;
 type AlertStatusType = any;
 type StoresT = any;
@@ -56,10 +62,9 @@ export default class RelayStore {
   _stores: StoresT;
   _relayEnv: *;
   _onResetCb: Function;
-  endpoint: string;
+  endpoint: string = endpoint;
 
   constructor(stores: StoresT) {
-    this.endpoint = stores.endpoint;
     this._stores = stores;
     this._createRelayEnv();
   }

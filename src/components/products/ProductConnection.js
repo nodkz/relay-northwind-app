@@ -24,7 +24,6 @@ class ProductConnection extends React.Component {
       loading: false,
     };
 
-    this.onCreating = this.onCreating.bind(this);
     this.onScroll = this.onScroll.bind(this);
     this.onFormFilter = this.onFormFilter.bind(this);
   }
@@ -47,12 +46,6 @@ class ProductConnection extends React.Component {
 
   onFormFilter(filter) {
     this.props.relay.setVariables({ filter });
-  }
-
-  onCreating() {
-    this.setState({
-      isCreating: true,
-    });
   }
 
   loadNextItemsIfNeeded() {
@@ -103,13 +96,7 @@ class ProductConnection extends React.Component {
           </Well>
         )}
 
-        {this.state.isCreating && <CreateProduct />}
-
-        <ProductHeaders
-          count={this.props.viewer.productConnection.count}
-          isCreating={this.state.isCreating}
-          onCreating={this.onCreating}
-        />
+        <ProductHeaders count={this.props.viewer.productConnection.count} />
         {this.props.viewer.productConnection.edges.map(({ node }) => {
           return (
             <div key={node._id}>
