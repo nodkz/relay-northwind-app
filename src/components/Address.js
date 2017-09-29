@@ -1,14 +1,22 @@
+/* @flow */
+
 import PropTypes from 'prop-types';
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { createFragmentContainer, graphql } from 'react-relay/compat';
+import type { Address_address } from './__generated__/Address_address.graphql';
 
-class Address extends React.Component {
+type Props = {
+  address: ?Address_address,
+};
+
+class Address extends React.Component<Props> {
   static propTypes = {
     address: PropTypes.object.isRequired,
   };
 
   render() {
-    const { address = {} } = this.props;
+    const { address } = this.props;
+    if (!address) return null;
 
     return (
       <div>
@@ -26,17 +34,16 @@ class Address extends React.Component {
   }
 }
 
-export default Relay.createContainer(Address, {
-  fragments: {
-    address: () => Relay.QL`
-      fragment on CustomerAddress {
-        street
-        city
-        region
-        postalCode
-        country
-        phone
-      }
-    `,
-  },
-});
+export default createFragmentContainer(
+  Address,
+  graphql`
+    fragment Address_address on CustomerAddress {
+      street
+      city
+      region
+      postalCode
+      country
+      phone
+    }
+  `
+);

@@ -1,16 +1,20 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { createFragmentContainer, graphql } from 'react-relay/compat';
 import Address from '../Address';
 import ToggleOrderCollection from '../orders/ToggleOrderConnection';
+import type { Customer_customer } from './__generated__/Customer_customer.graphql';
 
-class Customer extends React.Component {
-  static propTypes = {
-    customer: PropTypes.object.isRequired,
-  };
+type Props = {
+  customer: ?Customer_customer,
+};
 
+class Customer extends React.Component<Props> {
   render() {
-    const { customer = {} } = this.props;
+    const { customer } = this.props;
+
+    if (!customer) return 'no customer data';
 
     return (
       <div className="bordered">
@@ -34,7 +38,7 @@ class Customer extends React.Component {
 
           <dt>Total orders</dt>
           <dd>
-            <b>{customer.orderConnection.count}</b>
+            <b>{customer.orderConnection ? customer.orderConnection.count : 0}</b>
             <ToggleOrderCollection filter={{ customerID: customer.customerID }} />
           </dd>
         </dl>
@@ -43,21 +47,20 @@ class Customer extends React.Component {
   }
 }
 
-export default Relay.createContainer(Customer, {
-  fragments: {
-    customer: () => Relay.QL`
-      fragment on Customer {
-        customerID
-        companyName
-        contactName
-        contactTitle
-        address {
-          ${Address.getFragment('address')}
-        }
-        orderConnection {
-          count
-        }
+export default createFragmentContainer(
+  Customer,
+  graphql`
+    fragment Customer_customer on Customer {
+      customerID
+      companyName
+      contactName
+      contactTitle
+      address {
+        ...Address_address
       }
-    `,
-  },
-});
+      orderConnection {
+        count
+      }
+    }
+  `
+);

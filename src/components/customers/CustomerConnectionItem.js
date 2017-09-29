@@ -1,16 +1,22 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { createFragmentContainer, graphql } from 'react-relay/compat';
 import Address from '../Address';
 import ToggleOrderCollection from '../orders/ToggleOrderConnection';
+import type { CustomerConnectionItem_customer } from './__generated__/CustomerConnectionItem_customer.graphql';
 
-class CustomerConnectionItem extends React.Component {
-  static propTypes = {
-    customer: PropTypes.object.isRequired,
-  };
+type Props = {
+  customer: CustomerConnectionItem_customer,
+};
 
+class CustomerConnectionItem extends React.Component<Props> {
   render() {
-    const { customer = {} } = this.props;
+    const { customer } = this.props;
+
+    if (!customer) {
+      return 'no customer';
+    }
 
     return (
       <div className="row">
@@ -22,7 +28,7 @@ class CustomerConnectionItem extends React.Component {
           <Address address={customer.address} />
         </div>
         <div>
-          <b>{customer.orderConnection.count}</b>{' '}
+          <b>{customer.orderConnection ? customer.orderConnection.count : 0}</b>{' '}
           <ToggleOrderCollection filter={{ customerID: customer.customerID }} />
         </div>
       </div>
@@ -30,21 +36,20 @@ class CustomerConnectionItem extends React.Component {
   }
 }
 
-export default Relay.createContainer(CustomerConnectionItem, {
-  fragments: {
-    customer: () => Relay.QL`
-      fragment on Customer {
-        customerID
-        companyName
-        contactName
-        contactTitle
-        address {
-          ${Address.getFragment('address')}
-        }
-        orderConnection {
-          count
-        }
+export default createFragmentContainer(
+  CustomerConnectionItem,
+  graphql`
+    fragment CustomerConnectionItem_customer on Customer {
+      customerID
+      companyName
+      contactName
+      contactTitle
+      address {
+        ...Address_address
       }
-    `,
-  },
-});
+      orderConnection {
+        count
+      }
+    }
+  `
+);

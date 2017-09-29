@@ -63,6 +63,7 @@ export default class RelayStore {
   _relayEnv: *;
   _onResetCb: Function;
   endpoint: string = endpoint;
+  unstable_internal: any; // Relay Compat
 
   constructor(stores: StoresT) {
     this._stores = stores;
@@ -78,6 +79,8 @@ export default class RelayStore {
     if (__DEV__) {
       RelayNetworkDebug.init(this._relayEnv);
     }
+
+    this.unstable_internal = this._relayEnv.unstable_internal; // Relay Compat
   }
 
   reset(): void {

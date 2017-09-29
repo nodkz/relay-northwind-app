@@ -1,27 +1,29 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { graphql } from 'react-relay/compat';
 import { Button } from 'react-bootstrap';
 import Loading from '../Loading';
 import { relayStore } from '../../clientStores';
 import Customer from './Customer';
+import type { ToggleCustomerQueryResponse } from './__generated__/ToggleCustomerQuery.graphql';
 
-export default class ToggleCustomer extends React.Component {
-  static propTypes = {
-    id: PropTypes.string.isRequired,
+type Props = {
+  id: string,
+};
+
+type State = {
+  isOpen: boolean,
+  data: ?ToggleCustomerQueryResponse,
+};
+
+export default class ToggleCustomer extends React.Component<Props, State> {
+  state: State = {
+    isOpen: false,
+    data: null,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: false,
-      data: null,
-    };
-
-    this.toggle = this.toggle.bind(this);
-  }
-
-  toggle() {
+  toggle = () => {
     this.setState({
       isOpen: !this.state.isOpen,
     });
@@ -29,13 +31,15 @@ export default class ToggleCustomer extends React.Component {
     if (!this.state.data) {
       relayStore
         .fetch({
-          query: Relay.QL`query {
-          viewer {
-            customer(filter: $filter) {
-              ${Customer.getFragment('customer')}
+          query: graphql`
+            query ToggleCustomerQuery($filter: FilterFindOneCustomerInput) {
+              viewer {
+                customer(filter: $filter) {
+                  ...Customer_customer
+                }
+              }
             }
-          }
-        }`,
+          `,
           variables: {
             filter: {
               customerID: this.props.id,
@@ -48,7 +52,7 @@ export default class ToggleCustomer extends React.Component {
           });
         });
     }
-  }
+  };
 
   render() {
     return (
