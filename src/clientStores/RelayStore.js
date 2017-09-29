@@ -16,9 +16,9 @@ import {
 
 // This variable will be replaced at build process by webpack
 //    see webpack.DefinePlugin in /tools/webpack.config.commons.js
-// By default `https://graphql-compose.herokuapp.com/northwind/`
 // But may be overrided locally via .env file
-const endpoint = process.env.RELAY_ENDPOINT;
+const endpoint: string =
+  process.env.RELAY_ENDPOINT || 'https://graphql-compose.herokuapp.com/northwind/';
 
 type AlertData = any;
 type AlertStatusType = any;
@@ -223,12 +223,12 @@ export default class RelayStore {
             reject(err);
 
             const errMsg = err && err.message ? err.message : err;
-            // this._stores.errorCatcher.captureMessage('RelayMutationError', {
-            //   extra: {
-            //     variables,
-            //     error: errMsg,
-            //   },
-            // });
+            this._stores.errorCatcher.captureMessage('RelayMutationError', {
+              extra: {
+                variables,
+                error: errMsg,
+              },
+            });
 
             if (onErrorAlert) {
               this._showAlert(onErrorAlert, 'Ошибка сохранения данных.', 'error', colKey);
@@ -336,8 +336,7 @@ export default class RelayStore {
         alertOpts = { msg: alertForceOpts }; // eslint-disable-line
       }
 
-      // this._stores.alertStore.add({
-      console.log({
+      this._stores.alertStore.add({
         msg,
         idx,
         type,
@@ -348,7 +347,7 @@ export default class RelayStore {
   }
 
   _hideAlert(idx: any) {
-    // this._stores.alertStore.del(idx);
+    this._stores.alertStore.del(idx);
   }
 
   /**

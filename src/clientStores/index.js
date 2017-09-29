@@ -6,6 +6,6 @@ const stores = createClientStores();
 
 export default stores;
 
-const { relayStore } = stores;
+const { relayStore, alertStore, errorCatcher } = stores;
 
-export { relayStore };
+export { relayStore, alertStore, errorCatcher };
