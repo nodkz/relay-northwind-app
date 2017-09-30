@@ -1,3 +1,5 @@
+/* @flow */
+
 import React from 'react';
 import { default as ReactLoading } from 'react-loading';
 

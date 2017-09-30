@@ -1,30 +1,23 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
 import { Jumbotron, Button, Alert } from 'react-bootstrap';
 
-export default class BrokenPage extends React.Component {
-  static propTypes = {
-    children: PropTypes.node,
-    message: PropTypes.string,
-  };
+type Props = {
+  message: string,
+};
 
-  constructor(props) {
-    super(props);
-
-    this.reloadPage = this.reloadPage.bind(this);
-  }
-
-  reloadPage() {
+export default class BrokenPage extends React.Component<Props> {
+  reloadPage = () => {
     if (window) {
       window.location.reload(true);
     }
-  }
+  };
 
   render() {
     return (
       <Jumbotron style={{ textAlign: 'center' }}>
         <h1>
-          {this.state.cnt}
           {this.props.message ? (
             <Alert bsStyle="danger">{this.props.message}</Alert>
           ) : (

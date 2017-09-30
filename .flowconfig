@@ -44,6 +44,7 @@ module.name_mapper='^.*.png$' -> '<PROJECT_ROOT>/lib/flow/ImgUrlStub'
 
 module.name_mapper='^src\/\(.*\)$' -> '<PROJECT_ROOT>/src/\1'
 module.name_mapper='^components\/\(.*\)$' -> '<PROJECT_ROOT>/src/components/\1'
+module.name_mapper='^app\/\(.*\)$' -> '<PROJECT_ROOT>/src/app/\1'
 module.name_mapper='^clientStores$' -> '<PROJECT_ROOT>/src/clientStores'
 module.name_mapper='^clientStores\/\(.*\)$' -> '<PROJECT_ROOT>/src/clientStores/\1'
 

@@ -5,16 +5,14 @@ module.exports = {
   },
   "parser": "babel-eslint",
   "extends": ["react-app", "prettier"],
-  "plugins": [
-    "import",
-    "graphql",
-    "prettier"
-  ],
-  "settings": {
-    "import/resolver": {
-      "babel-module": {}
-    }
-  },
+  "plugins": ["graphql", "flowtype", "prettier"],
+  // TODO: enable when will be merged https://github.com/tleunen/eslint-import-resolver-babel-module/pull/63
+  // plugins: ["import", "graphql", "flowtype", "prettier"],
+  // settings: {
+  //   "import/resolver": {
+  //     "babel-module": {},
+  //   },
+  // },
   "globals": {
     "__DEV__": true
   },
@@ -45,5 +43,9 @@ module.exports = {
       },
     ],
     "jsx-a11y/href-no-hash": "off",
+
+    // TODO: remove when be merged https://github.com/tleunen/eslint-import-resolver-babel-module/pull/63
+    "import/no-unresolved": 0,
+    "import/extensions": 0,
   }
 };

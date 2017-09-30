@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import FastClick from 'fastclick';
 import 'whatwg-fetch';
-import App from './components/App';
+import App from 'app/App';
 
 const appContainer = document.getElementById('app');
 
@@ -12,8 +12,8 @@ function render() {
 }
 
 if (module.hot) {
-  module.hot.accept('./components/App', () => {
-    const NextRoot = require('./components/App').default; // eslint-disable-line
+  module.hot.accept('./app/App', () => {
+    const NextRoot = require('./app/App').default; // eslint-disable-line
 
     ReactDOM.render(<NextRoot />, appContainer);
   });

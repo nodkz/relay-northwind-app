@@ -4,7 +4,7 @@
 import * as React from 'react';
 import Loading from 'react-loading';
 import { Jumbotron } from 'react-bootstrap';
-import { relayStore } from '../clientStores';
+import { relayStore } from 'clientStores';
 
 export default class LoadingPage extends React.Component<*> {
   render() {
