@@ -360,13 +360,13 @@ type CustomerConnection {
   pageInfo: PageInfo!
 
   # Information to aid in pagination.
-  edges: [CustomerEdge]
+  edges: [CustomerEdge!]!
 }
 
 # An edge in a connection.
 type CustomerEdge {
   # The item at the end of the edge
-  node: Customer
+  node: Customer!
 
   # A cursor for use in pagination
   cursor: ConnectionCursor!

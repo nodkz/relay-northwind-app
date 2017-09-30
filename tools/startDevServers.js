@@ -7,7 +7,7 @@ import proxy from 'http-proxy-middleware';
 import path from 'path';
 import chalk from 'chalk';
 import open from 'open';
-import fs from 'fs';
+import { spawn } from 'child_process';
 import jsonfile from 'jsonfile';
 import errorOverlayMiddleware from 'react-dev-utils/errorOverlayMiddleware';
 import noopServiceWorkerMiddleware from 'react-dev-utils/noopServiceWorkerMiddleware';
@@ -40,6 +40,7 @@ export default async function startDevServers() {
   const bundler = webpack([clientConfig]);
   await run(frontendServer, bundler.compilers[0]);
   await run(commmonDevServer);
+  startRelayWatcher();
 }
 
 function frontendServer(compiler) {
@@ -92,5 +93,22 @@ function commmonDevServer() {
       open(serverUrl);
     });
     http.on('error', reject);
+  });
+}
+
+function startRelayWatcher() {
+  let handleErr = e => {
+    console.error('Relay Watcher was exited!');
+    if (e) console.error(e);
+  };
+  const childProcess = spawn('yarn', ['relay', '--', '--watch'], {
+    stdio: ['ignore', 1, 2],
+    cwd: path.resolve(__dirname, '../'),
+  });
+  childProcess.on('close', () => handleErr());
+  childProcess.on('error', e => handleErr(e));
+  process.on('exit', () => {
+    handleErr = () => {};
+    if (childProcess) childProcess.kill();
   });
 }
