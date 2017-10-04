@@ -1,30 +1,23 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { createPaginationContainer, graphql } from 'react-relay/compat';
 import Loading from 'components/Loading';
 import CustomerConnectionItem from './CustomerConnectionItem';
+import type { CustomerConnection_viewer } from './__generated__/CustomerConnection_viewer.graphql';
 
 const PER_PAGE = 10;
 
-class CustomerConnection extends React.Component {
-  static propTypes = {
-    viewer: PropTypes.object,
-    relay: PropTypes.object.isRequired,
-  };
+type Props = {
+  viewer: CustomerConnection_viewer,
+  relay: Object,
+};
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      loading: false,
-    };
-
-    this.onScroll = this.onScroll.bind(this);
-  }
+class CustomerConnection extends React.Component<Props> {
+  scrollContainer: ?HTMLElement;
 
   componentDidMount() {
-    setTimeout(() => this.loadNextItemsIfNeeded(this.scrollContainer), 500);
-
+    setTimeout(() => this.loadNextItemsIfNeeded(), 500);
     window.addEventListener('scroll', this.onScroll);
   }
 
@@ -32,14 +25,19 @@ class CustomerConnection extends React.Component {
     window.removeEventListener('scroll', this.onScroll);
   }
 
-  onScroll() {
-    if (!this.state.loading) {
-      this.loadNextItemsIfNeeded();
+  onScroll = () => {
+    if (!this.props.relay.hasMore()) {
+      window.removeEventListener('scroll', this.onScroll);
     }
-  }
+    this.loadNextItemsIfNeeded();
+  };
 
   loadNextItemsIfNeeded() {
+    if (this.props.relay.isLoading()) return;
+
     const elem = this.scrollContainer;
+    if (!elem) return;
+
     const contentHeight = elem.offsetHeight;
     const y = window.pageYOffset + window.innerHeight;
     if (y >= contentHeight) {
@@ -48,28 +46,20 @@ class CustomerConnection extends React.Component {
   }
 
   loadNextItems() {
-    this.setState({ loading: true }, () => {
-      if (this.props.viewer.customerConnection.pageInfo.hasNextPage) {
-        this.props.relay.setVariables(
-          {
-            count: this.props.relay.variables.count + PER_PAGE,
-          },
-          readyState => {
-            // this gets called twice https://goo.gl/ZsQ3Dy
-            if (readyState.done) {
-              this.setState({ loading: false }, () => {
-                this.loadNextItemsIfNeeded();
-              });
-            }
-          }
-        );
-      } else {
-        window.removeEventListener('scroll', this.onScroll);
-      }
+    if (!this.props.relay.hasMore() || this.props.relay.isLoading()) return;
+
+    this.props.relay.loadMore(PER_PAGE, () => {
+      this.forceUpdate(); // for hidding loader
     });
+    this.forceUpdate(); // for showing loader
   }
 
   render() {
+    const { viewer, relay } = this.props;
+    const { customerConnection } = viewer || {};
+
+    if (!customerConnection) return 'no customers found';
+
     return (
       <div
         onScroll={this.onScroll}
@@ -79,7 +69,7 @@ class CustomerConnection extends React.Component {
         style={{ marginBottom: '200px' }}
       >
         <div>
-          <h3>Total {this.props.viewer.customerConnection.count} records</h3>
+          <h3>Total {customerConnection.count} records</h3>
 
           <div className="row">
             <div className="col-sm-1">
@@ -104,41 +94,67 @@ class CustomerConnection extends React.Component {
           <hr />
         </div>
 
-        {this.props.viewer.customerConnection.edges.map(({ node }) => {
+        {customerConnection.edges.map(({ node }) => {
           return (
             <div key={node._id}>
-              <CustomerConnectionItem customer={node} onItemClick={this.handleItemClick} />
+              <CustomerConnectionItem customer={node} />
             </div>
           );
         })}
 
-        {this.props.viewer.customerConnection.pageInfo.hasNextPage && <Loading />}
+        {relay.isLoading() && <Loading />}
       </div>
     );
   }
 }
 
-export default Relay.createContainer(CustomerConnection, {
-  initialVariables: {
-    count: PER_PAGE,
-  },
-  fragments: {
-    viewer: () => Relay.QL`
-      fragment on Viewer {
-        customerConnection(first: $count) {
-          count
-          pageInfo {
-            hasNextPage
-          }
-          edges {
-            cursor
-            node {
-              _id
-              ${CustomerConnectionItem.getFragment('customer')}
-            }
+export default createPaginationContainer(
+  CustomerConnection,
+  graphql`
+    fragment CustomerConnection_viewer on Viewer {
+      customerConnection(first: $count, after: $cursor)
+        @connection(key: "CustomerConnection_customerConnection") {
+        count
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        edges {
+          cursor
+          node {
+            _id
+            ...CustomerConnectionItem_customer
           }
         }
       }
+    }
+  `,
+  {
+    direction: 'forward',
+    getConnectionFromProps(props) {
+      // console.log('getConnectionFromProps', props.viewer.customerConnection);
+      return props.viewer && props.viewer.customerConnection;
+    },
+    getFragmentVariables(prevVars, totalCount) {
+      console.log('getFragmentVariables', arguments);
+      return {
+        ...prevVars,
+        count: totalCount,
+      };
+    },
+    getVariables(props, { count, cursor }, fragmentVariables) {
+      console.log('getVariables', arguments);
+      return {
+        count,
+        cursor,
+      };
+    },
+    query: graphql`
+      query CustomerConnectionQuery($count: Int!, $cursor: String) {
+        viewer {
+          ...CustomerConnection_viewer
+        }
+      }
     `,
-  },
-});
+  }
+);

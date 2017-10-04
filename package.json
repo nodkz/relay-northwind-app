@@ -10,7 +10,6 @@
     "babel-polyfill": "7.0.0-beta.2",
     "dotenv": "^4.0.0",
     "fastclick": "1.0.6",
-    "graphql-relay": "^0.5.2",
     "history": "^4.7.2",
     "react": "^16.0.0",
     "react-bootstrap": "^0.31.3",

@@ -296,8 +296,7 @@ export default class RelayStore {
             })
           : null,
         __DEV__ ? gqErrorsMiddleware() : null,
-      ].filter(o => !!o),
-      { disableBatchQuery: false }
+      ].filter(o => !!o)
     );
   }
 
