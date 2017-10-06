@@ -8,17 +8,18 @@
 
 /*::
 import type {ConcreteFragment} from 'relay-runtime';
-export type Product_product = {|
-  +productID: ?number;
-  +name: ?string;
-  +supplierID: ?number;
-  +categoryID: ?number;
-  +quantityPerUnit: ?string;
-  +unitPrice: ?number;
-  +unitsInStock: ?number;
-  +unitsOnOrder: ?number;
-  +reorderLevel: ?number;
-  +discontinued: ?boolean;
+export type Order = {|
+  +orderID: ?number;
+  +customerID: ?string;
+  +employeeID: ?number;
+  +orderDate: ?any;
+  +requiredDate: ?any;
+  +shippedDate: ?any;
+  +shipVia: ?number;
+  +freight: ?number;
+  +shipName: ?string;
+  +shipAddress: ?{| |};
+  +details: ?$ReadOnlyArray<?{| |}>;
 |};
 */
 
@@ -27,80 +28,105 @@ const fragment /*: ConcreteFragment*/ = {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "Product_product",
+  "name": "Order",
   "selections": [
     {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "productID",
+      "name": "shippedDate",
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "name",
+      "name": "orderID",
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "supplierID",
+      "name": "employeeID",
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "categoryID",
+      "name": "orderDate",
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "quantityPerUnit",
+      "name": "requiredDate",
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "unitPrice",
+      "name": "customerID",
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "unitsInStock",
+      "name": "shipVia",
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "unitsOnOrder",
+      "name": "freight",
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "reorderLevel",
+      "name": "shipName",
       "storageKey": null
     },
     {
-      "kind": "ScalarField",
+      "kind": "LinkedField",
       "alias": null,
       "args": null,
-      "name": "discontinued",
+      "concreteType": "CustomerAddress",
+      "name": "shipAddress",
+      "plural": false,
+      "selections": [
+        {
+          "kind": "FragmentSpread",
+          "name": "Address_address",
+          "args": null
+        }
+      ],
+      "storageKey": null
+    },
+    {
+      "kind": "LinkedField",
+      "alias": null,
+      "args": null,
+      "concreteType": "OrderDetails",
+      "name": "details",
+      "plural": true,
+      "selections": [
+        {
+          "kind": "FragmentSpread",
+          "name": "OrderDetails_details",
+          "args": null
+        }
+      ],
       "storageKey": null
     }
   ],
-  "type": "Product"
+  "type": "Order"
 };
 
 module.exports = fragment;

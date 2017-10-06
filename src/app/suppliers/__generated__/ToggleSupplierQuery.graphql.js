@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash ff7b7880034ffe38f975f5a7c3bade6b
+ * @relayHash 4e8558f2c7f429896bc913793e63e7ed
  */
 
 /* eslint-disable */
@@ -23,13 +23,13 @@ query ToggleSupplierQuery(
 ) {
   viewer {
     supplier(filter: $filter) {
-      ...Supplier_supplier
+      ...Supplier
       id
     }
   }
 }
 
-fragment Supplier_supplier on Supplier {
+fragment Supplier on Supplier {
   supplierID
   companyName
   contactName
@@ -91,7 +91,7 @@ const batch /*: ConcreteBatch*/ = {
             "selections": [
               {
                 "kind": "FragmentSpread",
-                "name": "Supplier_supplier",
+                "name": "Supplier",
                 "args": null
               }
             ],
@@ -266,7 +266,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query ToggleSupplierQuery(\n  $filter: FilterFindOneSupplierInput\n) {\n  viewer {\n    supplier(filter: $filter) {\n      ...Supplier_supplier\n      id\n    }\n  }\n}\n\nfragment Supplier_supplier on Supplier {\n  supplierID\n  companyName\n  contactName\n  contactTitle\n  address {\n    ...Address_address\n  }\n  productConnection {\n    count\n  }\n}\n\nfragment Address_address on CustomerAddress {\n  street\n  city\n  region\n  postalCode\n  country\n  phone\n}\n"
+  "text": "query ToggleSupplierQuery(\n  $filter: FilterFindOneSupplierInput\n) {\n  viewer {\n    supplier(filter: $filter) {\n      ...Supplier\n      id\n    }\n  }\n}\n\nfragment Supplier on Supplier {\n  supplierID\n  companyName\n  contactName\n  contactTitle\n  address {\n    ...Address_address\n  }\n  productConnection {\n    count\n  }\n}\n\nfragment Address_address on CustomerAddress {\n  street\n  city\n  region\n  postalCode\n  country\n  phone\n}\n"
 };
 
 module.exports = batch;

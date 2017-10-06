@@ -2,72 +2,33 @@
 
 import React from 'react';
 import { graphql } from 'react-relay/compat';
-import { Button } from 'react-bootstrap';
-import Loading from 'components/Loading';
-import { relayStore } from '../../clientStores';
+import Toggler from 'components/Toggler';
 import Category from './Category';
-import type { Category_category } from './__generated__/Category_category.graphql';
+import type { ToggleCategoryQueryResponse } from './__generated__/ToggleCategoryQuery.graphql';
 
 type Props = {
-  id: number,
+  id: ?number,
 };
 
-type State = {
-  isOpen: boolean,
-  data: ?Category_category,
-};
+export default function ToggleCategory({ id }: Props) {
+  if (!id) return null;
 
-export default class ToggleCategory extends React.Component<Props, State> {
-  state: State = {
-    isOpen: false,
-    data: null,
-  };
-
-  toggle = () => {
-    this.setState({ isOpen: !this.state.isOpen });
-
-    if (!this.state.data) {
-      relayStore
-        .fetch({
-          query: graphql`
-            query ToggleCategoryQuery($filter: FilterFindOneCategoryInput) {
-              viewer {
-                category(filter: $filter) {
-                  ...Category_category
-                }
-              }
+  return (
+    <Toggler
+      component={Category}
+      query={() => graphql`
+        query ToggleCategoryQuery($filter: FilterFindOneCategoryInput) {
+          viewer {
+            category(filter: $filter) {
+              ...Category
             }
-          `,
-          variables: {
-            filter: { categoryID: this.props.id },
-          },
-        })
-        .then(res => {
-          this.setState({ data: res.category });
-        });
-    }
-  };
-
-  render() {
-    return (
-      <span>
-        {' '}
-        <Button
-          bsSize="xsmall"
-          bsStyle="info"
-          onClick={this.toggle}
-          data-id={this.props.id}
-          children={this.state.isOpen ? 'close' : 'open'}
-        />
-        {this.state.isOpen &&
-          (this.state.data ? (
-            <div className="lrspace bspace">
-              <Category category={this.state.data} />
-            </div>
-          ) : (
-            <Loading />
-          ))}
-      </span>
-    );
-  }
+          }
+        }
+      `}
+      variables={{ filter: { categoryID: id } }}
+      prepareProps={(payload: ToggleCategoryQueryResponse) => ({
+        data: payload.viewer && payload.viewer.category,
+      })}
+    />
+  );
 }

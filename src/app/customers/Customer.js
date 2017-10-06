@@ -4,42 +4,42 @@ import React from 'react';
 import { createFragmentContainer, graphql } from 'react-relay/compat';
 import Address from 'app/Address';
 import ToggleOrderCollection from 'app/orders/ToggleOrderConnection';
-import type { Customer_customer } from './__generated__/Customer_customer.graphql';
+import type { Customer as Data } from './__generated__/Customer.graphql';
 
 type Props = {
-  customer: ?Customer_customer,
+  data: ?Data,
 };
 
 class Customer extends React.Component<Props> {
   render() {
-    const { customer } = this.props;
+    const { data } = this.props;
 
-    if (!customer) return <div>no customer data</div>;
+    if (!data) return <div>no customer data</div>;
 
     return (
       <div className="bordered">
         <dl className="dl-horizontal">
           <dt>CustomerID</dt>
-          <dd>{customer.customerID}</dd>
+          <dd>{data.customerID}</dd>
 
           <dt>CompanyName</dt>
-          <dd>{customer.companyName}</dd>
+          <dd>{data.companyName}</dd>
 
           <dt>ContactName</dt>
-          <dd>{customer.contactName}</dd>
+          <dd>{data.contactName}</dd>
 
           <dt>ContactTitle</dt>
-          <dd>{customer.contactTitle}</dd>
+          <dd>{data.contactTitle}</dd>
 
           <dt>ShipAddress</dt>
           <dd>
-            <Address address={customer.address} />
+            <Address address={data.address} />
           </dd>
 
           <dt>Total orders</dt>
           <dd>
-            <b>{customer.orderConnection ? customer.orderConnection.count : 0}</b>
-            <ToggleOrderCollection filter={{ customerID: customer.customerID }} />
+            <b>{data.orderConnection ? data.orderConnection.count : 0}</b>
+            <ToggleOrderCollection filter={{ customerID: data.customerID }} />
           </dd>
         </dl>
       </div>
@@ -50,7 +50,7 @@ class Customer extends React.Component<Props> {
 export default createFragmentContainer(
   Customer,
   graphql`
-    fragment Customer_customer on Customer {
+    fragment Customer on Customer {
       customerID
       companyName
       contactName

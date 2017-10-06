@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 8971afb6a0c652332b230a624c854d38
+ * @relayHash cfa55ef82939ea1d8987f5b3b0f940ab
  */
 
 /* eslint-disable */
@@ -23,13 +23,13 @@ query ToggleProductQuery(
 ) {
   viewer {
     product(filter: $filter) {
-      ...Product_product
+      ...Product
       id
     }
   }
 }
 
-fragment Product_product on Product {
+fragment Product on Product {
   productID
   name
   supplierID
@@ -82,7 +82,7 @@ const batch /*: ConcreteBatch*/ = {
             "selections": [
               {
                 "kind": "FragmentSpread",
-                "name": "Product_product",
+                "name": "Product",
                 "args": null
               }
             ],
@@ -228,7 +228,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query ToggleProductQuery(\n  $filter: FilterFindOneProductInput\n) {\n  viewer {\n    product(filter: $filter) {\n      ...Product_product\n      id\n    }\n  }\n}\n\nfragment Product_product on Product {\n  productID\n  name\n  supplierID\n  categoryID\n  quantityPerUnit\n  unitPrice\n  unitsInStock\n  unitsOnOrder\n  reorderLevel\n  discontinued\n}\n"
+  "text": "query ToggleProductQuery(\n  $filter: FilterFindOneProductInput\n) {\n  viewer {\n    product(filter: $filter) {\n      ...Product\n      id\n    }\n  }\n}\n\nfragment Product on Product {\n  productID\n  name\n  supplierID\n  categoryID\n  quantityPerUnit\n  unitPrice\n  unitsInStock\n  unitsOnOrder\n  reorderLevel\n  discontinued\n}\n"
 };
 
 module.exports = batch;

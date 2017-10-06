@@ -8,13 +8,13 @@
 
 /*::
 import type {ConcreteFragment} from 'relay-runtime';
-export type Supplier_supplier = {|
-  +supplierID: ?number;
+export type Customer = {|
+  +customerID: ?string;
   +companyName: ?string;
   +contactName: ?string;
   +contactTitle: ?string;
   +address: ?{| |};
-  +productConnection: ?{|
+  +orderConnection: ?{|
     +count: number;
   |};
 |};
@@ -25,13 +25,13 @@ const fragment /*: ConcreteFragment*/ = {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "Supplier_supplier",
+  "name": "Customer",
   "selections": [
     {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "supplierID",
+      "name": "customerID",
       "storageKey": null
     },
     {
@@ -75,8 +75,8 @@ const fragment /*: ConcreteFragment*/ = {
       "kind": "LinkedField",
       "alias": null,
       "args": null,
-      "concreteType": "ProductConnection",
-      "name": "productConnection",
+      "concreteType": "OrderConnection",
+      "name": "orderConnection",
       "plural": false,
       "selections": [
         {
@@ -90,7 +90,7 @@ const fragment /*: ConcreteFragment*/ = {
       "storageKey": null
     }
   ],
-  "type": "Supplier"
+  "type": "Customer"
 };
 
 module.exports = fragment;

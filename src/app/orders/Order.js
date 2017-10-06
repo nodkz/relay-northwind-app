@@ -7,62 +7,62 @@ import OrderDetails from './OrderDetails';
 import ToggleCustomer from 'app/customers/ToggleCustomer';
 import ToggleEmployee from 'app/employees/ToggleEmployee';
 import ToggleShipper from 'app/shippers/ToggleShipper';
-import type { Order_order } from './__generated__/Order_order.graphql';
+import type { Order as Data } from './__generated__/Order.graphql';
 
 type Props = {
-  order: ?Order_order,
+  data: ?Data,
 };
 
 class Order extends React.Component<Props> {
   render() {
-    const { order } = this.props;
+    const { data } = this.props;
 
-    if (!order) return 'no order data';
+    if (!data) return 'no order data';
 
     return (
       <div className="bordered">
         <dl className="dl-horizontal">
           <dt>OrderID</dt>
-          <dd>{order.orderID}</dd>
+          <dd>{data.orderID}</dd>
 
           <dt>CustomerID</dt>
           <dd>
-            {order.customerID}
-            {order.customerID && <ToggleCustomer id={order.customerID} />}
+            {data.customerID}
+            <ToggleCustomer id={data.customerID} />
           </dd>
 
           <dt>EmployeeID</dt>
           <dd>
-            {order.employeeID}
-            {order.employeeID && <ToggleEmployee id={order.employeeID} />}
+            {data.employeeID}
+            <ToggleEmployee id={data.employeeID} />
           </dd>
 
           <dt>OrderDate</dt>
-          <dd>{`${order.orderDate || ''}`.substr(0, 10)}</dd>
+          <dd>{`${data.orderDate || ''}`.substr(0, 10)}</dd>
 
           <dt>RequiredDate</dt>
-          <dd>{`${order.requiredDate || ''}`.substr(0, 10)}</dd>
+          <dd>{`${data.requiredDate || ''}`.substr(0, 10)}</dd>
 
           <dt>ShippedDate</dt>
-          <dd>{`${order.shippedDate || ''}`.substr(0, 10)}</dd>
+          <dd>{`${data.shippedDate || ''}`.substr(0, 10)}</dd>
 
           <dt>ShipVia</dt>
           <dd>
-            {order.shipVia}
-            {order.shipVia && <ToggleShipper id={order.shipVia} />}
+            {data.shipVia}
+            <ToggleShipper id={data.shipVia} />
           </dd>
 
           <dt>Freight</dt>
-          <dd>{order.freight}</dd>
+          <dd>{data.freight}</dd>
 
           <dt>ShipAddress</dt>
           <dd>
-            <i>{order.shipName}</i>
-            <Address address={order.shipAddress} />
+            <i>{data.shipName}</i>
+            <Address address={data.shipAddress} />
           </dd>
         </dl>
         <div className="lrspace">
-          <OrderDetails details={order.details} />
+          <OrderDetails details={data.details} />
         </div>
       </div>
     );
@@ -72,7 +72,7 @@ class Order extends React.Component<Props> {
 export default createFragmentContainer(
   Order,
   graphql`
-    fragment Order_order on Order {
+    fragment Order on Order {
       orderID
       customerID
       employeeID

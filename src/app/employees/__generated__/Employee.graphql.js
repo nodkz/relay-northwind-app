@@ -8,18 +8,24 @@
 
 /*::
 import type {ConcreteFragment} from 'relay-runtime';
-export type Order_order = {|
-  +orderID: ?number;
-  +customerID: ?string;
+export type Employee = {|
   +employeeID: ?number;
-  +orderDate: ?any;
-  +requiredDate: ?any;
-  +shippedDate: ?any;
-  +shipVia: ?number;
-  +freight: ?number;
-  +shipName: ?string;
-  +shipAddress: ?{| |};
-  +details: ?$ReadOnlyArray<?{| |}>;
+  +lastName: ?string;
+  +firstName: ?string;
+  +title: ?string;
+  +titleOfCourtesy: ?string;
+  +birthDate: ?any;
+  +hireDate: ?any;
+  +notes: ?string;
+  +reportsTo: ?number;
+  +address: ?{| |};
+  +chief: ?{|
+    +lastName: ?string;
+    +firstName: ?string;
+  |};
+  +orderConnection: ?{|
+    +count: number;
+  |};
 |};
 */
 
@@ -28,20 +34,13 @@ const fragment /*: ConcreteFragment*/ = {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "Order_order",
+  "name": "Employee",
   "selections": [
     {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "shippedDate",
-      "storageKey": null
-    },
-    {
-      "kind": "ScalarField",
-      "alias": null,
-      "args": null,
-      "name": "orderID",
+      "name": "hireDate",
       "storageKey": null
     },
     {
@@ -55,42 +54,49 @@ const fragment /*: ConcreteFragment*/ = {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "orderDate",
+      "name": "firstName",
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "requiredDate",
+      "name": "title",
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "customerID",
+      "name": "titleOfCourtesy",
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "shipVia",
+      "name": "birthDate",
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "freight",
+      "name": "lastName",
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "shipName",
+      "name": "notes",
+      "storageKey": null
+    },
+    {
+      "kind": "ScalarField",
+      "alias": null,
+      "args": null,
+      "name": "reportsTo",
       "storageKey": null
     },
     {
@@ -98,7 +104,7 @@ const fragment /*: ConcreteFragment*/ = {
       "alias": null,
       "args": null,
       "concreteType": "CustomerAddress",
-      "name": "shipAddress",
+      "name": "address",
       "plural": false,
       "selections": [
         {
@@ -113,20 +119,47 @@ const fragment /*: ConcreteFragment*/ = {
       "kind": "LinkedField",
       "alias": null,
       "args": null,
-      "concreteType": "OrderDetails",
-      "name": "details",
-      "plural": true,
+      "concreteType": "Employee",
+      "name": "chief",
+      "plural": false,
       "selections": [
         {
-          "kind": "FragmentSpread",
-          "name": "OrderDetails_details",
-          "args": null
+          "kind": "ScalarField",
+          "alias": null,
+          "args": null,
+          "name": "lastName",
+          "storageKey": null
+        },
+        {
+          "kind": "ScalarField",
+          "alias": null,
+          "args": null,
+          "name": "firstName",
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
+    },
+    {
+      "kind": "LinkedField",
+      "alias": null,
+      "args": null,
+      "concreteType": "OrderConnection",
+      "name": "orderConnection",
+      "plural": false,
+      "selections": [
+        {
+          "kind": "ScalarField",
+          "alias": null,
+          "args": null,
+          "name": "count",
+          "storageKey": null
         }
       ],
       "storageKey": null
     }
   ],
-  "type": "Order"
+  "type": "Employee"
 };
 
 module.exports = fragment;

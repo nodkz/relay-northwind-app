@@ -2,72 +2,33 @@
 
 import React from 'react';
 import { graphql } from 'react-relay/compat';
-import { Button } from 'react-bootstrap';
-import Loading from 'components/Loading';
-import { relayStore } from '../../clientStores';
+import Toggler from 'components/Toggler';
 import Supplier from './Supplier';
 import type { ToggleSupplierQueryResponse } from './__generated__/ToggleSupplierQuery.graphql';
 
 type Props = {
-  id: number,
+  id: ?number,
 };
 
-type State = {
-  isOpen: boolean,
-  data: ?ToggleSupplierQueryResponse,
-};
+export default function ToggleSupplier({ id }: Props) {
+  if (!id) return null;
 
-export default class ToggleSupplier extends React.Component<Props, State> {
-  state: State = {
-    isOpen: false,
-    data: null,
-  };
-
-  toggle = () => {
-    this.setState({
-      isOpen: !this.state.isOpen,
-    });
-
-    if (!this.state.data) {
-      relayStore
-        .fetch({
-          query: graphql`
-            query ToggleSupplierQuery($filter: FilterFindOneSupplierInput) {
-              viewer {
-                supplier(filter: $filter) {
-                  ...Supplier_supplier
-                }
-              }
+  return (
+    <Toggler
+      component={Supplier}
+      query={() => graphql`
+        query ToggleSupplierQuery($filter: FilterFindOneSupplierInput) {
+          viewer {
+            supplier(filter: $filter) {
+              ...Supplier
             }
-          `,
-          variables: { filter: { supplierID: this.props.id } },
-        })
-        .then(res => {
-          this.setState({ data: res.supplier });
-        });
-    }
-  };
-
-  render() {
-    return (
-      <span>
-        {' '}
-        <Button
-          bsSize="xsmall"
-          bsStyle="info"
-          onClick={this.toggle}
-          data-id={this.props.id}
-          children={this.state.isOpen ? 'close' : 'open'}
-        />
-        {this.state.isOpen &&
-          (this.state.data ? (
-            <div className="lrspace bspace">
-              <Supplier supplier={this.state.data} />
-            </div>
-          ) : (
-            <Loading />
-          ))}
-      </span>
-    );
-  }
+          }
+        }
+      `}
+      variables={{ filter: { supplierID: id } }}
+      prepareProps={(payload: ToggleSupplierQueryResponse) => ({
+        data: payload.viewer && payload.viewer.supplier,
+      })}
+    />
+  );
 }

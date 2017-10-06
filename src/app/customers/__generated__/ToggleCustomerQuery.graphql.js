@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 15cb98b293211a1203541be1da2755c3
+ * @relayHash 733710f6bbfbfc75332580801cdf4a50
  */
 
 /* eslint-disable */
@@ -23,13 +23,13 @@ query ToggleCustomerQuery(
 ) {
   viewer {
     customer(filter: $filter) {
-      ...Customer_customer
+      ...Customer
       id
     }
   }
 }
 
-fragment Customer_customer on Customer {
+fragment Customer on Customer {
   customerID
   companyName
   contactName
@@ -91,7 +91,7 @@ const batch /*: ConcreteBatch*/ = {
             "selections": [
               {
                 "kind": "FragmentSpread",
-                "name": "Customer_customer",
+                "name": "Customer",
                 "args": null
               }
             ],
@@ -266,7 +266,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query ToggleCustomerQuery(\n  $filter: FilterFindOneCustomerInput\n) {\n  viewer {\n    customer(filter: $filter) {\n      ...Customer_customer\n      id\n    }\n  }\n}\n\nfragment Customer_customer on Customer {\n  customerID\n  companyName\n  contactName\n  contactTitle\n  address {\n    ...Address_address\n  }\n  orderConnection {\n    count\n  }\n}\n\nfragment Address_address on CustomerAddress {\n  street\n  city\n  region\n  postalCode\n  country\n  phone\n}\n"
+  "text": "query ToggleCustomerQuery(\n  $filter: FilterFindOneCustomerInput\n) {\n  viewer {\n    customer(filter: $filter) {\n      ...Customer\n      id\n    }\n  }\n}\n\nfragment Customer on Customer {\n  customerID\n  companyName\n  contactName\n  contactTitle\n  address {\n    ...Address_address\n  }\n  orderConnection {\n    count\n  }\n}\n\nfragment Address_address on CustomerAddress {\n  street\n  city\n  region\n  postalCode\n  country\n  phone\n}\n"
 };
 
 module.exports = batch;

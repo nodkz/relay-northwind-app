@@ -8,7 +8,7 @@
 
 /*::
 import type {ConcreteFragment} from 'relay-runtime';
-export type Shipper_shipper = {|
+export type Shipper = {|
   +shipperID: ?number;
   +companyName: ?string;
   +phone: ?string;
@@ -23,7 +23,7 @@ const fragment /*: ConcreteFragment*/ = {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "Shipper_shipper",
+  "name": "Shipper",
   "selections": [
     {
       "kind": "ScalarField",

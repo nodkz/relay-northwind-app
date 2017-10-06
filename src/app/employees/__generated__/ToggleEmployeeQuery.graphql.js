@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 8ee00341fa7bf431da5ffc97e096d027
+ * @relayHash 5c6fd1c9c9225bfb1428bfed728c95e5
  */
 
 /* eslint-disable */
@@ -23,13 +23,13 @@ query ToggleEmployeeQuery(
 ) {
   viewer {
     employee(filter: $filter) {
-      ...Employee_employee
+      ...Employee
       id
     }
   }
 }
 
-fragment Employee_employee on Employee {
+fragment Employee on Employee {
   hireDate
   employeeID
   firstName
@@ -101,7 +101,7 @@ const batch /*: ConcreteBatch*/ = {
             "selections": [
               {
                 "kind": "FragmentSpread",
-                "name": "Employee_employee",
+                "name": "Employee",
                 "args": null
               }
             ],
@@ -343,7 +343,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query ToggleEmployeeQuery(\n  $filter: FilterFindOneEmployeeInput\n) {\n  viewer {\n    employee(filter: $filter) {\n      ...Employee_employee\n      id\n    }\n  }\n}\n\nfragment Employee_employee on Employee {\n  hireDate\n  employeeID\n  firstName\n  title\n  titleOfCourtesy\n  birthDate\n  lastName\n  notes\n  reportsTo\n  address {\n    ...Address_address\n  }\n  chief {\n    lastName\n    firstName\n    id\n  }\n  orderConnection {\n    count\n  }\n}\n\nfragment Address_address on CustomerAddress {\n  street\n  city\n  region\n  postalCode\n  country\n  phone\n}\n"
+  "text": "query ToggleEmployeeQuery(\n  $filter: FilterFindOneEmployeeInput\n) {\n  viewer {\n    employee(filter: $filter) {\n      ...Employee\n      id\n    }\n  }\n}\n\nfragment Employee on Employee {\n  hireDate\n  employeeID\n  firstName\n  title\n  titleOfCourtesy\n  birthDate\n  lastName\n  notes\n  reportsTo\n  address {\n    ...Address_address\n  }\n  chief {\n    lastName\n    firstName\n    id\n  }\n  orderConnection {\n    count\n  }\n}\n\nfragment Address_address on CustomerAddress {\n  street\n  city\n  region\n  postalCode\n  country\n  phone\n}\n"
 };
 
 module.exports = batch;

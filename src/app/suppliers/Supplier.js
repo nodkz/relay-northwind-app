@@ -4,17 +4,17 @@ import React from 'react';
 import { createFragmentContainer, graphql } from 'react-relay/compat';
 import Address from 'app/Address';
 import ToggleProductCollection from 'app/products/ToggleProductConnection';
-import type { Supplier_supplier } from './__generated__/Supplier_supplier.graphql';
+import type { Supplier as Data } from './__generated__/Supplier.graphql';
 
 type Props = {
-  supplier: Supplier_supplier,
+  data: Data,
 };
 
 class Supplier extends React.Component<Props> {
   render() {
-    const { supplier } = this.props;
+    const { data } = this.props;
 
-    if (!supplier) {
+    if (!data) {
       return <div>Supplier does not found</div>;
     }
 
@@ -22,26 +22,26 @@ class Supplier extends React.Component<Props> {
       <div className="bordered">
         <dl className="dl-horizontal">
           <dt>SupplierID</dt>
-          <dd>{supplier.supplierID}</dd>
+          <dd>{data.supplierID}</dd>
 
           <dt>CompanyName</dt>
-          <dd>{supplier.companyName}</dd>
+          <dd>{data.companyName}</dd>
 
           <dt>ContactName</dt>
-          <dd>{supplier.contactName}</dd>
+          <dd>{data.contactName}</dd>
 
           <dt>ContactTitle</dt>
-          <dd>{supplier.contactTitle}</dd>
+          <dd>{data.contactTitle}</dd>
 
           <dt>Address</dt>
           <dd>
-            <Address address={supplier.address} />
+            <Address address={data.address} />
           </dd>
 
           <dt>Total products</dt>
           <dd>
-            <b>{supplier.productConnection && supplier.productConnection.count}</b>
-            <ToggleProductCollection filter={{ supplierID: supplier.supplierID }} />
+            <b>{data.productConnection && data.productConnection.count}</b>
+            <ToggleProductCollection filter={{ supplierID: data.supplierID }} />
           </dd>
         </dl>
       </div>
@@ -52,7 +52,7 @@ class Supplier extends React.Component<Props> {
 export default createFragmentContainer(
   Supplier,
   graphql`
-    fragment Supplier_supplier on Supplier {
+    fragment Supplier on Supplier {
       supplierID
       companyName
       contactName

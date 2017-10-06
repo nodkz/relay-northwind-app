@@ -30,7 +30,7 @@ const fragment /*: ConcreteFragment*/ = {
       "selections": [
         {
           "kind": "FragmentSpread",
-          "name": "Shipper_shipper",
+          "name": "Shipper",
           "args": null
         }
       ],

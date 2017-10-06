@@ -3,17 +3,17 @@
 import React from 'react';
 import { createFragmentContainer, graphql } from 'react-relay/compat';
 import ToggleProductCollection from 'app/products/ToggleProductConnection';
-import type { Category_category } from './__generated__/Category_category.graphql';
+import type { Category as Data } from './__generated__/Category.graphql';
 
 type Props = {
-  category: Category_category,
+  data: Data,
 };
 
 class Category extends React.Component<Props> {
   render() {
-    const { category } = this.props;
+    const { data } = this.props;
 
-    if (!category) {
+    if (!data) {
       return <div>Категория не найдена</div>;
     }
 
@@ -21,18 +21,18 @@ class Category extends React.Component<Props> {
       <div className="bordered bspace">
         <dl className="dl-horizontal">
           <dt>CategoryID</dt>
-          <dd>{category.categoryID}</dd>
+          <dd>{data.categoryID}</dd>
 
           <dt>Name</dt>
-          <dd>{category.name}</dd>
+          <dd>{data.name}</dd>
 
           <dt>Description</dt>
-          <dd>{category.description}</dd>
+          <dd>{data.description}</dd>
 
           <dt>Total products</dt>
           <dd>
-            <b>{category.productConnection && category.productConnection.count}</b>
-            <ToggleProductCollection filter={{ categoryID: category.categoryID }} />
+            <b>{data.productConnection && data.productConnection.count}</b>
+            <ToggleProductCollection filter={{ categoryID: data.categoryID }} />
           </dd>
         </dl>
       </div>
@@ -43,7 +43,7 @@ class Category extends React.Component<Props> {
 export default createFragmentContainer(
   Category,
   graphql`
-    fragment Category_category on Category {
+    fragment Category on Category {
       categoryID
       name
       description

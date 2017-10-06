@@ -5,50 +5,50 @@ import { createFragmentContainer, graphql } from 'react-relay/compat';
 import Address from 'app/Address';
 import ToggleEmployee from './ToggleEmployee';
 import ToggleOrderConnection from 'app/orders/ToggleOrderConnection';
-import type { Employee_employee } from './__generated__/Employee_employee.graphql';
+import type { Employee as Data } from './__generated__/Employee.graphql';
 
 type Props = {
-  employee: Employee_employee,
+  data: Data,
 };
 
 class Employee extends React.Component<Props> {
   render() {
-    const { employee } = this.props;
+    const { data } = this.props;
 
     return (
       <dl className="dl-horizontal bordered">
         <dt>EmployeeID</dt>
-        <dd>{employee.employeeID}</dd>
+        <dd>{data.employeeID}</dd>
 
         <dt>Name</dt>
         <dd>
-          {employee.firstName} {employee.lastName},
-          {employee.titleOfCourtesy}
+          {data.firstName} {data.lastName},
+          {data.titleOfCourtesy}
         </dd>
 
         <dt>Title</dt>
-        <dd>{employee.title}</dd>
+        <dd>{data.title}</dd>
 
         <dt>BirthDate</dt>
-        <dd>{`${employee.birthDate || ''}`.substr(0, 10)}</dd>
+        <dd>{`${data.birthDate || ''}`.substr(0, 10)}</dd>
 
         <dt>HireDate</dt>
-        <dd>{`${employee.hireDate || ''}`.substr(0, 10)}</dd>
+        <dd>{`${data.hireDate || ''}`.substr(0, 10)}</dd>
 
         <dt>Notes</dt>
-        <dd>{employee.notes}</dd>
+        <dd>{data.notes}</dd>
 
         <dt>Home address</dt>
         <dd>
-          <Address address={employee.address} />
+          <Address address={data.address} />
         </dd>
 
         <dt>Chief</dt>
         <dd>
-          {employee.chief ? (
+          {data.chief ? (
             <span>
-              {employee.chief.firstName} {employee.chief.lastName}
-              {employee.reportsTo && <ToggleEmployee id={employee.reportsTo} />}
+              {data.chief.firstName} {data.chief.lastName}
+              {data.reportsTo && <ToggleEmployee id={data.reportsTo} />}
             </span>
           ) : (
             <span className="text-danger">
@@ -59,8 +59,8 @@ class Employee extends React.Component<Props> {
 
         <dt>Total orders</dt>
         <dd>
-          <b>{employee.orderConnection && employee.orderConnection.count}</b>
-          <ToggleOrderConnection filter={{ employeeID: employee.employeeID }} />
+          <b>{data.orderConnection && data.orderConnection.count}</b>
+          <ToggleOrderConnection filter={{ employeeID: data.employeeID }} />
         </dd>
       </dl>
     );
@@ -70,7 +70,7 @@ class Employee extends React.Component<Props> {
 export default createFragmentContainer(
   Employee,
   graphql`
-    fragment Employee_employee on Employee {
+    fragment Employee on Employee {
       employeeID
       lastName
       firstName

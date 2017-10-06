@@ -12,11 +12,11 @@ import type { ProductConnection_viewer } from './__generated__/ProductConnection
 
 const PER_PAGE = 10;
 
-type Props = {
+type Props = {|
   viewer: ProductConnection_viewer,
   hideFilter: boolean,
   relay: Object,
-};
+|};
 
 class ProductConnection extends React.Component<Props> {
   scrollContainer: ?HTMLElement;

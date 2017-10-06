@@ -5,54 +5,58 @@ import { createFragmentContainer, graphql } from 'react-relay/compat';
 import { Label } from 'react-bootstrap';
 import ToggleCategory from 'app/categories/ToggleCategory';
 import ToggleSupplier from 'app/suppliers/ToggleSupplier';
-import type { Product_product } from './__generated__/Product_product.graphql';
+import type { Product as Data } from './__generated__/Product.graphql';
 
 type Props = {
-  product: Product_product,
+  data: Data,
 };
 
 class Product extends React.Component<Props> {
   render() {
-    const { product = {} } = this.props;
+    const { data } = this.props;
+
+    if (!data) {
+      return <div>product not found</div>;
+    }
 
     return (
       <div className="bordered">
         <dl className="dl-horizontal">
           <dt>ProductID</dt>
-          <dd>{product.productID}</dd>
+          <dd>{data.productID}</dd>
 
           <dt>Name</dt>
-          <dd>{product.name}</dd>
+          <dd>{data.name}</dd>
 
           <dt>SupplierID</dt>
           <dd>
-            {product.supplierID}
-            {product.supplierID && <ToggleSupplier id={product.supplierID} />}
+            {data.supplierID}
+            {data.supplierID && <ToggleSupplier id={data.supplierID} />}
           </dd>
 
           <dt>CategoryID</dt>
           <dd>
-            {product.categoryID}
-            {product.categoryID && <ToggleCategory id={product.categoryID} />}
+            {data.categoryID}
+            {data.categoryID && <ToggleCategory id={data.categoryID} />}
           </dd>
 
           <dt>QuantityPerUnit</dt>
-          <dd>{product.quantityPerUnit}</dd>
+          <dd>{data.quantityPerUnit}</dd>
 
           <dt>UnitPrice</dt>
-          <dd>{product.unitPrice}</dd>
+          <dd>{data.unitPrice}</dd>
 
           <dt>UnitsInStock</dt>
-          <dd>{product.unitsInStock}</dd>
+          <dd>{data.unitsInStock}</dd>
 
           <dt>UnitsOnOrder</dt>
-          <dd>{product.unitsOnOrder}</dd>
+          <dd>{data.unitsOnOrder}</dd>
 
           <dt>ReorderLevel</dt>
-          <dd>{product.reorderLevel}</dd>
+          <dd>{data.reorderLevel}</dd>
 
           <dt>Discontinued</dt>
-          <dd>{product.discontinued ? <Label bsStyle="danger">Discontinued</Label> : 'nope'}</dd>
+          <dd>{data.discontinued ? <Label bsStyle="danger">Discontinued</Label> : 'nope'}</dd>
         </dl>
       </div>
     );
@@ -62,7 +66,7 @@ class Product extends React.Component<Props> {
 export default createFragmentContainer(
   Product,
   graphql`
-    fragment Product_product on Product {
+    fragment Product on Product {
       productID
       name
       supplierID
