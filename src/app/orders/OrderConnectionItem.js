@@ -1,59 +1,63 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { createFragmentContainer, graphql } from 'react-relay/compat';
 import ToggleOrder from './ToggleOrder';
+import type { OrderConnectionItem_order } from './__generated__/OrderConnectionItem_order.graphql';
 
-class OrderConnectionItem extends React.Component {
-  static propTypes = {
-    order: PropTypes.object,
-    relay: PropTypes.object,
-  };
+type Props = {
+  order: OrderConnectionItem_order,
+  relay: Object,
+};
 
+class OrderConnectionItem extends React.Component<Props> {
   render() {
-    const { order = {} } = this.props;
+    const { order } = this.props;
+    const employee = order.employee || {};
+
+    if (!order) return <div>no order data</div>;
 
     return (
       <div>
         <div className="row">
           <div className="col-sm-1">{order.orderID}</div>
-          <div className="col-sm-2">{order.customer.companyName}</div>
+          <div className="col-sm-2">{order.customer && order.customer.companyName}</div>
           <div className="col-sm-2">
-            {order.employee.firstName} {order.employee.lastName} (id:{order.employeeID})
+            {employee.firstName} {employee.lastName} (id:{order.employeeID})
           </div>
           <div className="col-sm-2">
-            {order.shipper.companyName} (id:{order.shipVia})
+            {order.shipper && order.shipper.companyName} (id:{order.shipVia})
           </div>
-          <div className="col-sm-2">{`${order.orderDate}`.substr(0, 10)}</div>
+          <div className="col-sm-2">{`${order.orderDate || ''}`.substr(0, 10)}</div>
           <div className="col-sm-2">{order.freight}</div>
         </div>
-        <ToggleOrder id={order.orderID} />
+        {order.orderID && <ToggleOrder id={order.orderID} />}
       </div>
     );
   }
 }
 
-export default Relay.createContainer(OrderConnectionItem, {
-  fragments: {
-    order: () => Relay.QL`
-      fragment on Order {
-        id
-        orderID
-        customerID
-        employeeID
-        shipVia
-        customer {
-          companyName
-        }
-        shipper {
-          companyName
-        }
-        employee {
-          firstName
-          lastName
-        }
-        orderDate
-        freight
+export default createFragmentContainer(
+  OrderConnectionItem,
+  graphql`
+    fragment OrderConnectionItem_order on Order {
+      id
+      orderID
+      customerID
+      employeeID
+      shipVia
+      customer {
+        companyName
       }
-    `,
-  },
-});
+      shipper {
+        companyName
+      }
+      employee {
+        firstName
+        lastName
+      }
+      orderDate
+      freight
+    }
+  `
+);

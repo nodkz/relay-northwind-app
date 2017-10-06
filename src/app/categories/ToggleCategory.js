@@ -1,39 +1,43 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { graphql } from 'react-relay/compat';
 import { Button } from 'react-bootstrap';
 import Loading from 'components/Loading';
 import { relayStore } from '../../clientStores';
 import Category from './Category';
+import type { Category_category } from './__generated__/Category_category.graphql';
 
-export default class ToggleCategory extends React.Component {
-  static propTypes = {
-    id: PropTypes.number.isRequired,
+type Props = {
+  id: number,
+};
+
+type State = {
+  isOpen: boolean,
+  data: ?Category_category,
+};
+
+export default class ToggleCategory extends React.Component<Props, State> {
+  state: State = {
+    isOpen: false,
+    data: null,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: false,
-      data: null,
-    };
-
-    this.toggle = this.toggle.bind(this);
-  }
-
-  toggle() {
+  toggle = () => {
     this.setState({ isOpen: !this.state.isOpen });
 
     if (!this.state.data) {
       relayStore
         .fetch({
-          query: Relay.QL`query {
-            viewer {
-              category(filter: $filter) {
-                ${Category.getFragment('category')}
+          query: graphql`
+            query ToggleCategoryQuery($filter: FilterFindOneCategoryInput) {
+              viewer {
+                category(filter: $filter) {
+                  ...Category_category
+                }
               }
             }
-          }`,
+          `,
           variables: {
             filter: { categoryID: this.props.id },
           },
@@ -42,7 +46,7 @@ export default class ToggleCategory extends React.Component {
           this.setState({ data: res.category });
         });
     }
-  }
+  };
 
   render() {
     return (

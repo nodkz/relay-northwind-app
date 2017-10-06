@@ -1,37 +1,42 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
 import { Form, FormGroup, ControlLabel, FormControl, Button, InputGroup } from 'react-bootstrap';
 
 const InputGroupAddon = InputGroup.Addon;
 
-export default class ProductFilter extends React.Component {
-  static propTypes = {
-    onFilter: PropTypes.func,
+type Props = {
+  onFilter: Function,
+};
+
+type State = {
+  supplierID: string,
+  categoryID: string,
+  unitPriceLTE: string,
+  unitPriceGTE: string,
+};
+
+export default class ProductFilter extends React.Component<Props, State> {
+  state: State = {
+    supplierID: '',
+    categoryID: '',
+    unitPriceLTE: '',
+    unitPriceGTE: '',
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      supplierID: '',
-      categoryID: '',
-      unitPriceLTE: '',
-      unitPriceGTE: '',
-    };
-
-    this.onChange = this.onChange.bind(this);
-    this.onClear = this.onClear.bind(this);
-    this.onFilter = this.onFilter.bind(this);
-  }
-
-  onChange(event) {
-    const fname = event.target.getAttribute('data-name');
-    this.setState(
-      {
-        [fname]: event.target.value,
-      },
-      this.onFilter
-    );
+  onChange(e: Event) {
+    const { target } = e;
+    if (target instanceof HTMLInputElement) {
+      const fname = target.getAttribute('data-name');
+      if (
+        fname === 'supplierID' ||
+        fname === 'categoryID' ||
+        fname === 'unitPriceLTE' ||
+        fname === 'unitPriceGTE'
+      ) {
+        this.setState({ [fname]: target.value }, this.onFilter);
+      }
+    }
   }
 
   onClear() {
@@ -46,13 +51,13 @@ export default class ProductFilter extends React.Component {
     );
   }
 
-  onFilter(e) {
+  onFilter(e: ?Event) {
     if (e) e.preventDefault();
+    const { supplierID, categoryID, unitPriceLTE, unitPriceGTE } = this.state;
+    const { onFilter } = this.props;
 
-    if (this.props.onFilter) {
-      const { supplierID, categoryID, unitPriceLTE, unitPriceGTE } = this.state;
-
-      this.props.onFilter({
+    if (onFilter) {
+      onFilter({
         supplierID: supplierID ? supplierID : null, // eslint-disable-line
         categoryID: categoryID ? categoryID : null, // eslint-disable-line
         _operators:

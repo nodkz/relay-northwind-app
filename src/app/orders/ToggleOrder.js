@@ -1,27 +1,29 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { graphql } from 'react-relay/compat';
 import { Button } from 'react-bootstrap';
 import Loading from 'components/Loading';
 import { relayStore } from '../../clientStores';
 import Order from './Order';
+import type { ToggleOrderQueryResponse } from './__generated__/ToggleOrderQuery.graphql';
 
-export default class ToggleOrder extends React.Component {
-  static propTypes = {
-    id: PropTypes.number.isRequired,
+type Props = {
+  id: number,
+};
+
+type State = {
+  isOpen: boolean,
+  data: ?ToggleOrderQueryResponse,
+};
+
+export default class ToggleOrder extends React.Component<Props, State> {
+  state: State = {
+    isOpen: false,
+    data: null,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: false,
-      data: null,
-    };
-
-    this.toggle = this.toggle.bind(this);
-  }
-
-  toggle() {
+  toggle = () => {
     this.setState({
       isOpen: !this.state.isOpen,
     });
@@ -29,20 +31,22 @@ export default class ToggleOrder extends React.Component {
     if (!this.state.data) {
       relayStore
         .fetch({
-          query: Relay.QL`query {
-          viewer {
-            order(filter: $filter) {
-              ${Order.getFragment('order')}
+          query: graphql`
+            query ToggleOrderQuery($filter: FilterFindOneOrderInput) {
+              viewer {
+                order(filter: $filter) {
+                  ...Order_order
+                }
+              }
             }
-          }
-        }`,
+          `,
           variables: { filter: { orderID: this.props.id } },
         })
         .then(res => {
           this.setState({ data: res.order });
         });
     }
-  }
+  };
 
   render() {
     return (

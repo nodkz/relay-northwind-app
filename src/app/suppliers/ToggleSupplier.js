@@ -1,27 +1,29 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { graphql } from 'react-relay/compat';
 import { Button } from 'react-bootstrap';
 import Loading from 'components/Loading';
 import { relayStore } from '../../clientStores';
 import Supplier from './Supplier';
+import type { ToggleSupplierQueryResponse } from './__generated__/ToggleSupplierQuery.graphql';
 
-export default class ToggleSupplier extends React.Component {
-  static propTypes = {
-    id: PropTypes.number.isRequired,
+type Props = {
+  id: number,
+};
+
+type State = {
+  isOpen: boolean,
+  data: ?ToggleSupplierQueryResponse,
+};
+
+export default class ToggleSupplier extends React.Component<Props, State> {
+  state: State = {
+    isOpen: false,
+    data: null,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: false,
-      data: null,
-    };
-
-    this.toggle = this.toggle.bind(this);
-  }
-
-  toggle() {
+  toggle = () => {
     this.setState({
       isOpen: !this.state.isOpen,
     });
@@ -29,20 +31,22 @@ export default class ToggleSupplier extends React.Component {
     if (!this.state.data) {
       relayStore
         .fetch({
-          query: Relay.QL`query {
-          viewer {
-            supplier(filter: $filter) {
-              ${Supplier.getFragment('supplier')}
+          query: graphql`
+            query ToggleSupplierQuery($filter: FilterFindOneSupplierInput) {
+              viewer {
+                supplier(filter: $filter) {
+                  ...Supplier_supplier
+                }
+              }
             }
-          }
-        }`,
+          `,
           variables: { filter: { supplierID: this.props.id } },
         })
         .then(res => {
           this.setState({ data: res.supplier });
         });
     }
-  }
+  };
 
   render() {
     return (

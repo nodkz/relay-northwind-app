@@ -1,16 +1,19 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { createFragmentContainer, graphql } from 'react-relay/compat';
 import ToggleProduct from './ToggleProduct';
+import type { ProductConnectionItem_product } from './__generated__/ProductConnectionItem_product.graphql';
 
-class ProductConnectionItem extends React.Component {
-  static propTypes = {
-    product: PropTypes.object,
-    relay: PropTypes.object,
-  };
+type Props = {
+  product: ?ProductConnectionItem_product,
+};
 
+class ProductConnectionItem extends React.Component<Props> {
   render() {
-    const { product = {} } = this.props;
+    const { product } = this.props;
+
+    if (!product) return <div>no product data</div>;
 
     return (
       <div>
@@ -27,40 +30,39 @@ class ProductConnectionItem extends React.Component {
             )}
           </div>
           <div className="col-sm-2">
-            {product.category.name} (id:{product.categoryID})
+            {product.category && product.category.name} (id:{product.categoryID})
           </div>
           <div className="col-sm-2">
-            {product.supplier.companyName} (id:{product.supplierID})
+            {product.supplier && product.supplier.companyName} (id:{product.supplierID})
           </div>
           <div className="col-sm-2">${product.unitPrice}</div>
           <div className="col-sm-2">{product.unitsInStock} pcs</div>
         </div>
-        <ToggleProduct id={product.productID} />
+        {product.productID && <ToggleProduct id={product.productID} />}
       </div>
     );
   }
 }
 
-export default Relay.createContainer(ProductConnectionItem, {
-  fragments: {
-    product: () => Relay.QL`
-      fragment on Product {
-        id
+export default createFragmentContainer(
+  ProductConnectionItem,
+  graphql`
+    fragment ProductConnectionItem_product on Product {
+      id
+      name
+      categoryID
+      category {
         name
-        categoryID
-        category {
-          name
-        }
-        supplierID
-        supplier {
-          companyName
-        }
-        productID
-        quantityPerUnit
-        unitPrice
-        unitsInStock
-        discontinued
       }
-    `,
-  },
-});
+      supplierID
+      supplier {
+        companyName
+      }
+      productID
+      quantityPerUnit
+      unitPrice
+      unitsInStock
+      discontinued
+    }
+  `
+);

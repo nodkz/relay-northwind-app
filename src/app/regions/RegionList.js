@@ -1,19 +1,27 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { createFragmentContainer, graphql } from 'react-relay/compat';
 import Region from './Region';
+import type { RegionList_viewer } from './__generated__/RegionList_viewer.graphql';
 
-class RegionList extends React.Component {
-  static propTypes = {
-    viewer: PropTypes.object,
-  };
+type Props = {
+  viewer: RegionList_viewer,
+};
 
+class RegionList extends React.Component<Props> {
   render() {
+    const { regionList } = this.props.viewer;
+
+    if (!regionList) {
+      return <div>Region List is empty</div>;
+    }
+
     return (
       <div>
-        <h3>Total {this.props.viewer.regionList.length} records</h3>
+        <h3>Total {regionList.length} records</h3>
 
-        {this.props.viewer.regionList.map((region, i) => {
+        {regionList.map((region, i) => {
           return <Region key={i} region={region} />;
         })}
       </div>
@@ -21,14 +29,13 @@ class RegionList extends React.Component {
   }
 }
 
-export default Relay.createContainer(RegionList, {
-  fragments: {
-    viewer: () => Relay.QL`
-      fragment on Viewer {
-        regionList {
-          ${Region.getFragment('region')}
-        }
+export default createFragmentContainer(
+  RegionList,
+  graphql`
+    fragment RegionList_viewer on Viewer {
+      regionList {
+        ...Region_region
       }
-    `,
-  },
-});
+    }
+  `
+);

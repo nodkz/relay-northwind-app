@@ -14,7 +14,7 @@ class Customer extends React.Component<Props> {
   render() {
     const { customer } = this.props;
 
-    if (!customer) return 'no customer data';
+    if (!customer) return <div>no customer data</div>;
 
     return (
       <div className="bordered">

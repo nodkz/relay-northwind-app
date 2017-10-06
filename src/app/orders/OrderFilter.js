@@ -1,36 +1,34 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
 import { Form, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
 
-export default class OrderFilter extends React.Component {
-  static propTypes = {
-    onFilter: PropTypes.func,
+type Props = {
+  onFilter: (data: { employeeID?: string, shipperID?: string }) => any,
+};
+
+type State = {
+  employeeID: string,
+  shipperID: string,
+};
+
+export default class OrderFilter extends React.Component<Props, State> {
+  state = {
+    employeeID: '',
+    shipperID: '',
   };
 
-  constructor(props) {
-    super(props);
+  onChange = (e: Event) => {
+    const { target } = e;
+    if (target instanceof HTMLInputElement) {
+      const fname = target.getAttribute('data-name');
+      if (fname === 'employeeID' || fname === 'shipperID') {
+        this.setState({ [fname]: target.value }, this.onFilter);
+      }
+    }
+  };
 
-    this.state = {
-      employeeID: '',
-      shipperID: '',
-    };
-
-    this.onChange = this.onChange.bind(this);
-    this.onClear = this.onClear.bind(this);
-    this.onFilter = this.onFilter.bind(this);
-  }
-
-  onChange(event) {
-    const fname = event.target.getAttribute('data-name');
-    this.setState(
-      {
-        [fname]: event.target.value,
-      },
-      this.onFilter
-    );
-  }
-
-  onClear() {
+  onClear = () => {
     this.setState(
       {
         employeeID: '',
@@ -38,20 +36,20 @@ export default class OrderFilter extends React.Component {
       },
       this.onFilter
     );
-  }
+  };
 
-  onFilter(e) {
+  onFilter = (e?: Event) => {
     if (e) e.preventDefault();
 
     if (this.props.onFilter) {
       const { employeeID, shipperID } = this.state;
 
       this.props.onFilter({
-        employeeID: employeeID ? employeeID : null, // eslint-disable-line
-        shipVia: shipperID ? shipperID : null, // eslint-disable-line
+        employeeID: employeeID ? employeeID : '',
+        shipVia: shipperID ? shipperID : '',
       });
     }
-  }
+  };
 
   render() {
     const { employeeID, shipperID } = this.state;

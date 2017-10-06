@@ -1,35 +1,27 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { createPaginationContainer, graphql } from 'react-relay/compat';
 import { Well } from 'react-bootstrap';
 import Loading from 'components/Loading';
 import OrderConnectionItem from './OrderConnectionItem';
 import OrderFilter from './OrderFilter';
 import OrderHeaders from './OrderHeaders';
+import type { OrderConnection_viewer } from './__generated__/OrderConnection_viewer.graphql';
 
 const PER_PAGE = 10;
 
-class OrderConnection extends React.Component {
-  static propTypes = {
-    viewer: PropTypes.object,
-    relay: PropTypes.object.isRequired,
-    hideFilter: PropTypes.bool,
-  };
+type Props = {
+  viewer: OrderConnection_viewer,
+  relay: Object,
+  hideFilter: boolean,
+};
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      loading: false,
-    };
-
-    this.onScroll = this.onScroll.bind(this);
-    this.onFormFilter = this.onFormFilter.bind(this);
-  }
+class OrderConnection extends React.Component<Props> {
+  scrollContainer: ?HTMLElement;
 
   componentDidMount() {
-    setTimeout(() => this.loadNextItemsIfNeeded(this.scrollContainer), 500);
-
+    setTimeout(() => this.loadNextItemsIfNeeded(), 500);
     window.addEventListener('scroll', this.onScroll);
   }
 
@@ -37,18 +29,19 @@ class OrderConnection extends React.Component {
     window.removeEventListener('scroll', this.onScroll);
   }
 
-  onScroll() {
-    if (!this.state.loading) {
-      this.loadNextItemsIfNeeded();
+  onScroll = () => {
+    if (!this.props.relay.hasMore()) {
+      window.removeEventListener('scroll', this.onScroll);
     }
-  }
-
-  onFormFilter(filter) {
-    this.props.relay.setVariables({ filter });
-  }
+    this.loadNextItemsIfNeeded();
+  };
 
   loadNextItemsIfNeeded() {
+    if (this.props.relay.isLoading()) return;
+
     const elem = this.scrollContainer;
+    if (!elem) return;
+
     const contentHeight = elem.offsetHeight;
     const y = window.pageYOffset + window.innerHeight;
     if (y >= contentHeight) {
@@ -57,29 +50,25 @@ class OrderConnection extends React.Component {
   }
 
   loadNextItems() {
-    this.setState({ loading: true }, () => {
-      if (this.props.viewer.orderConnection.pageInfo.hasNextPage) {
-        this.props.relay.setVariables(
-          {
-            count: this.props.relay.variables.count + PER_PAGE,
-          },
-          readyState => {
-            // this gets called twice https://goo.gl/ZsQ3Dy
-            if (readyState.done) {
-              this.setState({ loading: false }, () => {
-                this.loadNextItemsIfNeeded();
-              });
-            }
-          }
-        );
-      } else {
-        window.removeEventListener('scroll', this.onScroll);
-      }
+    if (!this.props.relay.hasMore() || this.props.relay.isLoading()) return;
+
+    this.props.relay.loadMore(PER_PAGE, () => {
+      this.forceUpdate(); // for hidding loader
     });
+    this.forceUpdate(); // for showing loader
   }
+
+  onFormFilter = (filter: Object) => {
+    this.props.relay.setVariables({ filter });
+  };
 
   render() {
     const { hideFilter } = this.props;
+    const { orderConnection } = this.props.viewer;
+
+    if (!orderConnection) {
+      return <div>empty order list</div>;
+    }
 
     return (
       <div
@@ -95,44 +84,63 @@ class OrderConnection extends React.Component {
           </Well>
         )}
 
-        <OrderHeaders count={this.props.viewer.orderConnection.count} />
+        <OrderHeaders count={orderConnection.count} />
 
-        {this.props.viewer.orderConnection.edges.map(({ node }) => {
+        {orderConnection.edges.map(({ node }) => {
           return (
             <div key={node._id}>
-              <OrderConnectionItem order={node} onItemClick={this.handleItemClick} />
+              <OrderConnectionItem order={node} />
             </div>
           );
         })}
 
-        {this.props.viewer.orderConnection.pageInfo.hasNextPage && <Loading />}
+        {orderConnection.pageInfo.hasNextPage && <Loading />}
       </div>
     );
   }
 }
 
-export default Relay.createContainer(OrderConnection, {
-  initialVariables: {
-    count: PER_PAGE,
-    filter: null,
-  },
-  fragments: {
-    viewer: () => Relay.QL`
-      fragment on Viewer {
-        orderConnection(first: $count, filter: $filter) {
-          count
-          pageInfo {
-            hasNextPage
-          }
-          edges {
-            cursor
-            node {
-              _id
-              ${OrderConnectionItem.getFragment('order')}
-            }
+export default createPaginationContainer(
+  OrderConnection,
+  graphql`
+    fragment OrderConnection_viewer on Viewer {
+      orderConnection(first: $count, after: $cursor, filter: $filter)
+        @connection(key: "OrderConnection_orderConnection") {
+        count
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        edges {
+          cursor
+          node {
+            _id
+            ...OrderConnectionItem_order
           }
         }
       }
+    }
+  `,
+  {
+    direction: 'forward',
+    getConnectionFromProps(props) {
+      return props.viewer && props.viewer.orderConnection;
+    },
+    getFragmentVariables(prevVars, totalCount) {
+      return {
+        ...prevVars,
+        count: totalCount,
+      };
+    },
+    getVariables(props, { count, cursor, filter }, fragmentVariables) {
+      return { count, cursor, filter };
+    },
+    query: graphql`
+      query OrderConnectionQuery($count: Int!, $cursor: String, $filter: FilterFindManyOrderInput) {
+        viewer {
+          ...OrderConnection_viewer
+        }
+      }
     `,
-  },
-});
+  }
+);

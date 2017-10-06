@@ -1,34 +1,39 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { createFragmentContainer, graphql } from 'react-relay/compat';
 import Employee from './Employee';
+import type { EmployeeList_viewer } from './__generated__/EmployeeList_viewer.graphql';
 
-class EmployeeList extends React.Component {
-  static propTypes = {
-    viewer: PropTypes.object,
-  };
+type Props = {
+  viewer: EmployeeList_viewer,
+};
 
+class EmployeeList extends React.Component<Props> {
   render() {
+    const { employeeList } = this.props.viewer;
+
+    if (!employeeList) {
+      return <div>Employee list is empty</div>;
+    }
+
     return (
       <div>
-        <h3>Total {this.props.viewer.employeeList.length} records</h3>
+        <h3>Total {employeeList.length} records</h3>
 
-        {this.props.viewer.employeeList.map((employee, i) => (
-          <Employee key={i} employee={employee} />
-        ))}
+        {employeeList.map((employee, i) => <Employee key={i} employee={employee} />)}
       </div>
     );
   }
 }
 
-export default Relay.createContainer(EmployeeList, {
-  fragments: {
-    viewer: () => Relay.QL`
-      fragment on Viewer {
-        employeeList {
-          ${Employee.getFragment('employee')}
-        }
+export default createFragmentContainer(
+  EmployeeList,
+  graphql`
+    fragment EmployeeList_viewer on Viewer {
+      employeeList {
+        ...Employee_employee
       }
-    `,
-  },
-});
+    }
+  `
+);

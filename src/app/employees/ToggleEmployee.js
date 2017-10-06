@@ -1,27 +1,29 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { graphql } from 'react-relay/compat';
 import { Button } from 'react-bootstrap';
 import Loading from 'components/Loading';
 import { relayStore } from '../../clientStores';
 import Employee from './Employee';
+import type { ToggleEmployeeQueryResponse } from './__generated__/ToggleEmployeeQuery.graphql';
 
-export default class ToggleEmployee extends React.Component {
-  static propTypes = {
-    id: PropTypes.number.isRequired,
+type Props = {
+  id: number,
+};
+
+type State = {
+  isOpen: boolean,
+  data: ?ToggleEmployeeQueryResponse,
+};
+
+export default class ToggleEmployee extends React.Component<Props, State> {
+  state: State = {
+    isOpen: false,
+    data: null,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: false,
-      data: null,
-    };
-
-    this.toggle = this.toggle.bind(this);
-  }
-
-  toggle() {
+  toggle = () => {
     this.setState({
       isOpen: !this.state.isOpen,
     });
@@ -29,13 +31,15 @@ export default class ToggleEmployee extends React.Component {
     if (!this.state.data) {
       relayStore
         .fetch({
-          query: Relay.QL`query {
-          viewer {
-            employee(filter: $filter) {
-              ${Employee.getFragment('employee')}
+          query: graphql`
+            query ToggleEmployeeQuery($filter: FilterFindOneEmployeeInput) {
+              viewer {
+                employee(filter: $filter) {
+                  ...Employee_employee
+                }
+              }
             }
-          }
-        }`,
+          `,
           variables: { filter: { employeeID: this.props.id } },
         })
         .then(res => {
@@ -44,7 +48,7 @@ export default class ToggleEmployee extends React.Component {
           });
         });
     }
-  }
+  };
 
   render() {
     return (

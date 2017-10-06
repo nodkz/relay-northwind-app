@@ -1,34 +1,39 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { createFragmentContainer, graphql } from 'react-relay/compat';
 import Category from './Category';
+import type { CategoryList_viewer } from './__generated__/CategoryList_viewer.graphql';
 
-class CategoryList extends React.Component {
-  static propTypes = {
-    viewer: PropTypes.object,
-  };
+type Props = {
+  viewer: CategoryList_viewer,
+};
 
+class CategoryList extends React.Component<Props> {
   render() {
+    const { categoryList } = this.props.viewer;
+
+    if (!categoryList) {
+      return <div>Список категорий пуст</div>;
+    }
+
     return (
       <div>
-        <h3>Total {this.props.viewer.categoryList.length} records</h3>
+        <h3>Total {categoryList.length} records</h3>
 
-        {this.props.viewer.categoryList.map((category, i) => (
-          <Category key={i} category={category} />
-        ))}
+        {categoryList.map((category, i) => <Category key={i} category={category} />)}
       </div>
     );
   }
 }
 
-export default Relay.createContainer(CategoryList, {
-  fragments: {
-    viewer: () => Relay.QL`
-      fragment on Viewer {
-        categoryList {
-          ${Category.getFragment('category')}
-        }
+export default createFragmentContainer(
+  CategoryList,
+  graphql`
+    fragment CategoryList_viewer on Viewer {
+      categoryList {
+        ...Category_category
       }
-    `,
-  },
-});
+    }
+  `
+);

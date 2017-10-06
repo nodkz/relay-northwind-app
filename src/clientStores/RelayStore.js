@@ -109,12 +109,13 @@ export default class RelayStore {
   }: RelayFetchOpts): Promise<*> {
     return new Promise((resolve, reject) => {
       const alertIdx = Date.now();
+      console.log(query);
       const q = Relay.createQuery(query, variables || {});
       if (onStart) {
         onStart();
       }
       if (onStartAlert) {
-        this._showAlert(onStartAlert, 'Загружаю...', 'info', alertIdx);
+        this._showAlert(onStartAlert, 'Loading...', 'info', alertIdx);
       }
 
       const args = [
@@ -127,9 +128,9 @@ export default class RelayStore {
             reject(readyState.error);
 
             if (onErrorAlert) {
-              this._showAlert(onErrorAlert, `Ошибка загрузки: ${err}`, 'error', alertIdx);
+              this._showAlert(onErrorAlert, `Loading error: ${err}`, 'error', alertIdx);
             } else if (onEndAlert) {
-              this._showAlert(onEndAlert, 'Операция завершена', 'info', alertIdx, 2000);
+              this._showAlert(onEndAlert, 'Completed', 'info', alertIdx, 2000);
             } else {
               this._hideAlert(alertIdx);
             }
@@ -141,9 +142,9 @@ export default class RelayStore {
             resolve(result);
 
             if (onSuccessAlert) {
-              this._showAlert(onSuccessAlert, 'Сохранено', 'success', alertIdx, 2000);
+              this._showAlert(onSuccessAlert, 'success', 'success', alertIdx, 2000);
             } else if (onEndAlert) {
-              this._showAlert(onEndAlert, 'Операция завершена', 'info', alertIdx, 2000);
+              this._showAlert(onEndAlert, 'Completed', 'info', alertIdx, 2000);
             } else {
               this._hideAlert(alertIdx);
             }
@@ -210,7 +211,7 @@ export default class RelayStore {
         onStart();
       }
       if (onStartAlert) {
-        this._showAlert(onStartAlert, 'Сохраняю...', 'info', colKey);
+        this._showAlert(onStartAlert, 'Processing...', 'info', colKey);
       }
 
       const mutation = new Relay.GraphQLMutation(
@@ -234,9 +235,9 @@ export default class RelayStore {
             });
 
             if (onErrorAlert) {
-              this._showAlert(onErrorAlert, 'Ошибка сохранения данных.', 'error', colKey);
+              this._showAlert(onErrorAlert, 'Error in operation.', 'error', colKey);
             } else if (onEndAlert) {
-              this._showAlert(onEndAlert, 'Операция завершена', 'info', colKey, 2000);
+              this._showAlert(onEndAlert, 'Completed with error', 'info', colKey, 2000);
             } else {
               console.error(err); // eslint-disable-line
               this._hideAlert(colKey);
@@ -248,9 +249,9 @@ export default class RelayStore {
             resolve(response);
 
             if (onSuccessAlert) {
-              this._showAlert(onSuccessAlert, 'Сохранено', 'success', colKey, 2000);
+              this._showAlert(onSuccessAlert, 'Success', 'success', colKey, 2000);
             } else if (onEndAlert) {
-              this._showAlert(onEndAlert, 'Операция завершена', 'info', colKey, 2000);
+              this._showAlert(onEndAlert, 'Completed', 'info', colKey, 2000);
             } else {
               this._hideAlert(colKey);
             }

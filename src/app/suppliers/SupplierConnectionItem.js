@@ -1,54 +1,63 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { createFragmentContainer, graphql } from 'react-relay/compat';
 import { Button } from 'react-bootstrap';
 import Loading from 'react-loading';
 import Supplier from './Supplier';
 import { relayStore } from '../../clientStores';
+import type { SupplierConnectionItem_supplier } from './__generated__/SupplierConnectionItemQuery.graphql';
 
-class SupplierConnectionItem extends React.Component {
-  static propTypes = {
-    supplier: PropTypes.object,
-    relay: PropTypes.object,
+type Props = {
+  supplier: SupplierConnectionItem_supplier,
+  relay: any,
+};
+
+type State = {
+  isOpen: boolean,
+  additionalData: any,
+};
+
+class SupplierConnectionItem extends React.Component<Props, State> {
+  state: State = {
+    isOpen: false,
+    additionalData: null,
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isOpen: false,
-      additionalData: null,
-    };
-
-    this.openClose = this.openClose.bind(this);
-  }
-
-  openClose() {
+  openClose = () => {
     this.setState({
       isOpen: !this.state.isOpen,
     });
 
     if (!this.state.additionalData) {
-      const query = Relay.createQuery(
-        Relay.QL`query {
-          node(id:$id) {
-            ${Supplier.getFragment('supplier')}
-          }
-        }`,
-        { id: this.props.supplier.id }
-      );
-      relayStore.primeCache({ query }, readyState => {
-        if (readyState.done) {
-          const data = relayStore.readQuery(query)[0];
-          this.setState({ additionalData: data });
-        }
-      });
+      relayStore
+        .fetch({
+          query: graphql`
+            query SupplierConnectionItemQuery($id: ID!) {
+              node(id: $id) {
+                ...Supplier_supplier
+              }
+            }
+          `,
+          variables: {
+            id: this.props.supplier.id,
+          },
+        })
+        .then(res => {
+          this.setState({
+            additionalData: res.node,
+          });
+        });
     }
-  }
+  };
 
   render() {
-    const { supplier = {} } = this.props;
+    const { supplier } = this.props;
     const { isOpen } = this.state;
+
+    if (!supplier) {
+      return <div>Supplier does not found</div>;
+    }
 
     return (
       <div>
@@ -82,16 +91,15 @@ class SupplierConnectionItem extends React.Component {
   }
 }
 
-export default Relay.createContainer(SupplierConnectionItem, {
-  fragments: {
-    supplier: () => Relay.QL`
-      fragment on Supplier {
-        id
-        supplierID
-        companyName
-        contactName
-        contactTitle
-      }
-    `,
-  },
-});
+export default createFragmentContainer(
+  SupplierConnectionItem,
+  graphql`
+    fragment SupplierConnectionItem_supplier on Supplier {
+      id
+      supplierID
+      companyName
+      contactName
+      contactTitle
+    }
+  `
+);

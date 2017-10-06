@@ -41,9 +41,7 @@ export default class ToggleCustomer extends React.Component<Props, State> {
             }
           `,
           variables: {
-            filter: {
-              customerID: this.props.id,
-            },
+            filter: { customerID: this.props.id },
           },
         })
         .then(res => {

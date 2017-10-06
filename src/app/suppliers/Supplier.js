@@ -1,16 +1,22 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { createFragmentContainer, graphql } from 'react-relay/compat';
 import Address from 'app/Address';
 import ToggleProductCollection from 'app/products/ToggleProductConnection';
+import type { Supplier_supplier } from './__generated__/Supplier_supplier.graphql';
 
-class Supplier extends React.Component {
-  static propTypes = {
-    supplier: PropTypes.object,
-  };
+type Props = {
+  supplier: Supplier_supplier,
+};
 
+class Supplier extends React.Component<Props> {
   render() {
-    const { supplier = {} } = this.props;
+    const { supplier } = this.props;
+
+    if (!supplier) {
+      return <div>Supplier does not found</div>;
+    }
 
     return (
       <div className="bordered">
@@ -34,7 +40,7 @@ class Supplier extends React.Component {
 
           <dt>Total products</dt>
           <dd>
-            <b>{supplier.productConnection.count}</b>
+            <b>{supplier.productConnection && supplier.productConnection.count}</b>
             <ToggleProductCollection filter={{ supplierID: supplier.supplierID }} />
           </dd>
         </dl>
@@ -43,21 +49,20 @@ class Supplier extends React.Component {
   }
 }
 
-export default Relay.createContainer(Supplier, {
-  fragments: {
-    supplier: () => Relay.QL`
-      fragment on Supplier {
-        supplierID
-        companyName
-        contactName
-        contactTitle
-        address {
-          ${Address.getFragment('address')}
-        }
-        productConnection {
-          count
-        }
+export default createFragmentContainer(
+  Supplier,
+  graphql`
+    fragment Supplier_supplier on Supplier {
+      supplierID
+      companyName
+      contactName
+      contactTitle
+      address {
+        ...Address_address
       }
-    `,
-  },
-});
+      productConnection {
+        count
+      }
+    }
+  `
+);

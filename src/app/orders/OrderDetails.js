@@ -1,16 +1,20 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { createFragmentContainer, graphql } from 'react-relay/compat';
 import { Table } from 'react-bootstrap';
 import ToggleProduct from 'app/products/ToggleProduct';
+import type { OrderDetails_details } from './__generated__/OrderDetails_details.graphql';
 
-class OrderDetails extends React.Component {
-  static propTypes = {
-    details: PropTypes.array.isRequired,
-  };
+type Props = {
+  details: OrderDetails_details,
+};
 
+class OrderDetails extends React.Component<Props> {
   render() {
-    const { details = [] } = this.props;
+    const { details } = this.props;
+
+    if (!details) return 'no order details';
 
     return (
       <Table bordered condensed hover>
@@ -28,7 +32,13 @@ class OrderDetails extends React.Component {
             <tr key={i}>
               <td>{row.productID}</td>
               <td>
-                {row.product.name} <ToggleProduct id={row.productID} />
+                {row.product
+                  ? [
+                      row.product.name,
+                      ' ',
+                      row.productID ? <ToggleProduct id={row.productID} /> : null,
+                    ]
+                  : 'no product data'}
               </td>
               <td>{row.unitPrice}</td>
               <td>{row.quantity}</td>
@@ -41,18 +51,17 @@ class OrderDetails extends React.Component {
   }
 }
 
-export default Relay.createContainer(OrderDetails, {
-  fragments: {
-    details: () => Relay.QL`
-      fragment on OrderDetails @relay(plural: true) {
-        productID
-        unitPrice
-        quantity
-        discount
-        product {
-          name
-        }
+export default createFragmentContainer(
+  OrderDetails,
+  graphql`
+    fragment OrderDetails_details on OrderDetails @relay(plural: true) {
+      productID
+      unitPrice
+      quantity
+      discount
+      product {
+        name
       }
-    `,
-  },
-});
+    }
+  `
+);

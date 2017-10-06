@@ -63,9 +63,7 @@ class CustomerConnection extends React.Component<Props> {
     return (
       <div
         onScroll={this.onScroll}
-        ref={c => {
-          this.scrollContainer = c;
-        }}
+        ref={c => (this.scrollContainer = c)}
         style={{ marginBottom: '200px' }}
       >
         <div>
@@ -132,22 +130,16 @@ export default createPaginationContainer(
   {
     direction: 'forward',
     getConnectionFromProps(props) {
-      // console.log('getConnectionFromProps', props.viewer.customerConnection);
       return props.viewer && props.viewer.customerConnection;
     },
     getFragmentVariables(prevVars, totalCount) {
-      console.log('getFragmentVariables', arguments);
       return {
         ...prevVars,
         count: totalCount,
       };
     },
     getVariables(props, { count, cursor }, fragmentVariables) {
-      console.log('getVariables', arguments);
-      return {
-        count,
-        cursor,
-      };
+      return { count, cursor };
     },
     query: graphql`
       query CustomerConnectionQuery($count: Int!, $cursor: String) {

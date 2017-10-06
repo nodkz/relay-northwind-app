@@ -1,12 +1,14 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { createFragmentContainer, graphql } from 'react-relay/compat';
+import type { Region_region } from './__generated__/Region_region.graphql';
 
-class Region extends React.Component {
-  static propTypes = {
-    region: PropTypes.object.isRequired,
-  };
+type Props = {
+  region: Region_region,
+};
 
+class Region extends React.Component<Props> {
   render() {
     const { region } = this.props;
 
@@ -22,30 +24,32 @@ class Region extends React.Component {
 
         <dt>Territories</dt>
         <dd>
-          {region.territories.map((row, i) => {
-            return (
-              <div key={i}>
-                {row.name} ({row.territoryID})
-              </div>
-            );
-          })}
+          {region.territories &&
+            region.territories.map(row => {
+              if (!row) return null;
+
+              return (
+                <div key={row.territoryID}>
+                  {row.name} ({row.territoryID})
+                </div>
+              );
+            })}
         </dd>
       </dl>
     );
   }
 }
 
-export default Relay.createContainer(Region, {
-  fragments: {
-    region: () => Relay.QL`
-      fragment on Region {
-        regionID
+export default createFragmentContainer(
+  Region,
+  graphql`
+    fragment Region_region on Region {
+      regionID
+      name
+      territories {
+        territoryID
         name
-        territories {
-          territoryID
-          name
-        }
       }
-    `,
-  },
-});
+    }
+  `
+);

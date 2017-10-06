@@ -1,27 +1,29 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { graphql } from 'react-relay/compat';
 import { Button } from 'react-bootstrap';
 import Loading from 'components/Loading';
 import { relayStore } from '../../clientStores';
 import ProductConnection from './ProductConnection';
+import type { ToggleProductConnectionQueryResponse } from './__generated__/ToggleProductConnectionQuery.graphql';
 
-export default class ToggleProductConnection extends React.Component {
-  static propTypes = {
-    filter: PropTypes.object.isRequired,
+type Props = {
+  filter: Object,
+};
+
+type State = {
+  isOpen: boolean,
+  viewer: ?ToggleProductConnectionQueryResponse,
+};
+
+export default class ToggleProductConnection extends React.Component<Props, State> {
+  state: State = {
+    isOpen: false,
+    viewer: null,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: false,
-      viewer: null,
-    };
-
-    this.toggle = this.toggle.bind(this);
-  }
-
-  toggle() {
+  toggle = () => {
     this.setState({
       isOpen: !this.state.isOpen,
     });
@@ -29,18 +31,20 @@ export default class ToggleProductConnection extends React.Component {
     if (!this.state.viewer) {
       relayStore
         .fetch({
-          query: Relay.QL`query {
-          viewer {
-            ${ProductConnection.getFragment('viewer', { filter: this.props.filter })}
-          }
-        }`,
+          query: graphql`
+            query ToggleProductConnectionQuery($filter: FilterFindManyProductInput) {
+              viewer {
+                ...ProductConnection_viewer
+              }
+            }
+          `,
           variables: { filter: this.props.filter },
         })
         .then(res => {
           this.setState({ viewer: res });
         });
     }
-  }
+  };
 
   render() {
     return (

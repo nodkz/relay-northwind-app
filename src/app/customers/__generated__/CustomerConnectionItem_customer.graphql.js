@@ -15,7 +15,7 @@ export type CustomerConnectionItem_customer = {|
   +contactTitle: ?string;
   +address: ?{| |};
   +orderConnection: ?{|
-    +count: ?number;
+    +count: number;
   |};
 |};
 */

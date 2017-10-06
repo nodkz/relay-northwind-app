@@ -1,7 +1,12 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
 
-export default function OrderHeaders({ count }) {
+type Props = {
+  count: number,
+};
+
+export default function OrderHeaders({ count }: Props) {
   if (!count) {
     return <h3>Nothing found! But it is no reason to be upset ;)</h3>;
   }
@@ -33,7 +38,3 @@ export default function OrderHeaders({ count }) {
     </div>
   );
 }
-
-OrderHeaders.propTypes = {
-  count: PropTypes.number,
-};

@@ -1,15 +1,17 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { createFragmentContainer, graphql } from 'react-relay/compat';
 import Address from 'app/Address';
 import ToggleEmployee from './ToggleEmployee';
 import ToggleOrderConnection from 'app/orders/ToggleOrderConnection';
+import type { Employee_employee } from './__generated__/Employee_employee.graphql';
 
-class Employee extends React.Component {
-  static propTypes = {
-    employee: PropTypes.object.isRequired,
-  };
+type Props = {
+  employee: Employee_employee,
+};
 
+class Employee extends React.Component<Props> {
   render() {
     const { employee } = this.props;
 
@@ -28,10 +30,10 @@ class Employee extends React.Component {
         <dd>{employee.title}</dd>
 
         <dt>BirthDate</dt>
-        <dd>{`${employee.birthDate}`.substr(0, 10)}</dd>
+        <dd>{`${employee.birthDate || ''}`.substr(0, 10)}</dd>
 
         <dt>HireDate</dt>
-        <dd>{`${employee.hireDate}`.substr(0, 10)}</dd>
+        <dd>{`${employee.hireDate || ''}`.substr(0, 10)}</dd>
 
         <dt>Notes</dt>
         <dd>{employee.notes}</dd>
@@ -46,7 +48,7 @@ class Employee extends React.Component {
           {employee.chief ? (
             <span>
               {employee.chief.firstName} {employee.chief.lastName}
-              <ToggleEmployee id={employee.reportsTo} />
+              {employee.reportsTo && <ToggleEmployee id={employee.reportsTo} />}
             </span>
           ) : (
             <span className="text-danger">
@@ -57,7 +59,7 @@ class Employee extends React.Component {
 
         <dt>Total orders</dt>
         <dd>
-          <b>{employee.orderConnection.count}</b>
+          <b>{employee.orderConnection && employee.orderConnection.count}</b>
           <ToggleOrderConnection filter={{ employeeID: employee.employeeID }} />
         </dd>
       </dl>
@@ -65,30 +67,29 @@ class Employee extends React.Component {
   }
 }
 
-export default Relay.createContainer(Employee, {
-  fragments: {
-    employee: () => Relay.QL`
-      fragment on Employee {
-        employeeID
+export default createFragmentContainer(
+  Employee,
+  graphql`
+    fragment Employee_employee on Employee {
+      employeeID
+      lastName
+      firstName
+      title
+      titleOfCourtesy
+      birthDate
+      hireDate
+      notes
+      reportsTo
+      address {
+        ...Address_address
+      }
+      chief {
         lastName
         firstName
-        title
-        titleOfCourtesy
-        birthDate
-        hireDate
-        notes
-        reportsTo
-        address {
-          ${Address.getFragment('address')}
-        }
-        chief {
-          lastName
-          firstName
-        }
-        orderConnection {
-          count
-        }
       }
-    `,
-  },
-});
+      orderConnection {
+        count
+      }
+    }
+  `
+);

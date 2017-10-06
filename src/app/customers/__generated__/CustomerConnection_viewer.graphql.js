@@ -10,7 +10,7 @@
 import type {ConcreteFragment} from 'relay-runtime';
 export type CustomerConnection_viewer = {|
   +customerConnection: ?{|
-    +count: ?number;
+    +count: number;
     +pageInfo: {|
       +hasNextPage: boolean;
       +endCursor: ?string;

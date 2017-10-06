@@ -1,27 +1,29 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { graphql } from 'react-relay/compat';
 import { Button } from 'react-bootstrap';
 import Loading from 'components/Loading';
 import { relayStore } from '../../clientStores';
 import OrderConnection from './OrderConnection';
+import type { ToggleOrderConnectionQueryResponse } from './__generated__/ToggleOrderConnectionQuery.graphql';
 
-export default class ToggleOrderConnection extends React.Component {
-  static propTypes = {
-    filter: PropTypes.object.isRequired,
+type Props = {
+  filter: Object,
+};
+
+type State = {
+  isOpen: boolean,
+  viewer: ?ToggleOrderConnectionQueryResponse,
+};
+
+export default class ToggleOrderConnection extends React.Component<Props, State> {
+  state: State = {
+    isOpen: false,
+    viewer: null,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: false,
-      viewer: null,
-    };
-
-    this.toggle = this.toggle.bind(this);
-  }
-
-  toggle() {
+  toggle = () => {
     this.setState({
       isOpen: !this.state.isOpen,
     });
@@ -29,22 +31,25 @@ export default class ToggleOrderConnection extends React.Component {
     if (!this.state.viewer) {
       relayStore
         .fetch({
-          query: Relay.QL`query {
-          viewer {
-            ${OrderConnection.getFragment('viewer', { filter: this.props.filter })}
-          }
-        }`,
+          query: graphql`
+            query ToggleOrderConnectionQuery($filter: FilterFindManyOrderInput) {
+              viewer {
+                ...OrderConnection_viewer
+              }
+            }
+          `,
           variables: { filter: this.props.filter },
         })
         .then(res => {
-          this.setState({
-            viewer: res,
-          });
+          this.setState({ viewer: res });
         });
     }
-  }
+  };
 
   render() {
+    const { viewer, isOpen } = this.state;
+    const { filter } = this.props;
+
     return (
       <span>
         {' '}
@@ -52,12 +57,12 @@ export default class ToggleOrderConnection extends React.Component {
           bsSize="xsmall"
           bsStyle="danger"
           onClick={this.toggle}
-          children={this.state.isOpen ? 'hide all' : 'show all'}
+          children={isOpen ? 'hide all' : 'show all'}
         />
-        {this.state.isOpen &&
-          (this.state.viewer ? (
+        {isOpen &&
+          (viewer ? (
             <div className="lrspace bspace bordered">
-              <OrderConnection hideFilter viewer={this.state.viewer} filter={this.props.filter} />
+              <OrderConnection hideFilter viewer={viewer} filter={filter} />
             </div>
           ) : (
             <Loading />

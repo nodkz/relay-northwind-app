@@ -1,7 +1,12 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
 
-export default function ProductHeaders({ count, onCreating }) {
+type Props = {
+  count: number,
+};
+
+export default function ProductHeaders({ count }: Props) {
   if (!count) {
     return <h3>Nothing found! But it is no reason to be upset ;)</h3>;
   }
@@ -33,7 +38,3 @@ export default function ProductHeaders({ count, onCreating }) {
     </div>
   );
 }
-
-ProductHeaders.propTypes = {
-  count: PropTypes.number,
-};

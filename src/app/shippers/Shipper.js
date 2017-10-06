@@ -1,13 +1,15 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { createFragmentContainer, graphql } from 'react-relay/compat';
 import ToggleOrderCollection from 'app/orders/ToggleOrderConnection';
+import type { Shipper_shipper } from './__generated__/Shipper_shipper.graphql';
 
-class Shipper extends React.Component {
-  static propTypes = {
-    shipper: PropTypes.object.isRequired,
-  };
+type Props = {
+  shipper: Shipper_shipper,
+};
 
+class Shipper extends React.Component<Props> {
   render() {
     const { shipper } = this.props;
 
@@ -24,7 +26,7 @@ class Shipper extends React.Component {
 
         <dt>Total shipped orders</dt>
         <dd>
-          <b>{shipper.orderConnection.count}</b>
+          <b>{shipper.orderConnection && shipper.orderConnection.count}</b>
           <ToggleOrderCollection filter={{ shipVia: shipper.shipperID }} />
         </dd>
       </dl>
@@ -32,17 +34,16 @@ class Shipper extends React.Component {
   }
 }
 
-export default Relay.createContainer(Shipper, {
-  fragments: {
-    shipper: () => Relay.QL`
-      fragment on Shipper {
-        shipperID
-        companyName
-        phone
-        orderConnection {
-          count
-        }
+export default createFragmentContainer(
+  Shipper,
+  graphql`
+    fragment Shipper_shipper on Shipper {
+      shipperID
+      companyName
+      phone
+      orderConnection {
+        count
       }
-    `,
-  },
-});
+    }
+  `
+);

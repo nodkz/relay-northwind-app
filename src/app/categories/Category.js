@@ -1,15 +1,21 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { createFragmentContainer, graphql } from 'react-relay/compat';
 import ToggleProductCollection from 'app/products/ToggleProductConnection';
+import type { Category_category } from './__generated__/Category_category.graphql';
 
-class Category extends React.Component {
-  static propTypes = {
-    category: PropTypes.object.isRequired,
-  };
+type Props = {
+  category: Category_category,
+};
 
+class Category extends React.Component<Props> {
   render() {
-    const { category = {} } = this.props;
+    const { category } = this.props;
+
+    if (!category) {
+      return <div>Категория не найдена</div>;
+    }
 
     return (
       <div className="bordered bspace">
@@ -25,7 +31,7 @@ class Category extends React.Component {
 
           <dt>Total products</dt>
           <dd>
-            <b>{category.productConnection.count}</b>
+            <b>{category.productConnection && category.productConnection.count}</b>
             <ToggleProductCollection filter={{ categoryID: category.categoryID }} />
           </dd>
         </dl>
@@ -34,17 +40,16 @@ class Category extends React.Component {
   }
 }
 
-export default Relay.createContainer(Category, {
-  fragments: {
-    category: () => Relay.QL`
-      fragment on Category {
-        categoryID
-        name
-        description
-        productConnection {
-          count
-        }
+export default createFragmentContainer(
+  Category,
+  graphql`
+    fragment Category_category on Category {
+      categoryID
+      name
+      description
+      productConnection {
+        count
       }
-    `,
-  },
-});
+    }
+  `
+);

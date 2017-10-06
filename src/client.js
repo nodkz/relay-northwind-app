@@ -1,3 +1,5 @@
+/* @flow */
+
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -12,6 +14,7 @@ function render() {
 }
 
 if (module.hot) {
+  // $FlowFixMe
   module.hot.accept('./app/App', () => {
     const NextRoot = require('./app/App').default; // eslint-disable-line
 

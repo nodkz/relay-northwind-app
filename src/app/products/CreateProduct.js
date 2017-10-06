@@ -1,10 +1,15 @@
-import PropTypes from 'prop-types';
+/* @flow */
+
 import React from 'react';
 // import Relay from 'react-relay/classic';
 import { Form, FormGroup, ControlLabel, FormControl, Button, Well } from 'react-bootstrap';
 
-export default class CreateProduct extends React.Component {
-  onCreateProduct = productArgs => {
+type Props = {
+  onCreateProduct: Function,
+};
+
+export default class CreateProduct extends React.Component<Props> {
+  onCreateProduct = (productArgs: Object) => {
     // const variables = {};
     //
     // todo: need to wire all of this up with variables!
@@ -31,10 +36,6 @@ export default class CreateProduct extends React.Component {
     //   }`,
     //   variables,
     // });
-  };
-
-  static propTypes = {
-    onCreateProduct: PropTypes.func,
   };
 
   render() {
