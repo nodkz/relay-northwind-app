@@ -20,14 +20,14 @@ export default function ToggleEmployee({ id }: Props) {
         query ToggleEmployeeQuery($filter: FilterFindOneEmployeeInput) {
           viewer {
             employee(filter: $filter) {
-              ...Employee
+              ...Employee_employee
             }
           }
         }
       `}
       variables={{ filter: { employeeID: id } }}
       prepareProps={(payload: ToggleEmployeeQueryResponse) => ({
-        data: payload.viewer && payload.viewer.employee,
+        employee: payload.viewer && payload.viewer.employee,
       })}
     />
   );

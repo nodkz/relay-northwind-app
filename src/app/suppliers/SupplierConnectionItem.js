@@ -35,7 +35,7 @@ class SupplierConnectionItem extends React.Component<Props, State> {
           query: graphql`
             query SupplierConnectionItemQuery($id: ID!) {
               node(id: $id) {
-                ...Supplier
+                ...Supplier_supplier
               }
             }
           `,

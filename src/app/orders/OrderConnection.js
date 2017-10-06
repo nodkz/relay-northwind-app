@@ -3,7 +3,7 @@
 import React from 'react';
 import { createPaginationContainer, graphql } from 'react-relay/compat';
 import { Well } from 'react-bootstrap';
-import Loading from 'components/Loading';
+import ConnectionLoadMore from 'components/ConnectionLoadMore';
 import OrderConnectionItem from './OrderConnectionItem';
 import OrderFilter from './OrderFilter';
 import OrderHeaders from './OrderHeaders';
@@ -18,52 +18,12 @@ type Props = {
 };
 
 class OrderConnection extends React.Component<Props> {
-  scrollContainer: ?HTMLElement;
-
-  componentDidMount() {
-    setTimeout(() => this.loadNextItemsIfNeeded(), 500);
-    window.addEventListener('scroll', this.onScroll);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.onScroll);
-  }
-
-  onScroll = () => {
-    if (!this.props.relay.hasMore()) {
-      window.removeEventListener('scroll', this.onScroll);
-    }
-    this.loadNextItemsIfNeeded();
-  };
-
-  loadNextItemsIfNeeded() {
-    if (this.props.relay.isLoading()) return;
-
-    const elem = this.scrollContainer;
-    if (!elem) return;
-
-    const contentHeight = elem.offsetHeight;
-    const y = window.pageYOffset + window.innerHeight;
-    if (y >= contentHeight) {
-      this.loadNextItems();
-    }
-  }
-
-  loadNextItems() {
-    if (!this.props.relay.hasMore() || this.props.relay.isLoading()) return;
-
-    this.props.relay.loadMore(PER_PAGE, () => {
-      this.forceUpdate(); // for hidding loader
-    });
-    this.forceUpdate(); // for showing loader
-  }
-
   onFormFilter = (filter: Object) => {
     this.props.relay.setVariables({ filter });
   };
 
   render() {
-    const { hideFilter } = this.props;
+    const { hideFilter, relay } = this.props;
     const { orderConnection } = this.props.viewer;
 
     if (!orderConnection) {
@@ -71,12 +31,11 @@ class OrderConnection extends React.Component<Props> {
     }
 
     return (
-      <div
-        onScroll={this.onScroll}
-        ref={c => {
-          this.scrollContainer = c;
-        }}
+      <ConnectionLoadMore
+        connection={orderConnection}
+        relay={relay}
         style={{ marginBottom: hideFilter ? '20px' : '200px' }}
+        perPage={PER_PAGE}
       >
         {!hideFilter && (
           <Well>
@@ -93,9 +52,7 @@ class OrderConnection extends React.Component<Props> {
             </div>
           );
         })}
-
-        {orderConnection.pageInfo.hasNextPage && <Loading />}
-      </div>
+      </ConnectionLoadMore>
     );
   }
 }

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 585c254becc3ef30a4ab8bc0d535176b
+ * @relayHash bfc7d4afaa697ed4b66acba912943352
  */
 
 /* eslint-disable */
@@ -21,12 +21,12 @@ query SupplierConnectionItemQuery(
 ) {
   node(id: $id) {
     __typename
-    ...Supplier
+    ...Supplier_supplier
     id
   }
 }
 
-fragment Supplier on Supplier {
+fragment Supplier_supplier on Supplier {
   supplierID
   companyName
   contactName
@@ -80,7 +80,7 @@ const batch /*: ConcreteBatch*/ = {
         "selections": [
           {
             "kind": "FragmentSpread",
-            "name": "Supplier",
+            "name": "Supplier_supplier",
             "args": null
           }
         ],
@@ -245,7 +245,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query SupplierConnectionItemQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...Supplier\n    id\n  }\n}\n\nfragment Supplier on Supplier {\n  supplierID\n  companyName\n  contactName\n  contactTitle\n  address {\n    ...Address_address\n  }\n  productConnection {\n    count\n  }\n}\n\nfragment Address_address on CustomerAddress {\n  street\n  city\n  region\n  postalCode\n  country\n  phone\n}\n"
+  "text": "query SupplierConnectionItemQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...Supplier_supplier\n    id\n  }\n}\n\nfragment Supplier_supplier on Supplier {\n  supplierID\n  companyName\n  contactName\n  contactTitle\n  address {\n    ...Address_address\n  }\n  productConnection {\n    count\n  }\n}\n\nfragment Address_address on CustomerAddress {\n  street\n  city\n  region\n  postalCode\n  country\n  phone\n}\n"
 };
 
 module.exports = batch;

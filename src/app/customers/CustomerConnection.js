@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { createPaginationContainer, graphql } from 'react-relay/compat';
-import Loading from 'components/Loading';
+import ConnectionLoadMore from 'components/ConnectionLoadMore';
 import CustomerConnectionItem from './CustomerConnectionItem';
 import type { CustomerConnection_viewer } from './__generated__/CustomerConnection_viewer.graphql';
 
@@ -14,46 +14,6 @@ type Props = {
 };
 
 class CustomerConnection extends React.Component<Props> {
-  scrollContainer: ?HTMLElement;
-
-  componentDidMount() {
-    setTimeout(() => this.loadNextItemsIfNeeded(), 500);
-    window.addEventListener('scroll', this.onScroll);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.onScroll);
-  }
-
-  onScroll = () => {
-    if (!this.props.relay.hasMore()) {
-      window.removeEventListener('scroll', this.onScroll);
-    }
-    this.loadNextItemsIfNeeded();
-  };
-
-  loadNextItemsIfNeeded() {
-    if (this.props.relay.isLoading()) return;
-
-    const elem = this.scrollContainer;
-    if (!elem) return;
-
-    const contentHeight = elem.offsetHeight;
-    const y = window.pageYOffset + window.innerHeight;
-    if (y >= contentHeight) {
-      this.loadNextItems();
-    }
-  }
-
-  loadNextItems() {
-    if (!this.props.relay.hasMore() || this.props.relay.isLoading()) return;
-
-    this.props.relay.loadMore(PER_PAGE, () => {
-      this.forceUpdate(); // for hidding loader
-    });
-    this.forceUpdate(); // for showing loader
-  }
-
   render() {
     const { viewer, relay } = this.props;
     const { customerConnection } = viewer || {};
@@ -61,10 +21,11 @@ class CustomerConnection extends React.Component<Props> {
     if (!customerConnection) return 'no customers found';
 
     return (
-      <div
-        onScroll={this.onScroll}
-        ref={c => (this.scrollContainer = c)}
+      <ConnectionLoadMore
+        connection={customerConnection}
+        relay={relay}
         style={{ marginBottom: '200px' }}
+        perPage={PER_PAGE}
       >
         <div>
           <h3>Total {customerConnection.count} records</h3>
@@ -99,9 +60,7 @@ class CustomerConnection extends React.Component<Props> {
             </div>
           );
         })}
-
-        {relay.isLoading() && <Loading />}
-      </div>
+      </ConnectionLoadMore>
     );
   }
 }

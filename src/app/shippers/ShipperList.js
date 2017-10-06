@@ -34,7 +34,7 @@ export default createFragmentContainer(
   graphql`
     fragment ShipperList_viewer on Viewer {
       shipperList {
-        ...Shipper
+        ...Shipper_shipper
       }
     }
   `

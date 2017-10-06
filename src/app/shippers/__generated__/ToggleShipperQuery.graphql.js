@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash c80c1be0113574219e9475360016ae65
+ * @relayHash 9b28509d25e6a7494b4c704ffe843a01
  */
 
 /* eslint-disable */
@@ -23,13 +23,13 @@ query ToggleShipperQuery(
 ) {
   viewer {
     shipper(filter: $filter) {
-      ...Shipper
+      ...Shipper_shipper
       id
     }
   }
 }
 
-fragment Shipper on Shipper {
+fragment Shipper_shipper on Shipper {
   shipperID
   companyName
   phone
@@ -78,7 +78,7 @@ const batch /*: ConcreteBatch*/ = {
             "selections": [
               {
                 "kind": "FragmentSpread",
-                "name": "Shipper",
+                "name": "Shipper_shipper",
                 "args": null
               }
             ],
@@ -193,7 +193,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query ToggleShipperQuery(\n  $filter: FilterFindOneShipperInput\n) {\n  viewer {\n    shipper(filter: $filter) {\n      ...Shipper\n      id\n    }\n  }\n}\n\nfragment Shipper on Shipper {\n  shipperID\n  companyName\n  phone\n  orderConnection {\n    count\n  }\n}\n"
+  "text": "query ToggleShipperQuery(\n  $filter: FilterFindOneShipperInput\n) {\n  viewer {\n    shipper(filter: $filter) {\n      ...Shipper_shipper\n      id\n    }\n  }\n}\n\nfragment Shipper_shipper on Shipper {\n  shipperID\n  companyName\n  phone\n  orderConnection {\n    count\n  }\n}\n"
 };
 
 module.exports = batch;

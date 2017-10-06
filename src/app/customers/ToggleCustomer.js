@@ -20,14 +20,14 @@ export default function ToggleCustomer({ id }: Props) {
         query ToggleCustomerQuery($filter: FilterFindOneCustomerInput) {
           viewer {
             customer(filter: $filter) {
-              ...Customer
+              ...Customer_customer
             }
           }
         }
       `}
       variables={{ filter: { customerID: id } }}
       prepareProps={(payload: ToggleCustomerQueryResponse) => ({
-        data: payload.viewer && payload.viewer.customer,
+        customer: payload.viewer && payload.viewer.customer,
       })}
     />
   );

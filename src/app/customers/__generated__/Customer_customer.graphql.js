@@ -8,11 +8,13 @@
 
 /*::
 import type {ConcreteFragment} from 'relay-runtime';
-export type Category = {|
-  +categoryID: ?number;
-  +name: ?string;
-  +description: ?string;
-  +productConnection: ?{|
+export type Customer_customer = {|
+  +customerID: ?string;
+  +companyName: ?string;
+  +contactName: ?string;
+  +contactTitle: ?string;
+  +address: ?{| |};
+  +orderConnection: ?{|
     +count: number;
   |};
 |};
@@ -23,35 +25,58 @@ const fragment /*: ConcreteFragment*/ = {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "Category",
+  "name": "Customer_customer",
   "selections": [
     {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "categoryID",
+      "name": "customerID",
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "name",
+      "name": "companyName",
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "description",
+      "name": "contactName",
+      "storageKey": null
+    },
+    {
+      "kind": "ScalarField",
+      "alias": null,
+      "args": null,
+      "name": "contactTitle",
       "storageKey": null
     },
     {
       "kind": "LinkedField",
       "alias": null,
       "args": null,
-      "concreteType": "ProductConnection",
-      "name": "productConnection",
+      "concreteType": "CustomerAddress",
+      "name": "address",
+      "plural": false,
+      "selections": [
+        {
+          "kind": "FragmentSpread",
+          "name": "Address_address",
+          "args": null
+        }
+      ],
+      "storageKey": null
+    },
+    {
+      "kind": "LinkedField",
+      "alias": null,
+      "args": null,
+      "concreteType": "OrderConnection",
+      "name": "orderConnection",
       "plural": false,
       "selections": [
         {
@@ -65,7 +90,7 @@ const fragment /*: ConcreteFragment*/ = {
       "storageKey": null
     }
   ],
-  "type": "Category"
+  "type": "Customer"
 };
 
 module.exports = fragment;

@@ -20,14 +20,14 @@ export default function ToggleShipper({ id }: Props) {
         query ToggleShipperQuery($filter: FilterFindOneShipperInput) {
           viewer {
             shipper(filter: $filter) {
-              ...Shipper
+              ...Shipper_shipper
             }
           }
         }
       `}
       variables={{ filter: { shipperID: id } }}
       prepareProps={(payload: ToggleShipperQueryResponse) => ({
-        data: payload.viewer && payload.viewer.shipper,
+        shipper: payload.viewer && payload.viewer.shipper,
       })}
     />
   );

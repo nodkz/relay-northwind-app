@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash afc0e23e5a8acedf89810720684577bd
+ * @relayHash 039919a7da35923436cbf0f494537216
  */
 
 /* eslint-disable */
@@ -23,13 +23,13 @@ query ToggleOrderQuery(
 ) {
   viewer {
     order(filter: $filter) {
-      ...Order
+      ...Order_order
       id
     }
   }
 }
 
-fragment Order on Order {
+fragment Order_order on Order {
   shippedDate
   orderID
   employeeID
@@ -107,7 +107,7 @@ const batch /*: ConcreteBatch*/ = {
             "selections": [
               {
                 "kind": "FragmentSpread",
-                "name": "Order",
+                "name": "Order_order",
                 "args": null
               }
             ],
@@ -369,7 +369,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query ToggleOrderQuery(\n  $filter: FilterFindOneOrderInput\n) {\n  viewer {\n    order(filter: $filter) {\n      ...Order\n      id\n    }\n  }\n}\n\nfragment Order on Order {\n  shippedDate\n  orderID\n  employeeID\n  orderDate\n  requiredDate\n  customerID\n  shipVia\n  freight\n  shipName\n  shipAddress {\n    ...Address_address\n  }\n  details {\n    ...OrderDetails_details\n  }\n}\n\nfragment Address_address on CustomerAddress {\n  street\n  city\n  region\n  postalCode\n  country\n  phone\n}\n\nfragment OrderDetails_details on OrderDetails {\n  productID\n  unitPrice\n  quantity\n  discount\n  product {\n    name\n    id\n  }\n}\n"
+  "text": "query ToggleOrderQuery(\n  $filter: FilterFindOneOrderInput\n) {\n  viewer {\n    order(filter: $filter) {\n      ...Order_order\n      id\n    }\n  }\n}\n\nfragment Order_order on Order {\n  shippedDate\n  orderID\n  employeeID\n  orderDate\n  requiredDate\n  customerID\n  shipVia\n  freight\n  shipName\n  shipAddress {\n    ...Address_address\n  }\n  details {\n    ...OrderDetails_details\n  }\n}\n\nfragment Address_address on CustomerAddress {\n  street\n  city\n  region\n  postalCode\n  country\n  phone\n}\n\nfragment OrderDetails_details on OrderDetails {\n  productID\n  unitPrice\n  quantity\n  discount\n  product {\n    name\n    id\n  }\n}\n"
 };
 
 module.exports = batch;

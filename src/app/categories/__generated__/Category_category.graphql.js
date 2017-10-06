@@ -8,12 +8,10 @@
 
 /*::
 import type {ConcreteFragment} from 'relay-runtime';
-export type Supplier = {|
-  +supplierID: ?number;
-  +companyName: ?string;
-  +contactName: ?string;
-  +contactTitle: ?string;
-  +address: ?{| |};
+export type Category_category = {|
+  +categoryID: ?number;
+  +name: ?string;
+  +description: ?string;
   +productConnection: ?{|
     +count: number;
   |};
@@ -25,50 +23,27 @@ const fragment /*: ConcreteFragment*/ = {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "Supplier",
+  "name": "Category_category",
   "selections": [
     {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "supplierID",
+      "name": "categoryID",
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "companyName",
+      "name": "name",
       "storageKey": null
     },
     {
       "kind": "ScalarField",
       "alias": null,
       "args": null,
-      "name": "contactName",
-      "storageKey": null
-    },
-    {
-      "kind": "ScalarField",
-      "alias": null,
-      "args": null,
-      "name": "contactTitle",
-      "storageKey": null
-    },
-    {
-      "kind": "LinkedField",
-      "alias": null,
-      "args": null,
-      "concreteType": "CustomerAddress",
-      "name": "address",
-      "plural": false,
-      "selections": [
-        {
-          "kind": "FragmentSpread",
-          "name": "Address_address",
-          "args": null
-        }
-      ],
+      "name": "description",
       "storageKey": null
     },
     {
@@ -90,7 +65,7 @@ const fragment /*: ConcreteFragment*/ = {
       "storageKey": null
     }
   ],
-  "type": "Supplier"
+  "type": "Category"
 };
 
 module.exports = fragment;

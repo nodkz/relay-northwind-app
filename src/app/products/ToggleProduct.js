@@ -20,14 +20,14 @@ export default function ToggleProduct({ id }: Props) {
         query ToggleProductQuery($filter: FilterFindOneProductInput) {
           viewer {
             product(filter: $filter) {
-              ...Product
+              ...Product_product
             }
           }
         }
       `}
       variables={{ filter: { productID: id } }}
       prepareProps={(payload: ToggleProductQueryResponse) => ({
-        data: payload.viewer && payload.viewer.product,
+        product: payload.viewer && payload.viewer.product,
       })}
     />
   );

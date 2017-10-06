@@ -20,14 +20,14 @@ export default function ToggleOrder({ id }: Props) {
         query ToggleOrderQuery($filter: FilterFindOneOrderInput) {
           viewer {
             order(filter: $filter) {
-              ...Order
+              ...Order_order
             }
           }
         }
       `}
       variables={{ filter: { orderID: id } }}
       prepareProps={(payload: ToggleOrderQueryResponse) => ({
-        data: payload.viewer && payload.viewer.order,
+        order: payload.viewer && payload.viewer.order,
       })}
     />
   );

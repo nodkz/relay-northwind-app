@@ -20,7 +20,7 @@ export default function ToggleCategory({ id }: Props) {
         query ToggleCategoryQuery($filter: FilterFindOneCategoryInput) {
           viewer {
             category(filter: $filter) {
-              ...Category
+              ...Category_category
             }
           }
         }

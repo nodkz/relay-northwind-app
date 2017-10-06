@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 2c3453447643f207867ffa141922cfbe
+ * @relayHash e2b1d3905af5d69b68af90c16a192de7
  */
 
 /* eslint-disable */
@@ -23,13 +23,13 @@ query ToggleCategoryQuery(
 ) {
   viewer {
     category(filter: $filter) {
-      ...Category
+      ...Category_category
       id
     }
   }
 }
 
-fragment Category on Category {
+fragment Category_category on Category {
   categoryID
   name
   description
@@ -78,7 +78,7 @@ const batch /*: ConcreteBatch*/ = {
             "selections": [
               {
                 "kind": "FragmentSpread",
-                "name": "Category",
+                "name": "Category_category",
                 "args": null
               }
             ],
@@ -193,7 +193,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query ToggleCategoryQuery(\n  $filter: FilterFindOneCategoryInput\n) {\n  viewer {\n    category(filter: $filter) {\n      ...Category\n      id\n    }\n  }\n}\n\nfragment Category on Category {\n  categoryID\n  name\n  description\n  productConnection {\n    count\n  }\n}\n"
+  "text": "query ToggleCategoryQuery(\n  $filter: FilterFindOneCategoryInput\n) {\n  viewer {\n    category(filter: $filter) {\n      ...Category_category\n      id\n    }\n  }\n}\n\nfragment Category_category on Category {\n  categoryID\n  name\n  description\n  productConnection {\n    count\n  }\n}\n"
 };
 
 module.exports = batch;

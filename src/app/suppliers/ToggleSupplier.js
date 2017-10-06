@@ -20,14 +20,14 @@ export default function ToggleSupplier({ id }: Props) {
         query ToggleSupplierQuery($filter: FilterFindOneSupplierInput) {
           viewer {
             supplier(filter: $filter) {
-              ...Supplier
+              ...Supplier_supplier
             }
           }
         }
       `}
       variables={{ filter: { supplierID: id } }}
       prepareProps={(payload: ToggleSupplierQueryResponse) => ({
-        data: payload.viewer && payload.viewer.supplier,
+        supplier: payload.viewer && payload.viewer.supplier,
       })}
     />
   );
