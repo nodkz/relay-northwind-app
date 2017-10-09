@@ -4,18 +4,18 @@ import React from 'react';
 import { Form, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
 
 type Props = {
-  onFilter: (data: { employeeID?: string, shipperID?: string }) => any,
+  onFilter: (data: { employeeID?: ?number, shipperID?: ?number }) => any,
 };
 
 type State = {
-  employeeID: string,
-  shipperID: string,
+  employeeID: ?number,
+  shipperID: ?number,
 };
 
 export default class OrderFilter extends React.Component<Props, State> {
   state = {
-    employeeID: '',
-    shipperID: '',
+    employeeID: undefined,
+    shipperID: undefined,
   };
 
   onChange = (e: Event) => {
@@ -23,7 +23,7 @@ export default class OrderFilter extends React.Component<Props, State> {
     if (target instanceof HTMLInputElement) {
       const fname = target.getAttribute('data-name');
       if (fname === 'employeeID' || fname === 'shipperID') {
-        this.setState({ [fname]: target.value }, this.onFilter);
+        this.setState({ [fname]: parseInt(target.value, 10) || undefined }, this.onFilter);
       }
     }
   };
@@ -31,8 +31,8 @@ export default class OrderFilter extends React.Component<Props, State> {
   onClear = () => {
     this.setState(
       {
-        employeeID: '',
-        shipperID: '',
+        employeeID: undefined,
+        shipperID: undefined,
       },
       this.onFilter
     );
@@ -45,8 +45,8 @@ export default class OrderFilter extends React.Component<Props, State> {
       const { employeeID, shipperID } = this.state;
 
       this.props.onFilter({
-        employeeID: employeeID ? employeeID : '',
-        shipVia: shipperID ? shipperID : '',
+        employeeID: employeeID ? employeeID : undefined,
+        shipVia: shipperID ? shipperID : undefined,
       });
     }
   };
@@ -61,7 +61,7 @@ export default class OrderFilter extends React.Component<Props, State> {
           <FormControl
             type="number"
             data-name="employeeID"
-            value={employeeID}
+            value={employeeID || ''}
             style={{ width: '70px' }}
             onChange={this.onChange}
           />
@@ -71,7 +71,7 @@ export default class OrderFilter extends React.Component<Props, State> {
           <FormControl
             type="number"
             data-name="shipperID"
-            value={shipperID}
+            value={shipperID || ''}
             style={{ width: '70px' }}
             onChange={this.onChange}
           />

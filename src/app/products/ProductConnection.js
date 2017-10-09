@@ -20,7 +20,7 @@ type Props = {|
 
 class ProductConnection extends React.Component<Props> {
   onFormFilter = (filter: Object) => {
-    this.props.relay.setVariables({ filter });
+    this.props.relay.refetchConnection(100, null, { filter });
   };
 
   render() {
