@@ -27,7 +27,7 @@ type StoresT = any;
 export type AlertOptsT = string | boolean | $Shape<AlertData>;
 
 export type RelayFetchOpts = {
-  query: mixed,
+  query: any,
   force?: boolean,
   variables?: { [key: string]: any },
   onSuccess?: (result: *) => void,
@@ -41,7 +41,7 @@ export type RelayFetchOpts = {
 };
 
 export type RelayMutateOpts = {
-  query: mixed,
+  query: any,
   variables?: mixed,
   collisionKey?: string,
   configs?: mixed,
@@ -94,7 +94,15 @@ export default class RelayStore {
     this._onResetCb = cb;
   }
 
-  fetch({
+  fetch(opts: RelayFetchOpts): Promise<*> {
+    const { query } = opts;
+    if (query.classic || query.modern) {
+      return this.fetchModern(opts);
+    }
+    return this.fetchClassic(opts);
+  }
+
+  fetchClassic({
     query,
     force = false,
     variables,
@@ -109,7 +117,7 @@ export default class RelayStore {
   }: RelayFetchOpts): Promise<*> {
     return new Promise((resolve, reject) => {
       const alertIdx = Date.now();
-      console.log(query);
+
       const q = Relay.createQuery(query, variables || {});
       if (onStart) {
         onStart();
@@ -157,6 +165,71 @@ export default class RelayStore {
       } else {
         this._relayEnv.primeCache(...args);
       }
+    });
+  }
+
+  fetchModern({
+    query,
+    force = false,
+    variables,
+    onSuccess,
+    onSuccessAlert,
+    onError,
+    onErrorAlert,
+    onStart,
+    onStartAlert,
+    onEnd,
+    onEndAlert,
+  }: RelayFetchOpts): Promise<*> {
+    return new Promise((resolve, reject) => {
+      const alertIdx = Date.now();
+
+      const cacheConfig = force ? { force } : undefined;
+
+      const { createOperationSelector, getOperation } = this._relayEnv.unstable_internal;
+      const operation = createOperationSelector(getOperation(query), variables);
+
+      if (onStart) {
+        onStart();
+      }
+      if (onStartAlert) {
+        this._showAlert(onStartAlert, 'Loading...', 'info', alertIdx);
+      }
+
+      this._relayEnv
+        .execute({ operation, cacheConfig })
+        .finally(() => {
+          if (onEnd) onEnd();
+        })
+        .subscribe({
+          error: err => {
+            if (onError) onError(err);
+            reject(err);
+
+            if (onErrorAlert) {
+              this._showAlert(onErrorAlert, `Loading error: ${err}`, 'error', alertIdx);
+            } else if (onEndAlert) {
+              this._showAlert(onEndAlert, 'Completed', 'info', alertIdx, 2000);
+            } else {
+              this._hideAlert(alertIdx);
+            }
+          },
+          next: () => {
+            const snapshot = this._relayEnv.lookup(operation.fragment);
+            const result = snapshot.data;
+            if (onSuccess) onSuccess(result);
+
+            resolve(result);
+
+            if (onSuccessAlert) {
+              this._showAlert(onSuccessAlert, 'success', 'success', alertIdx, 2000);
+            } else if (onEndAlert) {
+              this._showAlert(onEndAlert, 'Completed', 'info', alertIdx, 2000);
+            } else {
+              this._hideAlert(alertIdx);
+            }
+          },
+        });
     });
   }
 
