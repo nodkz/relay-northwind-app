@@ -7,7 +7,6 @@ import ConnectionLoadMore from 'components/ConnectionLoadMore';
 import ProductConnectionItem from './ProductConnectionItem';
 import ProductFilter from './ProductFilter';
 import ProductHeaders from './ProductHeaders';
-// import CreateProduct from './CreateProduct';
 import type { ProductConnection_viewer } from './__generated__/ProductConnection_viewer.graphql';
 
 const PER_PAGE = 10;

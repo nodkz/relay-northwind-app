@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Form, FormGroup, ControlLabel, FormControl, Button, InputGroup } from 'react-bootstrap';
+import CreateProduct from './CreateProduct';
 
 const InputGroupAddon = InputGroup.Addon;
 
@@ -14,6 +15,7 @@ type State = {
   categoryID: ?number,
   unitPriceLTE: ?number,
   unitPriceGTE: ?number,
+  showAddForm: boolean,
 };
 
 export default class ProductFilter extends React.Component<Props, State> {
@@ -22,6 +24,7 @@ export default class ProductFilter extends React.Component<Props, State> {
     categoryID: undefined,
     unitPriceLTE: undefined,
     unitPriceGTE: undefined,
+    showAddForm: !false,
   };
 
   onChange = (e: Event) => {
@@ -70,8 +73,20 @@ export default class ProductFilter extends React.Component<Props, State> {
     }
   };
 
+  toggleAddForm = () => {
+    this.setState({ showAddForm: !this.state.showAddForm });
+  };
+
+  onCreate = (data: any) => {
+    this.setState({ showAddForm: false, categoryID: data.categoryID }, () => this.onFilter());
+  };
+
   render() {
-    const { supplierID, categoryID, unitPriceLTE, unitPriceGTE } = this.state;
+    const { supplierID, categoryID, unitPriceLTE, unitPriceGTE, showAddForm } = this.state;
+
+    if (showAddForm) {
+      return <CreateProduct onCancel={this.toggleAddForm} onCreate={this.onCreate} />;
+    }
 
     return (
       <Form inline>
@@ -121,7 +136,12 @@ export default class ProductFilter extends React.Component<Props, State> {
         </Button>{' '}
         <Button type="submit" onClick={this.onClear}>
           Clear
-        </Button>
+        </Button>{' '}
+        {!showAddForm && (
+          <Button onClick={this.toggleAddForm} bsStyle="success">
+            Add product
+          </Button>
+        )}
       </Form>
     );
   }
