@@ -16,7 +16,7 @@ export default function ToggleCategory({ id }: Props) {
   return (
     <Toggler
       component={Category}
-      query={() => graphql`
+      query={graphql`
         query ToggleCategoryQuery($filter: FilterFindOneCategoryInput) {
           viewer {
             category(filter: $filter) {
@@ -27,7 +27,7 @@ export default function ToggleCategory({ id }: Props) {
       `}
       variables={{ filter: { categoryID: id } }}
       prepareProps={(payload: ToggleCategoryQueryResponse) => ({
-        data: payload.viewer && payload.viewer.category,
+        category: payload.viewer && payload.viewer.category,
       })}
     />
   );

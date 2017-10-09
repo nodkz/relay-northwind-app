@@ -16,7 +16,7 @@ export default function ToggleOrder({ id }: Props) {
   return (
     <Toggler
       component={Order}
-      query={() => graphql`
+      query={graphql`
         query ToggleOrderQuery($filter: FilterFindOneOrderInput) {
           viewer {
             order(filter: $filter) {

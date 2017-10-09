@@ -16,7 +16,7 @@ export default function ToggleEmployee({ id }: Props) {
   return (
     <Toggler
       component={Employee}
-      query={() => graphql`
+      query={graphql`
         query ToggleEmployeeQuery($filter: FilterFindOneEmployeeInput) {
           viewer {
             employee(filter: $filter) {

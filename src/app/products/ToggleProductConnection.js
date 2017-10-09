@@ -1,10 +1,9 @@
 /* @flow */
 
 import React from 'react';
-import { graphql } from 'react-relay/compat';
 import Toggler from 'components/Toggler';
-import ProductConnection from './ProductConnection';
-import type { ToggleProductConnectionQueryResponse } from './__generated__/ToggleProductConnectionQuery.graphql';
+import ProductConnection, { query } from './ProductConnection';
+import type { ProductConnectionQueryResponse } from './__generated__/ProductConnectionQuery.graphql';
 
 type Props = {
   filter: Object,
@@ -14,16 +13,11 @@ export default function ToggleProductConnection({ filter }: Props) {
   return (
     <Toggler
       component={ProductConnection}
-      query={() => graphql`
-        query ToggleProductConnectionQuery($filter: FilterFindManyProductInput) {
-          viewer {
-            ...ProductConnection_viewer
-          }
-        }
-      `}
-      variables={{ filter }}
-      prepareProps={(payload: ToggleProductConnectionQueryResponse) => ({
+      query={query}
+      variables={{ filter, count: 10 }}
+      prepareProps={(payload: ProductConnectionQueryResponse) => ({
         viewer: payload.viewer,
+        hideFilter: true,
       })}
     />
   );

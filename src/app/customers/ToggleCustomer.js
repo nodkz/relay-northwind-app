@@ -16,7 +16,7 @@ export default function ToggleCustomer({ id }: Props) {
   return (
     <Toggler
       component={Customer}
-      query={() => graphql`
+      query={graphql`
         query ToggleCustomerQuery($filter: FilterFindOneCustomerInput) {
           viewer {
             customer(filter: $filter) {

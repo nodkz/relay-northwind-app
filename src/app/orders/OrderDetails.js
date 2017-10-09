@@ -32,13 +32,13 @@ class OrderDetails extends React.Component<Props> {
             <tr key={i}>
               <td>{row.productID}</td>
               <td>
-                {row.product
-                  ? [
-                      row.product.name,
-                      ' ',
-                      row.productID ? <ToggleProduct id={row.productID} /> : null,
-                    ]
-                  : 'no product data'}
+                {row.product ? (
+                  <span>
+                    {row.product.name} {row.productID ? <ToggleProduct id={row.productID} /> : null}
+                  </span>
+                ) : (
+                  'no product data'
+                )}
               </td>
               <td>{row.unitPrice}</td>
               <td>{row.quantity}</td>

@@ -16,7 +16,7 @@ export default function ToggleShipper({ id }: Props) {
   return (
     <Toggler
       component={Shipper}
-      query={() => graphql`
+      query={graphql`
         query ToggleShipperQuery($filter: FilterFindOneShipperInput) {
           viewer {
             shipper(filter: $filter) {

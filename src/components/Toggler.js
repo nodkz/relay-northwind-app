@@ -32,7 +32,7 @@ export default class Toggler extends React.Component<Props, State> {
     });
 
     if (!data) {
-      relayStore.fetch({ query: query(), variables }).then(res => {
+      relayStore.fetch({ query, variables }).then(res => {
         this.setState({
           data: prepareProps(res),
         });
@@ -55,7 +55,8 @@ export default class Toggler extends React.Component<Props, State> {
         />
         {isOpen &&
           (data ? (
-            <div className="lrspace bspace">{React.createElement(component, { data })}</div>
+            // $FlowFixMe
+            <div className="lrspace bspace">{React.createElement(component, data)}</div>
           ) : (
             <Loading />
           ))}

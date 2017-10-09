@@ -57,6 +57,14 @@ class OrderConnection extends React.Component<Props> {
   }
 }
 
+export const query = graphql`
+  query OrderConnectionQuery($count: Int!, $cursor: String, $filter: FilterFindManyOrderInput) {
+    viewer {
+      ...OrderConnection_viewer
+    }
+  }
+`;
+
 export default createPaginationContainer(
   OrderConnection,
   graphql`
@@ -90,14 +98,8 @@ export default createPaginationContainer(
       };
     },
     getVariables(props, { count, cursor, filter }, fragmentVariables) {
-      return { count, cursor, filter };
+      return { count, cursor, filter: filter || fragmentVariables.filter };
     },
-    query: graphql`
-      query OrderConnectionQuery($count: Int!, $cursor: String, $filter: FilterFindManyOrderInput) {
-        viewer {
-          ...OrderConnection_viewer
-        }
-      }
-    `,
+    query,
   }
 );

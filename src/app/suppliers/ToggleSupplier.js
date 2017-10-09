@@ -16,7 +16,7 @@ export default function ToggleSupplier({ id }: Props) {
   return (
     <Toggler
       component={Supplier}
-      query={() => graphql`
+      query={graphql`
         query ToggleSupplierQuery($filter: FilterFindOneSupplierInput) {
           viewer {
             supplier(filter: $filter) {

@@ -5,9 +5,9 @@ import AlertStore from './AlertStore';
 import ErrorCatcher from './ErrorCatcher';
 
 declare class StoresClass {
-  relayStore: RelayStore,
-  alertStore: AlertStore,
-  errorCatcher: ErrorCatcher,
+  relayStore: RelayStore;
+  alertStore: AlertStore;
+  errorCatcher: ErrorCatcher;
 }
 
 export type StoresT = StoresClass;

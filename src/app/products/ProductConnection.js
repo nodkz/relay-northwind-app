@@ -57,6 +57,14 @@ class ProductConnection extends React.Component<Props> {
   }
 }
 
+export const query = graphql`
+  query ProductConnectionQuery($count: Int!, $cursor: String, $filter: FilterFindManyProductInput) {
+    viewer {
+      ...ProductConnection_viewer
+    }
+  }
+`;
+
 export default createPaginationContainer(
   ProductConnection,
   graphql`
@@ -89,18 +97,8 @@ export default createPaginationContainer(
       };
     },
     getVariables(props, { count, cursor, filter }, fragmentVariables) {
-      return { count, cursor, filter };
+      return { count, cursor, filter: filter || fragmentVariables.filter };
     },
-    query: graphql`
-      query ProductConnectionQuery(
-        $count: Int!
-        $cursor: String
-        $filter: FilterFindManyProductInput
-      ) {
-        viewer {
-          ...ProductConnection_viewer
-        }
-      }
-    `,
+    query,
   }
 );
