@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 import Relay from 'react-relay/classic';
-import { commitMutation } from 'react-relay/compat';
+import { commitMutation } from 'react-relay';
 import RelayNetworkDebug from 'react-relay/lib/RelayNetworkDebug';
 import {
   RelayNetworkLayer,

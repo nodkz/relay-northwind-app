@@ -2,7 +2,7 @@
 /* eslint-disable graphql/template-strings */
 
 import * as React from 'react';
-import Relay from 'react-relay/compat';
+import Relay from 'react-relay';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import relayLoader from 'components/relayLoader';
 import Page404 from 'components/Page404';

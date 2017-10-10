@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { createFragmentContainer, graphql } from 'react-relay/compat';
+import { createFragmentContainer, graphql } from 'react-relay';
 import ToggleProductCollection from 'app/products/ToggleProductConnection';
 import type { Category_category } from './__generated__/Category_category.graphql';
 

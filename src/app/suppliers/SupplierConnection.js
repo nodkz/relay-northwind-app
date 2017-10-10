@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { createPaginationContainer, graphql } from 'react-relay/compat';
+import { createPaginationContainer, graphql } from 'react-relay';
 import ConnectionLoadMore from 'components/ConnectionLoadMore';
 import SupplierConnectionItem from './SupplierConnectionItem';
 import type { SupplierConnection_viewer } from './__generated__/SupplierConnection_viewer.graphql';
