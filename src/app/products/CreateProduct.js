@@ -20,6 +20,7 @@ type State = {
   unitsInStock: ?number,
   supplierID: ?number,
   categoryID: ?number,
+  error: ?string,
 };
 
 export default class CreateProduct extends React.Component<Props, State> {
@@ -29,14 +30,20 @@ export default class CreateProduct extends React.Component<Props, State> {
     unitsInStock: 10,
     supplierID: 666,
     categoryID: 666,
+    error: null,
   };
 
   onSubmit = () => {
+    const { name, unitPrice, unitsInStock, supplierID, categoryID } = this.state;
     const variables: CreateProductMutationVariables = {
       input: {
         record: {
           productID: Math.round(Date.now() / 1000),
-          ...this.state,
+          name,
+          unitPrice,
+          unitsInStock,
+          supplierID,
+          categoryID,
         },
       },
     };
@@ -59,6 +66,9 @@ export default class CreateProduct extends React.Component<Props, State> {
       onSuccess: (res: CreateProductMutationResponse) => {
         console.log(res);
         if (this.props.onCreate) this.props.onCreate(this.state);
+      },
+      onError: err => {
+        this.setState({ error: err.message });
       },
     });
   };
@@ -83,7 +93,17 @@ export default class CreateProduct extends React.Component<Props, State> {
   };
 
   render() {
-    const { name, unitPrice, unitsInStock, supplierID, categoryID } = this.state;
+    const { error, name, unitPrice, unitsInStock, supplierID, categoryID } = this.state;
+
+    if (error) {
+      return (
+        <div>
+          <h4>Save error:</h4>
+          <pre style={{ color: 'red', fontWeight: 'bold' }}>{error.replace(/\.\s/gi, '.\n')}</pre>
+          <Button onClick={this.onCancel}>Cancel</Button>
+        </div>
+      );
+    }
 
     return (
       <div>

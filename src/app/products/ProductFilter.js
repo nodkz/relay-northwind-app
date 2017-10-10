@@ -24,7 +24,7 @@ export default class ProductFilter extends React.Component<Props, State> {
     categoryID: undefined,
     unitPriceLTE: undefined,
     unitPriceGTE: undefined,
-    showAddForm: !false,
+    showAddForm: false,
   };
 
   onChange = (e: Event) => {
