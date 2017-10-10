@@ -3,6 +3,7 @@
 
 import * as React from 'react';
 import Relay from 'react-relay/classic';
+import { commitMutation } from 'react-relay/compat';
 import RelayNetworkDebug from 'react-relay/lib/RelayNetworkDebug';
 import {
   RelayNetworkLayer,
@@ -45,7 +46,7 @@ export type RelayMutateOpts = {
   variables?: mixed,
   collisionKey?: string,
   configs?: mixed,
-  onSuccess?: (payload: *) => void, // MAYBE SHOULD BE result???
+  onSuccess?: (payload: any) => void, // MAYBE SHOULD BE result???
   onSuccessAlert?: AlertOptsT,
   onError?: (err: Error, transaction: mixed) => void,
   onErrorAlert?: AlertOptsT,
@@ -233,7 +234,16 @@ export default class RelayStore {
     });
   }
 
-  mutate({
+  mutate(opts: RelayMutateOpts): Promise<any> {
+    const { query } = opts;
+    if (query.classic || query.modern) {
+      return this.mutateModern(opts);
+    }
+    // query.kind === 'Mutation'
+    return this.mutateClassic(opts);
+  }
+
+  mutateClassic({
     query,
     variables,
     collisionKey,
@@ -249,7 +259,7 @@ export default class RelayStore {
     optimisticQuery,
     optimisticResponse,
     optimisticConfigs,
-  }: RelayMutateOpts): Promise<mixed> {
+  }: RelayMutateOpts): Promise<any> {
     if (onErrorAlert === undefined) onErrorAlert = true; // eslint-disable-line
 
     return new Promise((resolve, reject) => {
@@ -346,6 +356,117 @@ export default class RelayStore {
     });
   }
 
+  mutateModern({
+    query,
+    variables,
+    collisionKey,
+    configs,
+    onSuccess,
+    onSuccessAlert,
+    onError,
+    onErrorAlert,
+    onStart,
+    onStartAlert,
+    onEnd,
+    onEndAlert,
+    optimisticQuery,
+    optimisticResponse,
+    optimisticConfigs,
+  }: RelayMutateOpts): Promise<any> {
+    if (onErrorAlert === undefined) onErrorAlert = true; // eslint-disable-line
+
+    return new Promise((resolve, reject) => {
+      // see docs https://facebook.github.io/relay/docs/api-reference-relay-graphql-mutation.html#content
+      let vars;
+      if (!variables) {
+        vars = undefined;
+      } else if (variables.input) {
+        // eslint-disable-line
+        vars = variables;
+      } else {
+        vars = { input: variables };
+      }
+
+      let colKey;
+      if (collisionKey) {
+        colKey = collisionKey;
+      } else if (variables) {
+        // if _id provided, then take it as collision key
+        if (variables._id) {
+          colKey = variables._id;
+        } else if (variables.record && variables.record._id) {
+          colKey = variables.record._id;
+        }
+      }
+
+      if (!colKey) {
+        colKey = 'mutation';
+      }
+
+      if (onStart) {
+        onStart();
+      }
+      if (onStartAlert) {
+        this._showAlert(onStartAlert, 'Processing...', 'info', colKey);
+      }
+
+      const handleError = (err: Error) => {
+        if (onError) onError(err);
+        if (onEnd) onEnd();
+        reject(err);
+
+        const errMsg = err && err.message ? err.message : err;
+
+        this._stores.errorCatcher.captureMessage('RelayMutationError', {
+          extra: {
+            variables,
+            error: errMsg,
+          },
+        });
+
+        if (onErrorAlert) {
+          this._showAlert(onErrorAlert, 'Error in operation.', 'error', colKey);
+        } else if (onEndAlert) {
+          this._showAlert(onEndAlert, 'Completed with error', 'info', colKey, 2000);
+        } else {
+          console.error(err); // eslint-disable-line
+          this._hideAlert(colKey);
+        }
+      };
+
+      commitMutation(this._relayEnv, {
+        mutation: query,
+        variables: vars,
+        // uploadables?: UploadableMap,
+        // updater?: ?SelectorStoreUpdater,
+        // optimisticUpdater?: ?SelectorStoreUpdater,
+        optimisticResponse,
+        onCompleted: (response: ?Object, errors: ?[Error]) => {
+          if (errors) {
+            const err = this._normalizeRelayPayloadErrors(errors);
+            handleError(err);
+            return;
+          }
+
+          if (onSuccess) onSuccess(response);
+          if (onEnd) onEnd();
+          resolve(response);
+
+          if (onSuccessAlert) {
+            this._showAlert(onSuccessAlert, 'Success', 'success', colKey, 2000);
+          } else if (onEndAlert) {
+            this._showAlert(onEndAlert, 'Completed', 'info', colKey, 2000);
+          } else {
+            this._hideAlert(colKey);
+          }
+        },
+        onError: (err: Error) => {
+          handleError(err);
+        },
+      });
+    });
+  }
+
   _createRelayNetworkLayer() {
     return new RelayNetworkLayer(
       [
@@ -374,21 +495,26 @@ export default class RelayStore {
     );
   }
 
+  _normalizeRelayPayloadErrors(errors: any): Error {
+    const messages = [];
+    if (Array.isArray(errors)) {
+      errors.forEach(item => {
+        messages.push(item.message ? item.message : item.toString());
+      });
+    } else {
+      messages.push(JSON.stringify(errors));
+    }
+    return new Error(messages.join(' \n\n'));
+  }
+
+  // Relay Classic
   _normalizeRelayTransactionError(transaction: *) {
     const some = transaction.getError();
     if (some instanceof Error) {
       return some;
     }
     if (some.json && some.json.errors) {
-      const messages = [];
-      if (Array.isArray(some.json.errors)) {
-        some.json.errors.forEach(item => {
-          messages.push(item.message ? item.message : item.toString());
-        });
-      } else {
-        messages.push(JSON.stringify(some.json));
-      }
-      return new Error(messages.join(' \n\n'));
+      return this._normalizeRelayPayloadErrors(some.json.errors);
     }
     if (some.status && some.statusText) {
       return new Error(`${some.status} ${some.statusText}`);

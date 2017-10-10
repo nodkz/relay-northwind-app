@@ -1,9 +1,13 @@
 /* @flow */
 
 import React from 'react';
-import Relay from 'react-relay/classic';
+import { graphql } from 'react-relay/compat';
 import { relayStore } from 'clientStores';
 import { Form, FormGroup, Col, FormControl, Button } from 'react-bootstrap';
+import type {
+  CreateProductMutationVariables,
+  CreateProductMutationResponse,
+} from './__generated__/CreateProductMutation.graphql';
 
 type Props = {
   onCreate?: Function,
@@ -28,7 +32,7 @@ export default class CreateProduct extends React.Component<Props, State> {
   };
 
   onSubmit = () => {
-    const variables = {
+    const variables: CreateProductMutationVariables = {
       input: {
         record: {
           productID: Math.round(Date.now() / 1000),
@@ -38,19 +42,22 @@ export default class CreateProduct extends React.Component<Props, State> {
     };
 
     relayStore.mutate({
-      query: Relay.QL`mutation createProduct {
-        createProduct(input: $input) {
-          record {
-            supplierID
-            categoryID
-            name
-            unitsInStock
-            unitPrice
+      query: graphql`
+        mutation CreateProductMutation($input: RelayCreateOneProductInput!) {
+          createProduct(input: $input) {
+            record {
+              supplierID
+              categoryID
+              name
+              unitsInStock
+              unitPrice
+            }
           }
         }
-      }`,
+      `,
       variables,
-      onSuccess: () => {
+      onSuccess: (res: CreateProductMutationResponse) => {
+        console.log(res);
         if (this.props.onCreate) this.props.onCreate(this.state);
       },
     });
