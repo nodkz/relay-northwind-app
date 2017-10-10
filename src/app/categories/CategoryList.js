@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { createFragmentContainer, graphql } from 'react-relay';
+import { createFragmentContainer, graphql } from 'react-relay/compat';
 import Category from './Category';
 import type { CategoryList_viewer } from './__generated__/CategoryList_viewer.graphql';
 

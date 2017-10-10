@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { graphql } from 'react-relay';
+import { graphql } from 'react-relay/compat';
 import { relayStore } from 'clientStores';
 import { Form, FormGroup, Col, FormControl, Button } from 'react-bootstrap';
 import type {

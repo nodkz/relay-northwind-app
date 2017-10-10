@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { createFragmentContainer, graphql } from 'react-relay';
+import { createFragmentContainer, graphql } from 'react-relay/compat';
 import Address from 'app/Address';
 import OrderDetails from './OrderDetails';
 import ToggleCustomer from 'app/customers/ToggleCustomer';

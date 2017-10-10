@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { createFragmentContainer, graphql } from 'react-relay';
+import { createFragmentContainer, graphql } from 'react-relay/compat';
 import { Label } from 'react-bootstrap';
 import ToggleCategory from 'app/categories/ToggleCategory';
 import ToggleSupplier from 'app/suppliers/ToggleSupplier';

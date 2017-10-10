@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { createFragmentContainer, graphql } from 'react-relay';
+import { createFragmentContainer, graphql } from 'react-relay/compat';
 import ToggleOrder from './ToggleOrder';
 import type { OrderConnectionItem_order } from './__generated__/OrderConnectionItem_order.graphql';
 

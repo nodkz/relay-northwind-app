@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { createFragmentContainer, graphql } from 'react-relay';
+import { createFragmentContainer, graphql } from 'react-relay/compat';
 import { Table } from 'react-bootstrap';
 import ToggleProduct from 'app/products/ToggleProduct';
 import type { OrderDetails_details } from './__generated__/OrderDetails_details.graphql';
