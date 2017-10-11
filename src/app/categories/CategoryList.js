@@ -27,6 +27,14 @@ class CategoryList extends React.Component<Props> {
   }
 }
 
+export const query = graphql`
+  query CategoryListQuery {
+    viewer {
+      ...CategoryList_viewer
+    }
+  }
+`;
+
 export default createFragmentContainer(
   CategoryList,
   graphql`

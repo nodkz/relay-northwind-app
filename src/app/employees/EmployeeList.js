@@ -27,6 +27,14 @@ class EmployeeList extends React.Component<Props> {
   }
 }
 
+export const query = graphql`
+  query EmployeeListQuery {
+    viewer {
+      ...EmployeeList_viewer
+    }
+  }
+`;
+
 export default createFragmentContainer(
   EmployeeList,
   graphql`

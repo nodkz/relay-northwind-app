@@ -29,6 +29,14 @@ class RegionList extends React.Component<Props> {
   }
 }
 
+export const query = graphql`
+  query RegionListQuery {
+    viewer {
+      ...RegionList_viewer
+    }
+  }
+`;
+
 export default createFragmentContainer(
   RegionList,
   graphql`

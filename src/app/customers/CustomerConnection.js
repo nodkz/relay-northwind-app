@@ -65,6 +65,14 @@ class CustomerConnection extends React.Component<Props> {
   }
 }
 
+export const query = graphql`
+  query CustomerConnectionQuery($count: Int!, $cursor: String) {
+    viewer {
+      ...CustomerConnection_viewer
+    }
+  }
+`;
+
 export default createPaginationContainer(
   CustomerConnection,
   graphql`
@@ -100,12 +108,6 @@ export default createPaginationContainer(
     getVariables(props, { count, cursor }, fragmentVariables) {
       return { count, cursor };
     },
-    query: graphql`
-      query CustomerConnectionQuery($count: Int!, $cursor: String) {
-        viewer {
-          ...CustomerConnection_viewer
-        }
-      }
-    `,
+    query,
   }
 );

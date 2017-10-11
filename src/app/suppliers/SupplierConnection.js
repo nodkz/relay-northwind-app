@@ -41,6 +41,14 @@ class SupplierConnection extends React.Component<Props> {
   }
 }
 
+export const query = graphql`
+  query SupplierConnectionQuery($count: Int!, $cursor: String) {
+    viewer {
+      ...SupplierConnection_viewer
+    }
+  }
+`;
+
 export default createPaginationContainer(
   SupplierConnection,
   graphql`
@@ -76,12 +84,6 @@ export default createPaginationContainer(
     getVariables(props, { count, cursor }, fragmentVariables) {
       return { count, cursor };
     },
-    query: graphql`
-      query SupplierConnectionQuery($count: Int!, $cursor: String) {
-        viewer {
-          ...SupplierConnection_viewer
-        }
-      }
-    `,
+    query,
   }
 );

@@ -29,6 +29,14 @@ class ShipperList extends React.Component<Props> {
   }
 }
 
+export const query = graphql`
+  query ShipperListQuery {
+    viewer {
+      ...ShipperList_viewer
+    }
+  }
+`;
+
 export default createFragmentContainer(
   ShipperList,
   graphql`
