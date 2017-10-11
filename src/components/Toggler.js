@@ -2,8 +2,9 @@
 
 import * as React from 'react';
 import { Button } from 'react-bootstrap';
-import Loading from 'components/Loading';
 import { relayStore } from 'clientStores';
+import Loading from 'components/Loading';
+import ErrorBoundary from 'components/ErrorBoundary';
 
 type Props = {
   component: Class<React$Component<{ data: ?Object }>>,
@@ -45,7 +46,7 @@ export default class Toggler extends React.Component<Props, State> {
     const { data, isOpen } = this.state;
 
     return (
-      <span>
+      <ErrorBoundary>
         {' '}
         <Button
           bsSize="xsmall"
@@ -60,7 +61,7 @@ export default class Toggler extends React.Component<Props, State> {
           ) : (
             <Loading />
           ))}
-      </span>
+      </ErrorBoundary>
     );
   }
 }
