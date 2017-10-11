@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 5f1c5b76f81f98296ddfdd7e65f293fb
+ * @relayHash c14b70a5cade42a4f6427406c7cba1f5
  */
 
 /* eslint-disable */
@@ -36,6 +36,7 @@ fragment ProductConnection_viewer on Viewer {
     edges {
       cursor
       node {
+        __typename
         _id
         ...ProductConnectionItem_product
         id
@@ -233,6 +234,13 @@ const batch /*: ConcreteBatch*/ = {
                         "kind": "ScalarField",
                         "alias": null,
                         "args": null,
+                        "name": "__typename",
+                        "storageKey": null
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "args": null,
                         "name": "_id",
                         "storageKey": null
                       },
@@ -363,6 +371,36 @@ const batch /*: ConcreteBatch*/ = {
               }
             ],
             "storageKey": null
+          },
+          {
+            "kind": "LinkedHandle",
+            "alias": null,
+            "args": [
+              {
+                "kind": "Variable",
+                "name": "after",
+                "variableName": "cursor",
+                "type": "String"
+              },
+              {
+                "kind": "Variable",
+                "name": "filter",
+                "variableName": "filter",
+                "type": "FilterFindManyProductInput"
+              },
+              {
+                "kind": "Variable",
+                "name": "first",
+                "variableName": "count",
+                "type": "Int"
+              }
+            ],
+            "handle": "connection",
+            "name": "productConnection",
+            "key": "ProductConnection_productConnection",
+            "filters": [
+              "filter"
+            ]
           }
         ],
         "storageKey": null
@@ -378,7 +416,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query ProductConnectionQuery(\n  $count: Int!\n  $cursor: String\n  $filter: FilterFindManyProductInput\n) {\n  viewer {\n    ...ProductConnection_viewer\n  }\n}\n\nfragment ProductConnection_viewer on Viewer {\n  productConnection(first: $count, after: $cursor, filter: $filter) {\n    count\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    edges {\n      cursor\n      node {\n        _id\n        ...ProductConnectionItem_product\n        id\n      }\n    }\n  }\n}\n\nfragment ProductConnectionItem_product on Product {\n  supplier {\n    companyName\n    id\n  }\n  id\n  categoryID\n  category {\n    name\n    id\n  }\n  supplierID\n  name\n  productID\n  quantityPerUnit\n  unitPrice\n  unitsInStock\n  discontinued\n}\n"
+  "text": "query ProductConnectionQuery(\n  $count: Int!\n  $cursor: String\n  $filter: FilterFindManyProductInput\n) {\n  viewer {\n    ...ProductConnection_viewer\n  }\n}\n\nfragment ProductConnection_viewer on Viewer {\n  productConnection(first: $count, after: $cursor, filter: $filter) {\n    count\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    edges {\n      cursor\n      node {\n        __typename\n        _id\n        ...ProductConnectionItem_product\n        id\n      }\n    }\n  }\n}\n\nfragment ProductConnectionItem_product on Product {\n  supplier {\n    companyName\n    id\n  }\n  id\n  categoryID\n  category {\n    name\n    id\n  }\n  supplierID\n  name\n  productID\n  quantityPerUnit\n  unitPrice\n  unitsInStock\n  discontinued\n}\n"
 };
 
 module.exports = batch;

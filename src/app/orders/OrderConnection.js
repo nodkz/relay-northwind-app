@@ -70,7 +70,7 @@ export default createPaginationContainer(
   graphql`
     fragment OrderConnection_viewer on Viewer {
       orderConnection(first: $count, after: $cursor, filter: $filter)
-        @connection(key: "OrderConnection_orderConnection") {
+        @connection(key: "OrderConnection_orderConnection", filters: ["filter"]) {
         count
         pageInfo {
           hasNextPage

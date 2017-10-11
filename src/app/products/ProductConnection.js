@@ -68,7 +68,8 @@ export default createPaginationContainer(
   ProductConnection,
   graphql`
     fragment ProductConnection_viewer on Viewer {
-      productConnection(first: $count, after: $cursor, filter: $filter) {
+      productConnection(first: $count, after: $cursor, filter: $filter)
+        @connection(key: "ProductConnection_productConnection", filters: ["filter"]) {
         count
         pageInfo {
           hasNextPage

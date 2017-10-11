@@ -45,34 +45,33 @@ const fragment /*: ConcreteFragment*/ = {
     }
   ],
   "kind": "Fragment",
-  "metadata": null,
+  "metadata": {
+    "connection": [
+      {
+        "count": "count",
+        "cursor": "cursor",
+        "direction": "forward",
+        "path": [
+          "productConnection"
+        ]
+      }
+    ]
+  },
   "name": "ProductConnection_viewer",
   "selections": [
     {
       "kind": "LinkedField",
-      "alias": null,
+      "alias": "productConnection",
       "args": [
-        {
-          "kind": "Variable",
-          "name": "after",
-          "variableName": "cursor",
-          "type": "String"
-        },
         {
           "kind": "Variable",
           "name": "filter",
           "variableName": "filter",
           "type": "FilterFindManyProductInput"
-        },
-        {
-          "kind": "Variable",
-          "name": "first",
-          "variableName": "count",
-          "type": "Int"
         }
       ],
       "concreteType": "ProductConnection",
-      "name": "productConnection",
+      "name": "__ProductConnection_productConnection_connection",
       "plural": false,
       "selections": [
         {
@@ -141,6 +140,13 @@ const fragment /*: ConcreteFragment*/ = {
                   "kind": "FragmentSpread",
                   "name": "ProductConnectionItem_product",
                   "args": null
+                },
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "args": null,
+                  "name": "__typename",
+                  "storageKey": null
                 }
               ],
               "storageKey": null
