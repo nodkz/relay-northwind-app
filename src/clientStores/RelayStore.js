@@ -2,8 +2,13 @@
 /* eslint-disable no-use-before-define */
 
 import * as React from 'react';
-import Relay from 'react-relay/classic';
+import {
+  createQuery,
+  Environment as ClassicEnvironment,
+  GraphQLMutation,
+} from 'react-relay/classic';
 import { commitMutation } from 'react-relay/compat';
+import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import RelayNetworkDebug from 'react-relay/lib/RelayNetworkDebug';
 import {
   RelayNetworkLayer,
@@ -72,7 +77,30 @@ export default class RelayStore {
   }
 
   _createRelayEnv() {
-    this._relayEnv = new Relay.Environment();
+    const fetchQuery = (operation, variables, cacheConfig, uploadables) => {
+      return fetch(this.endpoint, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: operation.text,
+          variables,
+        }),
+      }).then(response => {
+        return response.json();
+      });
+    };
+    const source = new RecordSource();
+    const store = new Store(source);
+    const network = Network.create(fetchQuery);
+
+    this._relayEnv = new Environment({ network, store });
+    this.unstable_internal = this._relayEnv.unstable_internal; // Relay Compat
+  }
+
+  _createRelayEnvClassic() {
+    this._relayEnv = new ClassicEnvironment();
     this._relayEnv.injectNetworkLayer(this._createRelayNetworkLayer());
     // this._relayEnv.injectTaskScheduler((task) => {
     //   setTimeout(task, 0);
@@ -119,7 +147,7 @@ export default class RelayStore {
     return new Promise((resolve, reject) => {
       const alertIdx = Date.now();
 
-      const q = Relay.createQuery(query, variables || {});
+      const q = createQuery(query, variables || {});
       if (onStart) {
         onStart();
       }
@@ -297,7 +325,7 @@ export default class RelayStore {
         this._showAlert(onStartAlert, 'Processing...', 'info', colKey);
       }
 
-      const mutation = new Relay.GraphQLMutation(
+      const mutation = new GraphQLMutation(
         query,
         vars,
         null, // I don't use file upload, cause upload by signed url directly to S3
