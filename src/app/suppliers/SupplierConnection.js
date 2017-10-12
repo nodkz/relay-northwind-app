@@ -72,15 +72,6 @@ export default createPaginationContainer(
   `,
   {
     direction: 'forward',
-    getConnectionFromProps(props) {
-      return props.viewer && props.viewer.supplierConnection;
-    },
-    getFragmentVariables(prevVars, totalCount) {
-      return {
-        ...prevVars,
-        count: totalCount,
-      };
-    },
     getVariables(props, { count, cursor }, fragmentVariables) {
       return { count, cursor };
     },
