@@ -21,7 +21,7 @@ const relayTransformWatchPlugin = [
   require.resolve('babel-plugin-transform-relay-hot'),
   {
     schema: './schema.graphql',
-    compat: true,
+    // compat: true,
     watchInterval: 2000,
   },
 ];
@@ -30,7 +30,7 @@ const relayTransformStaticPlugin = [
   require.resolve('babel-plugin-transform-relay-hot'),
   {
     schema: './schema.graphql',
-    compat: true,
+    // compat: true,
     watchInterval: 0, // disable watch
   },
 ];

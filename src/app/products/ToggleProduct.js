@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { graphql } from 'react-relay/compat';
+import { graphql } from 'react-relay';
 import Toggler from 'components/Toggler';
 import Product from './Product';
 import type { ToggleProductQueryResponse } from './__generated__/ToggleProductQuery.graphql';

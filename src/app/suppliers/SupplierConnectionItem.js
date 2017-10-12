@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { createFragmentContainer, graphql } from 'react-relay/compat';
+import { createFragmentContainer, graphql } from 'react-relay';
 import { Button } from 'react-bootstrap';
 import Loading from 'react-loading';
 import Supplier from './Supplier';

@@ -1,7 +1,7 @@
 /* @flow */
 
 import * as React from 'react';
-import { QueryRenderer } from 'react-relay/compat';
+import { QueryRenderer } from 'react-relay';
 import type { ContextRouter } from 'react-router';
 import { relayStore } from 'clientStores';
 import ErrorBoundary from './ErrorBoundary';
@@ -19,7 +19,7 @@ export default function relayLoader(component: React$ComponentType<any>, opts: L
       <ErrorBoundary>
         <QueryRenderer
           Container={component}
-          environment={relayStore}
+          environment={relayStore.env}
           query={opts.query}
           variables={
             !opts.variables ? {} : opts.variables.call ? opts.variables(routeProps) : opts.variables

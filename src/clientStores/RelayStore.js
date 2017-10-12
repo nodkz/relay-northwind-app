@@ -7,7 +7,7 @@ import {
   Environment as ClassicEnvironment,
   GraphQLMutation,
 } from 'react-relay/classic';
-import { commitMutation } from 'react-relay/compat';
+import { commitMutation } from 'react-relay';
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import RelayNetworkDebug from 'react-relay/lib/RelayNetworkDebug';
 import {
@@ -76,6 +76,10 @@ export default class RelayStore {
     this._createRelayEnv();
   }
 
+  get env(): any {
+    return this._relayEnv;
+  }
+
   _createRelayEnv() {
     const fetchQuery = (operation, variables, cacheConfig, uploadables) => {
       return fetch(this.endpoint, {
@@ -125,10 +129,12 @@ export default class RelayStore {
 
   fetch(opts: RelayFetchOpts): Promise<*> {
     const { query } = opts;
-    if (query.classic || query.modern) {
-      return this.fetchModern(opts);
-    }
-    return this.fetchClassic(opts);
+
+    return this.fetchModern(opts);
+    // if (query.classic || query.modern) {
+    //   return this.fetchModern(opts);
+    // }
+    // return this.fetchClassic(opts);
   }
 
   fetchClassic({
@@ -263,12 +269,13 @@ export default class RelayStore {
   }
 
   mutate(opts: RelayMutateOpts): Promise<any> {
-    const { query } = opts;
-    if (query.classic || query.modern) {
-      return this.mutateModern(opts);
-    }
-    // query.kind === 'Mutation'
-    return this.mutateClassic(opts);
+    return this.mutateModern(opts);
+    // const { query } = opts;
+    // if (query.classic || query.modern) {
+    //   return this.mutateModern(opts);
+    // }
+    // // query.kind === 'Mutation'
+    // return this.mutateClassic(opts);
   }
 
   mutateClassic({

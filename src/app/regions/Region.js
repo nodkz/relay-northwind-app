@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { createFragmentContainer, graphql } from 'react-relay/compat';
+import { createFragmentContainer, graphql } from 'react-relay';
 import type { Region_region } from './__generated__/Region_region.graphql';
 
 type Props = {

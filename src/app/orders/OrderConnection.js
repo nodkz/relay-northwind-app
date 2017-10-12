@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { createPaginationContainer, graphql } from 'react-relay/compat';
+import { createPaginationContainer, graphql } from 'react-relay';
 import { Well } from 'react-bootstrap';
 import ConnectionLoadMore from 'components/ConnectionLoadMore';
 import OrderConnectionItem from './OrderConnectionItem';
