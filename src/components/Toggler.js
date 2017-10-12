@@ -2,9 +2,11 @@
 
 import * as React from 'react';
 import { Button } from 'react-bootstrap';
+import { QueryRenderer } from 'react-relay';
 import { relayStore } from 'clientStores';
 import Loading from 'components/Loading';
 import ErrorBoundary from 'components/ErrorBoundary';
+import BrokenPage from 'components/BrokenPage';
 
 type Props = {
   component: Class<React$Component<{ data: ?Object }>>,
@@ -42,7 +44,7 @@ export default class Toggler extends React.Component<Props, State> {
   };
 
   render() {
-    const { component } = this.props;
+    const { component, query, variables, prepareProps } = this.props;
     const { data, isOpen } = this.state;
 
     return (
@@ -54,13 +56,25 @@ export default class Toggler extends React.Component<Props, State> {
           onClick={this.toggle}
           children={isOpen ? 'close' : 'open'}
         />
-        {isOpen &&
-          (data ? (
-            // $FlowFixMe
-            <div className="lrspace bspace">{React.createElement(component, data)}</div>
-          ) : (
-            <Loading />
-          ))}
+        {isOpen && (
+          <div className="lrspace bspace">
+            <QueryRenderer
+              environment={relayStore.env}
+              query={query}
+              variables={variables}
+              render={({ error, props }) => {
+                if (error) {
+                  return <BrokenPage message={error.message} />;
+                } else if (props) {
+                  return React.createElement(component, {
+                    ...prepareProps(props),
+                  });
+                }
+                return <Loading />;
+              }}
+            />
+          </div>
+        )}
       </ErrorBoundary>
     );
   }

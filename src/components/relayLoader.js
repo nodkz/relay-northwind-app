@@ -18,7 +18,6 @@ export default function relayLoader(component: React$ComponentType<any>, opts: L
     return (
       <ErrorBoundary>
         <QueryRenderer
-          Container={component}
           environment={relayStore.env}
           query={opts.query}
           variables={
