@@ -19,6 +19,7 @@ import {
   // batchMiddleware,
   // perfMiddleware,
 } from 'react-relay-network-layer';
+import RelayQueryResponseCache from 'relay-runtime/lib/RelayQueryResponseCache';
 
 // This variable will be replaced at build process by webpack
 //    see webpack.DefinePlugin in /tools/webpack.config.commons.js
@@ -81,7 +82,18 @@ export default class RelayStore {
   }
 
   _createRelayEnv() {
+    const cache = new RelayQueryResponseCache({ size: 250, ttl: 15 * 60 * 1000 });
     const fetchQuery = (operation, variables, cacheConfig, uploadables) => {
+      const queryID = operation.text;
+      const isMutation = operation.query.operation === 'mutation';
+      const isQuery = operation.query.operation === 'query';
+      const forceFetch = cacheConfig && cacheConfig.force;
+
+      const fromCache = cache.get(queryID, variables);
+      if (isQuery && fromCache !== null && !forceFetch) {
+        return fromCache;
+      }
+
       return fetch(this.endpoint, {
         method: 'POST',
         headers: {
@@ -91,9 +103,22 @@ export default class RelayStore {
           query: operation.text,
           variables,
         }),
-      }).then(response => {
-        return response.json();
-      });
+      })
+        .then(response => {
+          return response.json();
+        })
+        .then(json => {
+          // Update cache on queries
+          if (isQuery && json) {
+            cache.set(queryID, variables, json);
+          }
+          // Clear cache on mutations
+          if (isMutation) {
+            cache.clear();
+          }
+
+          return json;
+        });
     };
     const source = new RecordSource();
     const store = new Store(source);
