@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Form, FormGroup, ControlLabel, FormControl, Button, InputGroup } from 'react-bootstrap';
-import CreateProduct from './CreateProduct';
+import CreateProductMutation from './CreateProductMutation';
 
 const InputGroupAddon = InputGroup.Addon;
 
@@ -85,7 +85,7 @@ export default class ProductFilter extends React.Component<Props, State> {
     const { supplierID, categoryID, unitPriceLTE, unitPriceGTE, showAddForm } = this.state;
 
     if (showAddForm) {
-      return <CreateProduct onCancel={this.toggleAddForm} onCreate={this.onCreate} />;
+      return <CreateProductMutation onCancel={this.toggleAddForm} onCreate={this.onCreate} />;
     }
 
     return (
