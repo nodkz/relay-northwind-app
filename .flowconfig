@@ -1,0 +1,53 @@
+[ignore]
+.*/build/.*
+.*/tools/.*
+.*/node_modules/.*/test/.*
+.*/node_modules/.*/tests/.*
+.*/node_modules/ajv.*
+.*/node_modules/acorn.*
+.*/node_modules/async.*
+.*/node_modules/babel.*
+.*/node_modules/bluebird.*
+.*/node_modules/caniuse-db.*
+.*/node_modules/config-chain.*
+.*/node_modules/conventional-changelog.*
+.*/node_modules/core-js.*
+.*/node_modules/cssstyle.*
+.*/node_modules/diff.*
+.*/node_modules/es5-ext.*
+.*/node_modules/escope.*
+.*/node_modules/escodegen.*
+.*/node_modules/eslint.*
+.*/node_modules/github.*
+.*/node_modules/fsevents.*
+.*/node_modules/jsdoctypeparser.*
+.*/node_modules/jsdom.*
+.*/node_modules/iconv.*
+.*/node_modules/istanbul.*
+.*/node_modules/handlebars.*
+.*/node_modules/markdown.*
+.*/node_modules/node-notifier.*
+.*/node_modules/npmconf.*
+.*/node_modules/source-map.*
+.*/node_modules/travis.*
+.*/node_modules/uglify.*
+.*/node_modules/yargs.*
+.*/node_modules/babel-plugin-relay.*
+.*/node_modules/graphql-relay.*
+
+[options]
+all=false
+module.name_mapper='^raw-loader.*$' -> '<PROJECT_ROOT>/lib/flow/StringStub'
+module.name_mapper='^.*.scss$' -> '<PROJECT_ROOT>/lib/flow/ObjectStub'
+module.name_mapper='^.*.jpg$' -> '<PROJECT_ROOT>/lib/flow/ImgUrlStub'
+module.name_mapper='^.*.png$' -> '<PROJECT_ROOT>/lib/flow/ImgUrlStub'
+
+module.name_mapper='^src\/\(.*\)$' -> '<PROJECT_ROOT>/src/\1'
+module.name_mapper='^components\/\(.*\)$' -> '<PROJECT_ROOT>/src/components/\1'
+module.name_mapper='^app\/\(.*\)$' -> '<PROJECT_ROOT>/src/app/\1'
+module.name_mapper='^clientStores$' -> '<PROJECT_ROOT>/src/clientStores'
+module.name_mapper='^clientStores\/\(.*\)$' -> '<PROJECT_ROOT>/src/clientStores/\1'
+
+unsafe.enable_getters_and_setters=true
+suppress_type=$FlowTODO
+suppress_type=$FlowFixMe

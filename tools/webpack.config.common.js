@@ -1,11 +1,10 @@
-// Common configuration chunk to be used for both
-// client-side (client.js) and server-side (server.js) bundles
+/* eslint-disable import/first */
 
 require('dotenv').config();
 
-import path from 'path';
 import webpack from 'webpack';
 import deepmerge from 'deepmerge';
+import aliases from '../aliases';
 
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = 'development';
@@ -25,7 +24,6 @@ export const GLOBALS = {
   ),
 };
 
-
 export const config = {
   output: {
     publicPath: '/',
@@ -33,11 +31,10 @@ export const config = {
   },
 
   cache: DEV,
-  debug: DEV,
 
   stats: {
     colors: true,
-    reasons: DEV,
+    reasons: VERBOSE,
     hash: VERBOSE,
     version: VERBOSE,
     timings: true,
@@ -45,70 +42,38 @@ export const config = {
     chunkModules: VERBOSE,
     cached: VERBOSE,
     cachedAssets: VERBOSE,
+    modules: VERBOSE,
   },
 
   plugins: [
-    DEV ? new webpack.NoErrorsPlugin() : null,
+    DEV ? new webpack.NoEmitOnErrorsPlugin() : null,
     new webpack.DefinePlugin(GLOBALS),
     DEV ? new webpack.NamedModulesPlugin() : null,
   ].filter(o => !!o),
 
   resolve: {
-    extensions: ['', '.js', '.jsx', '.json'],
-    alias: {
-      app: path.resolve(__dirname, '../app/'),
-    },
+    extensions: ['.js', '.json'],
+    alias: aliases,
   },
-
   module: {
-    loaders: [
-      {
-        test: /\.jsx?$/,
-        happy: { id: 'js' },
-        include: [
-          path.resolve(__dirname, '../app'),
-        ],
-        loaders: [
-          {
-            loader: 'babel',
-            query: {
-              cacheDirectory: DEV
-                ? path.join(__dirname, '../build/tmp/babel-cache/', process.env.NODE_ENV)
-                : false,
-              plugins: [
-                DEV ? ['react-transform', {
-                  transforms: [
-                    {
-                      transform: 'react-transform-catch-errors',
-                      imports: ['react', 'redbox-react'],
-                    },
-                  ],
-                }] : null,
-                path.resolve(__dirname, './lib/babelRelayPlugin'),
-
-                // improve production build,
-                // see https://medium.com/doctolib-engineering/improve-react-performance-with-babel-16f1becfaa25
-                !DEV ? 'transform-react-remove-prop-types' : null,
-                !DEV ? 'transform-react-constant-elements' : null,
-                !DEV ? 'transform-react-inline-elements' : null,
-              ].filter(o => !!o),
-            },
-          },
-        ],
-      },
+    rules: [
       {
         test: /\.json$/,
         loader: 'json-loader',
-      }, {
+      },
+      {
         test: /\.txt$/,
         loader: 'raw-loader',
-      }, {
+      },
+      {
         test: /\.(png|jpg|jpeg|gif)$/,
         loader: 'url-loader?limit=1000',
-      }, {
+      },
+      {
         test: /\.(svg|woff|woff2)$/,
         loader: 'url-loader?limit=10000',
-      }, {
+      },
+      {
         test: /\.(eot|ttf|wav|mp3)$/,
         loader: 'file-loader',
       },
@@ -116,18 +81,25 @@ export const config = {
   },
 };
 
-
 export function mergeConfig(extConfig) {
   let result = deepmerge({}, config);
   const plugins = result.plugins || [];
   delete result.plugins;
 
   result = deepmerge(result, extConfig);
+  // combine plugins
   result.plugins = [...plugins, ...result.plugins];
 
+  // combine rules
+  result.module.rules = [
+    ...((config.module || {}).rules || []),
+    ...((extConfig.module || {}).rules || []),
+  ];
+
+  // clone all rules configs
   result = Object.assign({}, result, {
     module: Object.assign({}, result.module, {
-      loaders: result.module.loaders.map(x => Object.assign({}, x)),
+      rules: result.module.rules.map(x => Object.assign({}, x)),
     }),
   });
 
