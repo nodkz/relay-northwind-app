@@ -43,7 +43,7 @@ const clientConfig = mergeConfig({
     // filename [chunkhash] for PRODUCTION is important! But for DEV must be [hash]
     filename: DEV ? `[name].js?[hash]` : `[name]-[chunkhash].js`,
     chunkFilename: DEV ? '[name].js?[chunkhash]' : '[name].[chunkhash].js',
-    publicPath: '/',
+    publicPath: './',
     devtoolModuleFilenameTemplate: DEV
       ? info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')
       : undefined,
