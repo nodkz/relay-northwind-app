@@ -101,7 +101,7 @@ function startRelayWatcher() {
     console.error('Relay Watcher was exited!');
     if (e) console.error(e);
   };
-  const childProcess = spawn('yarn', ['relay', '--', '--watch'], {
+  const childProcess = spawn('npm', ['run', 'relay', '--', '--watch'], {
     stdio: ['ignore', 1, 2],
     cwd: path.resolve(__dirname, '../'),
   });
