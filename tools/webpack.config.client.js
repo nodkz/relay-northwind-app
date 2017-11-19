@@ -43,13 +43,11 @@ const clientConfig = mergeConfig({
     // filename [chunkhash] for PRODUCTION is important! But for DEV must be [hash]
     filename: DEV ? `[name].js?[hash]` : `[name]-[chunkhash].js`,
     chunkFilename: DEV ? '[name].js?[chunkhash]' : '[name].[chunkhash].js',
-    publicPath: './',
+    publicPath: DEV ? '/' : './',
     devtoolModuleFilenameTemplate: DEV
       ? info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')
       : undefined,
   },
-
-  devtool: DEV ? 'cheap-module-source-map' : 'source-map',
 
   module: {
     rules: [
@@ -77,6 +75,7 @@ const clientConfig = mergeConfig({
   // devtool: DEV ? 'sourcemap' : false,
   // devtool: DEV ? 'cheap-module-eval-source-map' : 'source-map', // 2.2x performance! in watch mode
   // devtool: DEV ? '#eval-source-map' : false, // 2x performance! in dev watch mode
+  // devtool: DEV ? 'cheap-module-source-map' : 'source-map',
   devtool: DEV ? 'eval' : 'source-map',
 
   plugins: [
