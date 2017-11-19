@@ -31,7 +31,7 @@ const clientConfig = mergeConfig({
       'react',
       'react-dom',
       'react-relay',
-      'react-relay-network-layer',
+      'react-relay-network-modern',
       'regenerator-runtime',
       'sockjs-client',
     ],

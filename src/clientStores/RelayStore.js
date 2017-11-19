@@ -2,24 +2,16 @@
 /* eslint-disable no-use-before-define */
 
 import * as React from 'react';
-import {
-  createQuery,
-  Environment as ClassicEnvironment,
-  GraphQLMutation,
-} from 'react-relay/classic';
 import { commitMutation } from 'react-relay';
-import { Environment, Network, RecordSource, Store } from 'relay-runtime';
-import RelayNetworkDebug from 'react-relay/lib/RelayNetworkDebug';
+import { Environment, RecordSource, Store } from 'relay-runtime';
 import {
   RelayNetworkLayer,
   urlMiddleware,
   loggerMiddleware,
   retryMiddleware,
-  gqErrorsMiddleware,
-  // batchMiddleware,
-  // perfMiddleware,
-} from 'react-relay-network-layer';
-import RelayQueryResponseCache from 'relay-runtime/lib/RelayQueryResponseCache';
+  gqlErrorsMiddleware,
+  cacheMiddleware,
+} from 'react-relay-network-modern';
 
 // This variable will be replaced at build process by webpack
 //    see webpack.DefinePlugin in /tools/webpack.config.commons.js
@@ -65,8 +57,18 @@ export type RelayMutateOpts = {
   optimisticConfigs?: mixed,
 };
 
+type QueryResponseCache = {
+  _responses: Map<string, Response>,
+  _size: number,
+  _ttl: number,
+  clear: () => void,
+  get(queryID: string, variables: any): ?any,
+  set(queryID: string, variables: any, payload: any): void,
+};
+
 export default class RelayStore {
   _stores: StoresT;
+  _cache: QueryResponseCache;
   _relayEnv: *;
   _onResetCb: Function;
   endpoint: string = endpoint;
@@ -82,63 +84,21 @@ export default class RelayStore {
   }
 
   _createRelayEnv() {
-    const cache = new RelayQueryResponseCache({ size: 250, ttl: 15 * 60 * 1000 });
-    const fetchQuery = (operation, variables, cacheConfig, uploadables) => {
-      const queryID = operation.text;
-      const isMutation = operation.query.operation === 'mutation';
-      const isQuery = operation.query.operation === 'query';
-      const forceFetch = cacheConfig && cacheConfig.force;
-
-      const fromCache = cache.get(queryID, variables);
-      if (isQuery && fromCache !== null && !forceFetch) {
-        return fromCache;
-      }
-
-      return fetch(this.endpoint, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          query: operation.text,
-          variables,
-        }),
-      })
-        .then(response => {
-          return response.json();
-        })
-        .then(json => {
-          // Update cache on queries
-          if (isQuery && json) {
-            cache.set(queryID, variables, json);
-          }
-          // Clear cache on mutations
-          if (isMutation) {
-            cache.clear();
-          }
-
-          return json;
-        });
-    };
     const source = new RecordSource();
     const store = new Store(source);
-    const network = Network.create(fetchQuery);
-
+    const network = this._createRelayNetworkLayer();
     this._relayEnv = new Environment({ network, store });
     this.unstable_internal = this._relayEnv.unstable_internal; // Relay Compat
   }
 
-  _createRelayEnvClassic() {
-    this._relayEnv = new ClassicEnvironment();
-    this._relayEnv.injectNetworkLayer(this._createRelayNetworkLayer());
-    // this._relayEnv.injectTaskScheduler((task) => {
-    //   setTimeout(task, 0);
-    // });
-    if (__DEV__) {
-      RelayNetworkDebug.init(this._relayEnv);
+  clearCache() {
+    if (this._cache) {
+      try {
+        this._cache.clear();
+      } catch (e) {
+        this._stores.errorCatcher.captureException(e);
+      }
     }
-
-    this.unstable_internal = this._relayEnv.unstable_internal; // Relay Compat
   }
 
   reset(): void {
@@ -152,83 +112,7 @@ export default class RelayStore {
     this._onResetCb = cb;
   }
 
-  fetch(opts: RelayFetchOpts): Promise<*> {
-    const { query } = opts;
-
-    return this.fetchModern(opts);
-    // if (query.classic || query.modern) {
-    //   return this.fetchModern(opts);
-    // }
-    // return this.fetchClassic(opts);
-  }
-
-  fetchClassic({
-    query,
-    force = false,
-    variables,
-    onSuccess,
-    onSuccessAlert,
-    onError,
-    onErrorAlert,
-    onStart,
-    onStartAlert,
-    onEnd,
-    onEndAlert,
-  }: RelayFetchOpts): Promise<*> {
-    return new Promise((resolve, reject) => {
-      const alertIdx = Date.now();
-
-      const q = createQuery(query, variables || {});
-      if (onStart) {
-        onStart();
-      }
-      if (onStartAlert) {
-        this._showAlert(onStartAlert, 'Loading...', 'info', alertIdx);
-      }
-
-      const args = [
-        { query: q },
-        readyState => {
-          if (readyState.error) {
-            const err = readyState.error;
-            if (onError) onError(err);
-            if (onEnd) onEnd();
-            reject(readyState.error);
-
-            if (onErrorAlert) {
-              this._showAlert(onErrorAlert, `Loading error: ${err}`, 'error', alertIdx);
-            } else if (onEndAlert) {
-              this._showAlert(onEndAlert, 'Completed', 'info', alertIdx, 2000);
-            } else {
-              this._hideAlert(alertIdx);
-            }
-          }
-          if (readyState.ready) {
-            const result = this._relayEnv.readQuery(q)[0];
-            if (onSuccess) onSuccess(result);
-            if (onEnd) onEnd();
-            resolve(result);
-
-            if (onSuccessAlert) {
-              this._showAlert(onSuccessAlert, 'success', 'success', alertIdx, 2000);
-            } else if (onEndAlert) {
-              this._showAlert(onEndAlert, 'Completed', 'info', alertIdx, 2000);
-            } else {
-              this._hideAlert(alertIdx);
-            }
-          }
-        },
-      ];
-
-      if (force) {
-        this._relayEnv.forceFetch(...args);
-      } else {
-        this._relayEnv.primeCache(...args);
-      }
-    });
-  }
-
-  fetchModern({
+  fetch({
     query,
     force = false,
     variables,
@@ -293,130 +177,7 @@ export default class RelayStore {
     });
   }
 
-  mutate(opts: RelayMutateOpts): Promise<any> {
-    return this.mutateModern(opts);
-    // const { query } = opts;
-    // if (query.classic || query.modern) {
-    //   return this.mutateModern(opts);
-    // }
-    // // query.kind === 'Mutation'
-    // return this.mutateClassic(opts);
-  }
-
-  mutateClassic({
-    query,
-    variables,
-    collisionKey,
-    configs,
-    onSuccess,
-    onSuccessAlert,
-    onError,
-    onErrorAlert,
-    onStart,
-    onStartAlert,
-    onEnd,
-    onEndAlert,
-    optimisticQuery,
-    optimisticResponse,
-    optimisticConfigs,
-  }: RelayMutateOpts): Promise<any> {
-    if (onErrorAlert === undefined) onErrorAlert = true; // eslint-disable-line
-
-    return new Promise((resolve, reject) => {
-      // see docs https://facebook.github.io/relay/docs/api-reference-relay-graphql-mutation.html#content
-      let vars;
-      if (!variables) {
-        vars = undefined;
-      } else if (variables.input) {
-        // eslint-disable-line
-        vars = variables;
-      } else {
-        vars = { input: variables };
-      }
-
-      let colKey;
-      if (collisionKey) {
-        colKey = collisionKey;
-      } else if (variables) {
-        // if _id provided, then take it as collision key
-        if (variables._id) {
-          colKey = variables._id;
-        } else if (variables.record && variables.record._id) {
-          colKey = variables.record._id;
-        }
-      }
-
-      if (!colKey) {
-        colKey = 'mutation';
-      }
-
-      if (onStart) {
-        onStart();
-      }
-      if (onStartAlert) {
-        this._showAlert(onStartAlert, 'Processing...', 'info', colKey);
-      }
-
-      const mutation = new GraphQLMutation(
-        query,
-        vars,
-        null, // I don't use file upload, cause upload by signed url directly to S3
-        this._relayEnv,
-        {
-          onFailure: transaction => {
-            const err = this._normalizeRelayTransactionError(transaction);
-            if (onError) onError(err, transaction);
-            if (onEnd) onEnd();
-            reject(err);
-
-            const errMsg = err && err.message ? err.message : err;
-            this._stores.errorCatcher.captureMessage('RelayMutationError', {
-              extra: {
-                variables,
-                error: errMsg,
-              },
-            });
-
-            if (onErrorAlert) {
-              this._showAlert(onErrorAlert, 'Error in operation.', 'error', colKey);
-            } else if (onEndAlert) {
-              this._showAlert(onEndAlert, 'Completed with error', 'info', colKey, 2000);
-            } else {
-              console.error(err); // eslint-disable-line
-              this._hideAlert(colKey);
-            }
-          },
-          onSuccess: response => {
-            if (onSuccess) onSuccess(response);
-            if (onEnd) onEnd();
-            resolve(response);
-
-            if (onSuccessAlert) {
-              this._showAlert(onSuccessAlert, 'Success', 'success', colKey, 2000);
-            } else if (onEndAlert) {
-              this._showAlert(onEndAlert, 'Completed', 'info', colKey, 2000);
-            } else {
-              this._hideAlert(colKey);
-            }
-          },
-        },
-        colKey
-      );
-
-      if (optimisticResponse) {
-        mutation.applyOptimistic(
-          optimisticQuery || query, // if optimisticQuery not provided, then take query
-          optimisticResponse,
-          optimisticConfigs || configs
-        );
-      }
-
-      // we can get transaction here but no need, cause callbacks already defined in constructor
-      mutation.commit(configs);
-    });
-  }
-
-  mutateModern({
+  mutate({
     query,
     variables,
     collisionKey,
@@ -502,6 +263,8 @@ export default class RelayStore {
         // optimisticUpdater?: ?SelectorStoreUpdater,
         optimisticResponse,
         onCompleted: (response: ?Object, errors: ?[Error]) => {
+          this.clearCache();
+
           if (errors) {
             const err = this._normalizeRelayPayloadErrors(errors);
             handleError(err);
@@ -534,6 +297,11 @@ export default class RelayStore {
         //   batchUrl: '/graphql/batch',
         //   batchTimeout: 20,
         // }),
+        cacheMiddleware({
+          size: 100,
+          ttl: 15 * 60 * 1000, // 15 minutes
+          onInit: cache => (this._cache = cache),
+        }),
         urlMiddleware({
           url: this.endpoint,
         }),
@@ -550,7 +318,7 @@ export default class RelayStore {
               },
             })
           : null,
-        __DEV__ ? gqErrorsMiddleware() : null,
+        __DEV__ ? gqlErrorsMiddleware() : null,
       ].filter(o => !!o)
     );
   }
@@ -719,3 +487,5 @@ export default class RelayStore {
     return this._relayEnv.getFragmentResolver(fragment, onNext);
   }
 }
+
+(RelayStore: any).prototype['@@RelayModernEnvironment'] = true;
