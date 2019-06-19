@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 import { commitMutation } from 'react-relay';
-import { Environment, RecordSource, Store } from 'relay-runtime';
+import { Environment, RecordSource, Store, getRequest } from 'relay-runtime';
 import {
   RelayNetworkLayer,
   urlMiddleware,
@@ -130,8 +130,8 @@ export default class RelayStore {
 
       const cacheConfig = force ? { force } : undefined;
 
-      const { createOperationSelector, getOperation } = this._relayEnv.unstable_internal;
-      const operation = createOperationSelector(getOperation(query), variables);
+      const { createOperationSelector } = this._relayEnv.unstable_internal;
+      const operation = createOperationSelector(getRequest(query), variables);
 
       if (onStart) {
         onStart();
