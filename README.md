@@ -1,3 +1,7 @@
+# OUTDATED
+
+If somebody somebody wants take care about this demo - please open an issue. And I'll grant your permissions. Thanks.
+
 ## Northwind demo app (on Relay Modern)
 
 > This is a true story. The events depicted took place in Northwind in 1996-1998. At the request of the survivors, the names have been changed. Out of respect for the dead, the rest has been told exactly as it occurred.
